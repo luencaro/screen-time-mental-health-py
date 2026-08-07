@@ -1,0 +1,22 @@
+{
+  "name": "screen-time-mental-health",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "jupyter",
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/conda/envs/screen-time-env/bin/python"
+      }
+    }
+  },
+
+  // Evita que VS Code apague el contenedor al cerrar la ventana
+  "shutdownAction": "stopCompose"
+}

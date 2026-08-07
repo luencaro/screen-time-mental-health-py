@@ -1,0 +1,15 @@
+name: screen-time-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - jupyterlab
+  - pandas
+  - numpy
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - pip
+  - pip:
+      - jupyter-book

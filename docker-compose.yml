@@ -1,0 +1,10 @@
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/workspace
+    container_name: screen-time-jupyter

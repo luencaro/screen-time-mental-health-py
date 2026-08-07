@@ -1,0 +1,26 @@
+# Datos (no versionar, se descargan aparte)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Jupyter Book / MyST build
+book/_build/
+book/.myst_cache/
+
+# Docker
+docker/*.log
+
+# SO / editores
+.DS_Store
+.vscode/
+.idea/
