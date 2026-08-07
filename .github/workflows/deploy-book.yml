@@ -50,7 +50,7 @@ jobs:
       - name: Subir artefacto del sitio
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _build/html
+          path: _build/site
 
       - name: Publicar en GitHub Pages
         id: deployment
