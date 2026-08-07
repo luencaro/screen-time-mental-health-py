@@ -5,8 +5,10 @@ on:
     branches:
       - main
     paths:
-      # Solo dispara el build si algo dentro de book/ cambió
+      # Dispara el build si cambia el book, sus páginas, o el notebook fuente
+      - "myst.yml"
       - "book/**"
+      - "notebooks/EDA.ipynb"
       - ".github/workflows/deploy-book.yml"
 
 permissions:
@@ -30,18 +32,25 @@ jobs:
         with:
           python-version: "3.11"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Instalar Jupyter Book
         run: pip install -U jupyter-book
 
       - name: Compilar el book
+        run: jupyter book build .
+
+      - name: Diagnóstico - ver qué se generó
         run: |
-          cd book
-          jupyter book build .
+          echo "Contenido de _build (si existe):"
+          find _build -maxdepth 3 2>/dev/null || echo "_build no existe"
 
       - name: Subir artefacto del sitio
         uses: actions/upload-pages-artifact@v3
         with:
-          path: book/_build/html
+          path: _build/html
 
       - name: Publicar en GitHub Pages
         id: deployment

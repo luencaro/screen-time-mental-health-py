@@ -14,8 +14,8 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Jupyter Book / MyST build
-book/_build/
-book/.myst_cache/
+_build/
+.myst_cache/
 
 # Docker
 docker/*.log

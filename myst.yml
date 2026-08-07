@@ -1,0 +1,15 @@
+version: 1
+project:
+  title: "Screentime vs, Salud Mental"
+  authors:
+    - name: "Luis Cabarcas" # cambia por tu nombre completo real
+      affiliations:
+        - "Universidad del Norte"
+  github: "https://github.com/luencaro/screen-time-mental-health-py.git"  # descomenta y completa cuando quieras
+  toc:
+    - file: book/intro.md
+    - file: notebooks/EDA.ipynb
+    - file: book/methodology.md
+    - file: book/references.md
+site:
+  template: book-theme
