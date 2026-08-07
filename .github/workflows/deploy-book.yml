@@ -40,7 +40,7 @@ jobs:
         run: pip install -U jupyter-book
 
       - name: Compilar el book
-        run: jupyter book build .
+        run: jupyter book build 
 
       - name: Diagnóstico - ver qué se generó
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Subir artefacto del sitio
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _build/site
+          path: _build/html
 
       - name: Publicar en GitHub Pages
         id: deployment
