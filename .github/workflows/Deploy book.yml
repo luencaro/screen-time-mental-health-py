@@ -1,0 +1,48 @@
+name: deploy-book
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Solo dispara el build si algo dentro de book/ cambió
+      - "book/**"
+      - ".github/workflows/deploy-book.yml"
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy-book:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar Jupyter Book
+        run: pip install -U jupyter-book
+
+      - name: Compilar el book
+        run: |
+          cd book
+          jupyter book build .
+
+      - name: Subir artefacto del sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: book/_build/html
+
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
