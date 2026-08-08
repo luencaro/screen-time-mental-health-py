@@ -5,7 +5,6 @@ on:
     branches:
       - main
     paths:
-      # Dispara el build si cambia el book, sus páginas, o el notebook fuente
       - "myst.yml"
       - "book/**"
       - "notebooks/EDA.ipynb"
@@ -18,6 +17,9 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: true
+
+env:
+  BASE_URL: /${{ github.event.repository.name }}
 
 jobs:
   deploy-book:
