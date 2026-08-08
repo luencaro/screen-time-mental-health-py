@@ -36,11 +36,11 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Instalar Jupyter Book
-        run: pip install -U jupyter-book
+      - name: Instalar MyST CLI
+        run: pip install -U mystmd
 
       - name: Compilar el book
-        run: jupyter book build 
+        run: myst build --html --ci
 
       - name: Diagnóstico - ver qué se generó
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Subir artefacto del sitio
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _build/site
+          path: _build/html
 
       - name: Publicar en GitHub Pages
         id: deployment
