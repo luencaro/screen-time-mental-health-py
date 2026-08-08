@@ -11,5 +11,6 @@ dependencies:
   - matplotlib
   - seaborn
   - pip
+  - nodejs
   - pip:
-      - jupyter-book
+      - mystmd

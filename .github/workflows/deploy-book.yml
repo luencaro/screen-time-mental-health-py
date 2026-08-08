@@ -1,0 +1,59 @@
+name: deploy-book
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "myst.yml"
+      - "book/**"
+      - "notebooks/EDA.ipynb"
+      - ".github/workflows/deploy-book.yml"
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+env:
+  BASE_URL: /${{ github.event.repository.name }}
+
+jobs:
+  deploy-book:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar MyST CLI
+        run: pip install -U mystmd
+
+      - name: Compilar el book
+        run: myst build --html --ci
+
+      - name: Diagnóstico - ver qué se generó
+        run: |
+          echo "Contenido de _build (si existe):"
+          find _build -maxdepth 3 2>/dev/null || echo "_build no existe"
+
+      - name: Subir artefacto del sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _build/html
+
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
