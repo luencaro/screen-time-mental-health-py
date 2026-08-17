@@ -3,7 +3,9 @@
   "dockerComposeFile": "../docker-compose.yml",
   "service": "jupyter",
   "workspaceFolder": "/workspace",
-
+  "mounts": [
+    "source=/var/home/luencaro/Programing/College/2026-30/DataViz/screen-time-mental-health-py,target=/workspace,type=bind"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
