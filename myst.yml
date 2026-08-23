@@ -1,15 +1,17 @@
 version: 1
 project:
-  title: "Screentime vs, Salud Mental"
+  title: "Tiempo de pantalla, sueño y depresión en adolescentes: un enfoque de aprendizaje automático sobre estudiantes en Suecia"
+  bibliography:
+    - book/references.bib
   authors:
-    - name: "Luis Cabarcas" # cambia por tu nombre completo real
+    - name: "Luis Cabarcas y Santiago Jimenez" 
       affiliations:
         - "Universidad del Norte"
-  github: "https://github.com/luencaro/screen-time-mental-health-py.git"  # descomenta y completa cuando quieras
+  github: "https://github.com/luencaro/screen-time-mental-health-py.git"  
   toc:
     - file: book/intro.md
-    - file: notebooks/EDA.ipynb
     - file: book/methodology.md
+    - file: notebooks/EDA.ipynb
     - file: book/references.md
 site:
   template: book-theme
