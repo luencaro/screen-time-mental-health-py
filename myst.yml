@@ -12,6 +12,11 @@ project:
     - file: book/intro.md
     - file: book/methodology.md
     - file: notebooks/EDA.ipynb
-    - file: book/references.md
 site:
-  template: book-theme
+  template:
+    name: book-theme
+    options:
+      logo: book/logo_uninorte.png
+      favicon: book/logo_uninorte.png
+      logo_alt: "Universidad del Norte"
+      logo_url: "https://www.uninorte.edu.co"
