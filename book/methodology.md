@@ -42,12 +42,7 @@ Se utilizará el dataset `screen_time_mental_health.csv`, adquirido desde Kaggle
 
 ## 6. Interpretabilidad
 - Feature importance nativa (RF, XGBoost).
-- SHAP — contrastar si `sleep_quality_index` es el predictor dominante, y comparar entre modelos por género.
-- Coeficientes de regresión logística como referencia adicional.
+- Contrastar si `sleep_quality_index` es el predictor dominante, y comparar entre modelos por género.
 
 ## 7. Herramientas
-- Python: pandas, scikit-learn, imbalanced-learn, xgboost, shap, matplotlib/seaborn.
-
-## 8. Consideraciones éticas
-- Datos anonimizados de menores; sin intento de reidentificación.
-- Diseño transversal en este proyecto (vs. longitudinal del estudio original): resultados interpretados como asociaciones predictivas, no causales.
+- Python: pandas, scikit-learn, xgboost, matplotlib/seaborn, etc.
