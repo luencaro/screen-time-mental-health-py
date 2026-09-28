@@ -19,11 +19,7 @@ Se utilizará el dataset `screen_time_mental_health.csv`, adquirido desde Kaggle
 | `depressed` | Binaria | Target (0/1), corte clínico BDI-II > 13. Desbalanceada: 16.4% positivos |
 
 ## 2. EDA
-- Estadística descriptiva por variable y por género.
-- Distribución del target y de `bdi_total`.
-- Matriz de correlación entre pantalla, sueño y `bdi_total`.
-- Pruebas de diferencia por género.
-- Visualizaciones: histogramas, boxplots, etc.
+En este apartado se realicza el analisis descriptivo por variable y luego se hacen por genero. Luego se hace un analisis de las distribucion de las variables targets `depressed` y `bdi_total`donde una es categorica (dicotomica que inidica si una persona eta deprimida o no) y la otra es numerica (es el Beck Depression Inventory que mide que tan severos son los sintomas depresivos de una persona). Posterioremente se analizara la matriz de correlacion y se haran pruebas estadisticas.
 
 ## 3. Preprocesamiento
 - Split del data set.
