@@ -60,6 +60,22 @@ screen-time-mental-health-py/
 └── requirements.txt      # referencia rápida vía pip (opcional, fuera de Docker)
 ```
 
+## Dashboard del EDA (Dash)
+
+Requiere Python 3.11 y el dataset en `data/raw/` (ver paso 2).
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python app.py                      # abre http://127.0.0.1:8050
+```
+
+Estructura: `app.py` (header, menú y routing), `data/load_data.py` (carga y validación),
+`analysis/` (estadística y figuras), `content/` (texto de `book/` y citas), `components/`
+(componentes de interfaz y tema Plotly), `tabs/` (una sección por archivo) y `assets/` (estilos).
+La guía visual está en `design/guia_estilo_4d.md`.
+
 ## Comandos útiles
 
 | Acción | Comando |
