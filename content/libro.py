@@ -57,6 +57,31 @@ def _postprocesar(texto: str, citas: bool) -> str:
     return convertir_citas(texto) if citas else texto
 
 
+def subsecciones(archivo: str, titulo: str) -> tuple[str, list[tuple[str, str]]]:
+    """Divide una sección en su texto introductorio y sus subsecciones directas.
+
+    Devuelve ``(introduccion, [(titulo, cuerpo), ...])``; los títulos conservan
+    su numeración y las citas ya vienen convertidas.
+    """
+    lineas = seccion(archivo, titulo, citas=False).splitlines()
+    niveles = [len(m.group(1)) for linea in lineas if (m := _ENCABEZADO.match(linea))]
+    if not niveles:
+        return convertir_citas("\n".join(lineas).strip()), []
+    nivel = min(niveles)
+    intro, partes, actual = [], [], None
+    for linea in lineas:
+        m = _ENCABEZADO.match(linea)
+        if m and len(m.group(1)) == nivel:
+            actual = (m.group(2), [])
+            partes.append(actual)
+        elif actual is None:
+            intro.append(linea)
+        else:
+            actual[1].append(linea)
+    return (convertir_citas("\n".join(intro).strip()),
+            [(t, convertir_citas("\n".join(c).strip())) for t, c in partes])
+
+
 def parrafos(texto: str) -> list[str]:
     """Divide un bloque Markdown en párrafos (separados por líneas en blanco)."""
     return [p.strip() for p in re.split(r"\n\s*\n", texto) if p.strip()]

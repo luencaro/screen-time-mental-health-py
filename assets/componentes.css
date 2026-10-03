@@ -427,40 +427,6 @@ code, .variable, .mono {
 .lista-hallazgos li:last-child { border-bottom: none; padding-bottom: 0; }
 .lista-hallazgos strong { font-weight: var(--peso-semibold); }
 
-/* ── Diagrama de flujo del EDA ─────────────────── */
-.flujo { list-style: none; padding: 0; margin: 0; }
-.flujo-paso {
-  display: flex;
-  gap: 12px;
-  position: relative;
-  padding-bottom: var(--espaciado-md);
-}
-.flujo-paso:last-child { padding-bottom: 0; }
-.flujo-paso::before {
-  content: "";
-  position: absolute;
-  left: 13px;
-  top: 28px;
-  bottom: 0;
-  border-left: 1px dashed var(--color-borde);
-}
-.flujo-paso:last-child::before { display: none; }
-.flujo-marca {
-  flex: 0 0 28px;
-  height: 28px;
-  border-radius: var(--radio-badge);
-  background: var(--color-primario-suave);
-  color: var(--color-primario);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-leyenda);
-  font-weight: var(--peso-semibold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.flujo-titulo { font-weight: var(--peso-semibold); line-height: 1.4; }
-.flujo-desc { font-size: var(--texto-pequeno); color: var(--color-texto-secundario); line-height: 1.45; }
-
 /* ── Aviso y código ────────────────────────────── */
 .bloque-codigo {
   background: var(--color-fondo);
@@ -488,5 +454,44 @@ code, .variable, .mono {
 }
 
 /* Tablas del libro: desplazamiento horizontal propio en pantallas estrechas */
-.texto-libro table { display: block; overflow-x: auto; max-width: 100%; }
+@media (max-width: 768px) {
+  .texto-libro table { display: block; overflow-x: auto; max-width: 100%; }
+}
 .grafico-desplazable { overflow-x: auto; }
+
+/* ── Bloques dentro de una sección (p. ej. Base estadística) ── */
+.subtitulo-seccion {
+  font-size: 22px;
+  font-weight: var(--peso-semibold);
+  color: var(--color-texto);
+  margin: var(--espaciado-lg) 0 var(--espaciado-sm);
+}
+
+.intro-bloque { max-width: 920px; margin-bottom: var(--espaciado-md); color: var(--color-texto-secundario); }
+
+/* Fórmulas (MathJax): las ecuaciones largas se desplazan dentro de la card */
+.texto-libro mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: var(--espaciado-xs) 0;
+}
+.texto-libro h3 { font-size: var(--texto-cuerpo); }
+
+/* Texto largo a todo el ancho: dos columnas en pantallas grandes */
+@media (min-width: 992px) {
+  .texto-libro.dos-columnas { column-count: 2; column-gap: var(--espaciado-lg); }
+  .texto-libro.dos-columnas p { break-inside: avoid; }
+}
+
+/* Rejilla tipo mosaico: cada card conserva su altura y se coloca en la
+   columna que queda más arriba (assets/mosaico.js calcula la altura). */
+.rejilla-mosaico {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: var(--espaciado-md);
+  margin-bottom: var(--espaciado-md);
+}
+.rejilla-mosaico > * { align-self: start; margin-bottom: var(--espaciado-md); }
+.rejilla-mosaico.mosaico-activo { grid-auto-rows: 4px; }
+@media (min-width: 992px) { .rejilla-mosaico { grid-template-columns: 1fr 1fr; } }

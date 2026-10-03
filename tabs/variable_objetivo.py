@@ -19,9 +19,9 @@ def layout():
     return html.Div([
         encabezado_seccion("variable_objetivo", [f"n = {entero(r['n'])}", "bdi_total · depressed"]),
         fila_kpis([
-            kpi("Sobre el corte clínico", pct(r["prevalencia"]),
+            kpi("Deprimidos", pct(r["prevalencia"]),
                 f"{entero(r['n_deprimidos'])} adolescentes con BDI-II ≥ {CORTE_BDI}", "deprimido"),
-            kpi("Bajo el corte clínico", pct(1 - r["prevalencia"]),
+            kpi("No deprimidos", pct(1 - r["prevalencia"]),
                 f"{entero(n_bajo)} adolescentes", "no_deprimido"),
             kpi("Mediana de BDI-II", num(r["mediana_bdi"], 0), f"Media {num(r['media_bdi'], 2)}"),
             kpi("Asimetría de BDI-II", num(g["asimetria"], 2), "Positiva: cola hacia la derecha"),

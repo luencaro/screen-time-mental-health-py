@@ -1,9 +1,10 @@
 # Metodología
-A continuacion se presenta la metodologia a seguir en este proyecto. 
+
+A continuación se presenta la metodología que se seguirá en este proyecto.
 
 ## 1. Descripción del dataset
 
-Se utilizará el dataset `screen_time_mental_health.csv`, adquirido desde Kaggle: [Screen Time vs Mental Health (ML-Ready)](https://www.kaggle.com/datasets/kylefengkfeng209/screen-time-vs-mental-health-ml-ready). El dataset está compuesto por 4,810 registros sin valores faltantes y 10 variables:
+Se utilizará el dataset `screen_time_mental_health.csv`, adquirido desde Kaggle: [Screen Time vs Mental Health (ML-Ready)](https://www.kaggle.com/datasets/kylefengkfeng209/screen-time-vs-mental-health-ml-ready). El dataset está compuesto por 4,810 registros sin valores faltantes y 10 variables, cuya descripción se resume en la siguiente tabla. Cabe destacar que `subject_id` es únicamente un identificador y no se utilizará como predictor, y que la variable objetivo `depressed` presenta un desbalance de clases, con apenas un 16.4% de casos positivos.
 
 | Variable | Tipo | Descripción |
 |---|---|---|
@@ -18,27 +19,26 @@ Se utilizará el dataset `screen_time_mental_health.csv`, adquirido desde Kaggle
 | `bdi_total` | Discreta (0–63) | Puntaje total BDI-II |
 | `depressed` | Binaria | Target (0/1), corte clínico BDI-II > 13. Desbalanceada: 16.4% positivos |
 
-## 2. EDA
-En este apartado se realicza el analisis descriptivo por variable y luego se hacen por genero. Luego se hace un analisis de las distribucion de las variables targets `depressed` y `bdi_total`donde una es categorica (dicotomica que inidica si una persona eta deprimida o no) y la otra es numerica (es el Beck Depression Inventory que mide que tan severos son los sintomas depresivos de una persona). Posterioremente se analizara la matriz de correlacion y se haran pruebas estadisticas.
+## 2. Análisis exploratorio de datos (EDA)
+
+El análisis exploratorio comenzará con un estudio descriptivo de cada variable, el cual se repetirá posteriormente de forma separada por género para identificar posibles diferencias entre chicos y chicas. Se analizará la distribución de las dos variables objetivo: `depressed`, una variable categórica dicotómica que indica si una persona presenta o no depresión, y `bdi_total`, una variable numérica correspondiente al Beck Depression Inventory, que mide la severidad de los síntomas depresivos. Finalmente, se examinará la matriz de correlación entre las variables y se realizarán pruebas estadísticas que permitan respaldar formalmente los patrones observados.
 
 ## 3. Preprocesamiento
-- Split del data set.
-- Estandarización de variables continuas.
-- Manejo de desbalance: SMOTE o `class_weight='balanced'`, aplicado solo en entrenamiento.
+
+El preprocesamiento iniciará con la división del dataset en conjuntos de entrenamiento y prueba, con el fin de evaluar los modelos sobre datos no vistos. Posteriormente, las variables continuas serán estandarizadas para que se encuentren en escalas comparables, lo cual es especialmente relevante para modelos de regresión. Por otro lado, dado el desbalance de clases en la variable objetivo, se abordará mediante la técnica SMOTE o mediante el parámetro `class_weight='balanced'`, aplicando cualquiera de estas estrategias únicamente sobre el conjunto de entrenamiento para evitar fugas de información hacia la evaluación.
 
 ## 4. Modelado
-- **Algoritmos:** regresión logística, Random Forest, XGBoost {cite}`chen2026predicting`.
-- **Configuraciones:** (a) modelo conjunto con `sex` como predictor, (b) modelo solo chicos, (c) modelo solo chicas — para contrastar con {cite}`hokby2025adolescents`.
-- **Tuning:** `GridSearchCV`/`RandomizedSearchCV`, validación cruzada k=5, optimizando AUC-PR.
+
+Se entrenarán diferentes algoritmos de regresión y clasificación {cite}`chen2026predicting`. Cada uno de ellos se ajustará bajo tres configuraciones distintas: un modelo conjunto que incluye `sex` como predictor, un modelo entrenado únicamente con chicos y un modelo entrenado únicamente con chicas, de modo que sea posible contrastar los resultados con lo reportado en {cite}`hokby2025adolescents`. Los hiperparámetros se optimizarán mediante `GridSearchCV` o `RandomizedSearchCV`, empleando validación cruzada con k=5 y tomando como métrica de optimización el RMSE para regresión y PR-AUC para clasificación, la cual resulta apropiada para la naturaleza de los puntajes y el desbalance de clase respectivamente.
 
 ## 5. Evaluación
-- AUC-ROC, precisión, recall, F1 (clase positiva).
-- Matriz de confusión y curva Precision-Recall.
-- Comparación contra baseline (clase mayoritaria).
+
+Ademas de las metricas principales mencionadas anterioremente, el desempeño de los modelos se evaluará a partir de las métricas AUC-ROC, precisión, recall y F1, complementadas con la matriz de confusión y la curva Precision-Recall, que permiten entender el tipo de errores que comete cada modelo. 
 
 ## 6. Interpretabilidad
-- Feature importance nativa (RF, XGBoost).
-- Contrastar si `sleep_quality_index` es el predictor dominante, y comparar entre modelos por género.
+
+Para interpretar los modelos se utilizará la importancia de variables nativa de Random Forest y XGBoost. A partir de ella se evaluará si `sleep_quality_index` es efectivamente el predictor dominante de la depresión, y se comparará la jerarquía de variables entre los modelos específicos por género, con el fin de identificar si los factores asociados difieren entre chicos y chicas.
 
 ## 7. Herramientas
-- Python: pandas, scikit-learn, xgboost, matplotlib/seaborn, etc.
+
+El proyecto se desarrollará en Python, haciendo uso de librerías como pandas para la manipulación de datos, scikit-learn para el modelado y la evaluación, y matplotlib y seaborn para la visualización, junto con otras herramientas complementarias según se requiera.

@@ -7,14 +7,14 @@ BLOQUES = ["Proyecto", "EDA", "Cierre"]
 
 SECCIONES = [
     # Proyecto
-    {"slug": "introduccion", "bloque": "Proyecto", "nombre": "Introducción",
+    {"slug": "inicio", "bloque": "Proyecto", "nombre": "Inicio",
      "descripcion": "Contexto del estudio y datos generales de la muestra"},
-    {"slug": "antecedentes", "bloque": "Proyecto", "nombre": "Antecedentes",
-     "descripcion": "Estudios previos sobre pantallas, sueño y depresión"},
+    {"slug": "marco_teorico", "bloque": "Proyecto", "nombre": "Marco teórico",
+     "descripcion": "Antecedentes y base estadística del estudio"},
     {"slug": "objetivos", "bloque": "Proyecto", "nombre": "Objetivos",
-     "descripcion": "Objetivo general, específicos y alcance de esta fase"},
+     "descripcion": "Objetivo general y objetivos específicos"},
     {"slug": "metodologia", "bloque": "Proyecto", "nombre": "Metodología",
-     "descripcion": "Variables, operacionalización y flujo del EDA"},
+     "descripcion": "Dataset, EDA, preprocesamiento, modelado y evaluación"},
     # EDA
     {"slug": "calidad_datos", "bloque": "EDA", "nombre": "Calidad de datos",
      "descripcion": "Dimensiones, nulos, duplicados y descriptivos"},
@@ -39,7 +39,7 @@ for _i, _s in enumerate(SECCIONES, start=1):
     _s["numero"] = f"{_i:02d}"
 
 POR_SLUG = {s["slug"]: s for s in SECCIONES}
-SECCION_INICIAL = "introduccion"
+SECCION_INICIAL = "inicio"
 
 
 def slug_desde_ruta(ruta: str | None) -> str:

@@ -50,9 +50,11 @@ def kpi(etiqueta: str, valor: str, contexto: str = "", categoria: str | None = N
 
 
 def fila_kpis(kpis: list) -> dbc.Row:
-    """Fila de KPIs de 3 columnas cada uno (se apilan en móvil)."""
+    """Fila de KPIs: 3 columnas cada uno con cuatro KPIs; con menos, se reparte
+    el ancho para no dejar huecos (se apilan en móvil)."""
+    ancho = max(3, 12 // max(len(kpis), 1))
     return dbc.Row(
-        [dbc.Col(k, xs=12, sm=6, lg=3) for k in kpis],
+        [dbc.Col(k, xs=12, sm=6, lg=ancho) for k in kpis],
         className="fila",
     )
 
@@ -141,9 +143,16 @@ def tabla(filas: list[dict], columnas: list[dict], className: str = "") -> html.
     )
 
 
-def markdown(texto: str, className: str = "") -> dcc.Markdown:
-    """Texto del libro renderizado con estilos de cuerpo."""
-    return dcc.Markdown(texto, className=f"texto-libro {className}".strip(), link_target="_blank")
+def markdown(texto: str, className: str = "", formulas: bool = True) -> dcc.Markdown:
+    """Texto del libro renderizado con estilos de cuerpo.
+
+    Las expresiones $…$ y $$…$$ se interpretan con MathJax. Va activado por
+    defecto en todos los textos: si en una misma página se mezclan
+    dcc.Markdown con y sin MathJax, Dash falla en el primer render de las
+    fórmulas.
+    """
+    return dcc.Markdown(texto, className=f"texto-libro {className}".strip(), link_target="_blank",
+                        mathjax=formulas)
 
 
 def aviso_sin_datos(motivo: str, comando: str) -> html.Div:
@@ -157,18 +166,3 @@ def aviso_sin_datos(motivo: str, comando: str) -> html.Div:
         titulo="Dataset no disponible",
         className="aviso",
     )
-
-
-def flujo(pasos: list[dict]) -> html.Ol:
-    """Diagrama de flujo vertical: cada paso con número, título, descripción y enlace."""
-    return html.Ol([
-        html.Li([
-            html.Span(p["numero"], className="flujo-marca"),
-            html.Div([
-                html.Div(html.A(p["titulo"], href=p["href"]) if p.get("href") else p["titulo"],
-                         className="flujo-titulo"),
-                html.Div(p["descripcion"], className="flujo-desc"),
-            ]),
-        ], className="flujo-paso")
-        for p in pasos
-    ], className="flujo")

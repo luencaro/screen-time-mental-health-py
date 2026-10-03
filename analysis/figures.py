@@ -59,7 +59,7 @@ def dona_estado(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
     ))
     prevalencia = dist.loc[dist["depressed"] == 1, "proporcion"].iloc[0]
     fig.add_annotation(
-        text=f"<b>{pct(prevalencia)}</b><br><span style='font-size:12px'>sobre el corte</span>",
+        text=f"<b>{pct(prevalencia)}</b><br><span style='font-size:12px'>deprimidos</span>",
         showarrow=False, font=dict(size=24, color=COLORES[tema]["texto"]),
     )
     return _base(fig, tema, margin=dict(l=8, r=8, t=40, b=8), showlegend=True)
@@ -129,7 +129,7 @@ def barras_sexo(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
 
 
 def barras_depresion_sexo(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
-    """Porcentaje bajo y sobre el corte dentro de cada sexo."""
+    """Porcentaje de deprimidos y no deprimidos dentro de cada sexo."""
     tabla = stats.depresion_por_sexo(df)
     colores = MAPA_ESTADO(tema)
     fig = go.Figure()

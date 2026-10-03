@@ -58,7 +58,7 @@ ETIQUETAS = {
 }
 
 ETIQUETAS_SEXO = {"Boy": "Chicos", "Girl": "Chicas"}
-ETIQUETAS_ESTADO = {0: "Bajo el corte", 1: "Sobre el corte"}
+ETIQUETAS_ESTADO = {0: "No deprimido", 1: "Deprimido"}
 
 
 class DatosNoDisponibles(Exception):

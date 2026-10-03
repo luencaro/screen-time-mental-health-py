@@ -1,4 +1,4 @@
-"""Pestaña 01 · Introducción: contexto del estudio y datos generales de la muestra."""
+"""Pestaña 01 · Inicio: contexto del estudio y datos generales de la muestra."""
 
 import re
 
@@ -32,38 +32,32 @@ def _mapa_dashboard() -> html.Div:
 
 
 def layout():
-    """Estructura: KPIs → texto de introducción + dona → mapa del dashboard."""
+    """Estructura: KPIs → texto de introducción + dona y mapa del dashboard."""
     texto = libro.seccion("intro.md", "Introducción")
     df = cargar_datos()
     r = stats.resumen_muestra(df)
 
     return html.Div([
-        encabezado_seccion("Inicio", [f"n = {entero(r['n'])}", "Estocolmo · Suecia"]),
+        encabezado_seccion("inicio", [f"n = {entero(r['n'])}", "Estocolmo · Suecia"]),
         fila_kpis([
             kpi("Adolescentes", entero(r["n"]), "Participantes en el dataset"),
-            kpi("Rango de edad", _rango_edad(texto), "Años, según el estudio de origen"),
+            kpi("Rango de edad", _rango_edad(texto)),
             kpi("Chicas / chicos", f"{pct(r['prop_chicas'], 0)} / {pct(r['prop_chicos'], 0)}",
                 f"{entero(r['n_chicas'])} chicas · {entero(r['n_chicos'])} chicos"),
-            kpi("Sobre el corte clínico", pct(r["prevalencia"]),
+            kpi("Deprimidos", pct(r["prevalencia"]),
                 f"{entero(r['n_deprimidos'])} adolescentes con BDI-II ≥ 14", "deprimido"),
         ]),
         dbc.Row([
             dbc.Col(card(markdown(texto), titulo="Contexto del proyecto"), lg=8),
-            dbc.Col(card(
-                html.P("Proporción de adolescentes según el corte clínico del BDI-II.",
-                       className="card-subtitulo"),
-                grafico("in-dona", 280),
-                titulo="Estado depresivo en la muestra",
-            ), lg=4),
-        ], className="fila"),
-        dbc.Row([
-            dbc.Col(card(
-                html.P("Este dashboard presenta el análisis exploratorio (EDA) del proyecto. No "
-                       "incluye modelado: esa fase se desarrollará a partir de los hallazgos aquí "
-                       "descritos."),
-                titulo="Alcance",
-            ), lg=8),
-            dbc.Col(card(_mapa_dashboard(), titulo="Contenido del dashboard"), lg=4),
+            dbc.Col([
+                card(
+                    html.P("Proporción de adolescentes según el corte clínico del BDI-II.",
+                           className="card-subtitulo"),
+                    grafico("in-dona", 280),
+                    titulo="Estado depresivo en la muestra",
+                ),
+                card(_mapa_dashboard(), titulo="Contenido del dashboard", className="estirar"),
+            ], lg=4),
         ], className="fila"),
     ])
 

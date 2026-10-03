@@ -106,7 +106,7 @@ def layout():
                 f"Efecto {stats.magnitud(c['pantalla_max'])}"),
             kpi("Razón chicas / chicos", f"{num(c['chi']['razon_prevalencias'], 2)}×",
                 f"{pct(r['prevalencia_chicas'])} frente a {pct(r['prevalencia_chicos'])}"),
-            kpi("Sobre el corte entre outliers", pct(c["outliers"]["prevalencia"]),
+            kpi("Deprimidos entre outliers", pct(c["outliers"]["prevalencia"]),
                 f"Frente a {pct(c['outliers']['prevalencia_resto'])} en el resto", "deprimido"),
         ]),
         dbc.Row([

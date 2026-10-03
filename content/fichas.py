@@ -1,7 +1,7 @@
 """Fichas estructuradas y breves que complementan el texto del libro.
 
 Resúmenes de estudios (muestra, diseño, hallazgo) extraídos de la sección
-Antecedentes de book/intro.md, y la tabla de operacionalización de variables.
+Antecedentes de book/intro.md, y la fase en que se atiende cada objetivo.
 Los párrafos completos se leen siempre desde book/*.md.
 """
 
@@ -78,30 +78,6 @@ def estudios() -> list[dict]:
         })
     return salida
 
-
-# Operacionalización de variables del dataset
-OPERACIONALIZACION = [
-    {"variable": "subject_id", "dimension": "Identificación", "tipo": "Identificador",
-     "escala": "Entero", "indicador": "Código del participante", "rol": "Excluida del análisis"},
-    {"variable": "sex", "dimension": "Sociodemográfica", "tipo": "Categórica binaria",
-     "escala": "Boy / Girl", "indicador": "Sexo del participante", "rol": "Predictor y estratificación"},
-    {"variable": "screen_time_index", "dimension": "Tiempo de pantalla", "tipo": "Continua",
-     "escala": "Índice 1–6", "indicador": "Índice combinado de tiempo de pantalla", "rol": "Predictor"},
-    {"variable": "est_leisure_screen_hours", "dimension": "Tiempo de pantalla", "tipo": "Continua",
-     "escala": "Horas", "indicador": "Horas estimadas de pantalla de ocio", "rol": "Predictor"},
-    {"variable": "sleep_quality_index", "dimension": "Sueño · calidad", "tipo": "Continua",
-     "escala": "Índice (SQI)", "indicador": "Calidad del sueño", "rol": "Predictor"},
-    {"variable": "avg_sleep_hours", "dimension": "Sueño · duración", "tipo": "Continua",
-     "escala": "Horas", "indicador": "Duración promedio de sueño semanal (WASD)", "rol": "Predictor"},
-    {"variable": "midsleep_weekend_hours", "dimension": "Sueño · cronotipo", "tipo": "Continua",
-     "escala": "Horas", "indicador": "Punto medio del sueño en fin de semana", "rol": "Predictor"},
-    {"variable": "social_jetlag_hours", "dimension": "Sueño · jet lag social", "tipo": "Continua",
-     "escala": "Horas (admite negativos)", "indicador": "Jet lag social", "rol": "Predictor"},
-    {"variable": "bdi_total", "dimension": "Síntomas depresivos", "tipo": "Discreta",
-     "escala": "Puntos 0–63", "indicador": "Puntaje total BDI-II", "rol": "Objetivo continuo"},
-    {"variable": "depressed", "dimension": "Síntomas depresivos", "tipo": "Binaria",
-     "escala": "0 / 1", "indicador": "BDI-II ≥ 14 (corte clínico)", "rol": "Objetivo binario"},
-]
 
 # Objetivos específicos que cubre esta fase y sección del dashboard que los atiende
 OBJETIVOS_FASE = {

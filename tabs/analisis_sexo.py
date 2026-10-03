@@ -11,7 +11,7 @@ from data.load_data import ETIQUETAS_SEXO, VARIABLES_NUMERICAS, cargar_datos
 
 
 def _tabla_contingencia(df):
-    """Tabla sexo × estado con % sobre el corte dentro de cada fila."""
+    """Tabla sexo × estado con % de deprimidos dentro de cada fila."""
     ct = stats.tabla_contingencia(df)
     filas = []
     for sexo in ["Girl", "Boy", "Total"]:
@@ -24,10 +24,10 @@ def _tabla_contingencia(df):
         })
     return tabla(filas, [
         {"clave": "grupo", "titulo": "Grupo"},
-        {"clave": "bajo", "titulo": "Bajo el corte", "tipo": "numero", "formato": entero},
-        {"clave": "sobre", "titulo": "Sobre el corte", "tipo": "numero", "formato": entero},
+        {"clave": "bajo", "titulo": "No deprimido", "tipo": "numero", "formato": entero},
+        {"clave": "sobre", "titulo": "Deprimido", "tipo": "numero", "formato": entero},
         {"clave": "total", "titulo": "Total", "tipo": "numero", "formato": entero},
-        {"clave": "pct", "titulo": "% sobre", "tipo": "numero", "formato": pct},
+        {"clave": "pct", "titulo": "% deprimido", "tipo": "numero", "formato": pct},
     ])
 
 
@@ -91,9 +91,9 @@ def layout():
         fila_kpis([
             kpi("Chicas", entero(r["n_chicas"]), f"{pct(r['prop_chicas'])} de la muestra"),
             kpi("Chicos", entero(r["n_chicos"]), f"{pct(r['prop_chicos'])} de la muestra"),
-            kpi("Sobre el corte · chicas", pct(r["prevalencia_chicas"]),
+            kpi("Deprimidas · chicas", pct(r["prevalencia_chicas"]),
                 f"{entero(n_dep['Girl'])} de {entero(r['n_chicas'])} chicas", "deprimido"),
-            kpi("Sobre el corte · chicos", pct(r["prevalencia_chicos"]),
+            kpi("Deprimidos · chicos", pct(r["prevalencia_chicos"]),
                 f"{entero(n_dep['Boy'])} de {entero(r['n_chicos'])} chicos", "deprimido"),
         ]),
         dbc.Row([

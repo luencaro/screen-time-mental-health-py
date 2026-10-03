@@ -74,7 +74,7 @@ def layout():
             kpi("Mediciones por adolescente", entero(len(df) / df["subject_id"].nunique()),
                 "Diseño de corte transversal"),
             kpi("Desbalance", f"1 : {num(n_bajo / r['n_deprimidos'], 1)}",
-                f"{pct(r['prevalencia'])} sobre el corte clínico", "deprimido"),
+                f"{pct(r['prevalencia'])} deprimidos", "deprimido"),
             kpi("Máxima |ρ| entre predictores", num(abs(par["rho"]), 3), f"{par['x']} · {par['y']}"),
             kpi("Población", "Suecia", "Centros escolares de Estocolmo"),
         ]),

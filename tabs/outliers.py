@@ -26,13 +26,14 @@ def layout():
     bdi = iqr[iqr["variable"] == "bdi_total"].iloc[0]
     sin_outliers = iqr.loc[iqr["n"] == 0, "variable"].tolist()
 
-    # Variables donde los outliers se concentran en adolescentes sobre el corte
+    # Variables donde los outliers se concentran en el grupo deprimido
     ancho = por_estado.pivot(index="variable", columns="depressed", values="proporcion")
     prev_out = por_estado.drop_duplicates("variable").set_index("variable")["prevalencia_en_outliers"]
     con_outliers = [v for v in PREDICTORES if v not in sin_outliers]
     frases_estado = [
-        f"`{v}`: {pct(ancho.loc[v, 1])} de outliers entre quienes están sobre el corte frente a "
-        f"{pct(ancho.loc[v, 0])} bajo el corte; entre sus outliers, {pct(prev_out[v])} supera el corte."
+        f"`{v}`: {pct(ancho.loc[v, 1])} de outliers en el grupo deprimido frente a "
+        f"{pct(ancho.loc[v, 0])} en el no deprimido; {pct(prev_out[v])} de sus outliers pertenece "
+        "al grupo deprimido."
         for v in sorted(con_outliers, key=lambda v: -prev_out[v])
     ]
 
@@ -41,7 +42,7 @@ def layout():
         fila_kpis([
             kpi("Filas con algún outlier", entero(filas["n"]),
                 f"{pct(filas['proporcion'])} de la muestra (predictores)"),
-            kpi("Sobre el corte en esas filas", pct(filas["prevalencia"]),
+            kpi("Deprimidos en esas filas", pct(filas["prevalencia"]),
                 f"Frente a {pct(filas['prevalencia_resto'])} en el resto", "deprimido"),
             kpi("Outliers en bdi_total", entero(bdi["n"]),
                 f"{pct(bdi['proporcion'])} · puntaje > {_dos(bdi['lim_sup'])}"),
