@@ -495,3 +495,30 @@ code, .variable, .mono {
 .rejilla-mosaico > * { align-self: start; margin-bottom: var(--espaciado-md); }
 .rejilla-mosaico.mosaico-activo { grid-auto-rows: 4px; }
 @media (min-width: 992px) { .rejilla-mosaico { grid-template-columns: 1fr 1fr; } }
+
+/* Entrada de los gráficos: invisibles hasta que assets/animacion_graficos.js
+   pone las barras en cero; luego aparecen con un fundido mientras crecen.
+   Respaldo: si el script no actúa, se muestran igual a los 1,2 s. */
+@keyframes mostrar-grafico { to { opacity: 1; } }
+.dash-graph .js-plotly-plot {
+  opacity: 0;
+  animation: mostrar-grafico 0s 1.2s forwards;
+}
+.dash-graph .js-plotly-plot.grafico-listo {
+  opacity: 1;
+  animation: none;
+  transition: opacity .3s ease-out;
+}
+.dash-graph .js-plotly-plot.grafico-listo.grafico-actualizando {
+  opacity: .2;
+  transition: opacity .16s ease-in;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dash-graph .js-plotly-plot,
+  .dash-graph .js-plotly-plot.grafico-listo.grafico-actualizando { opacity: 1; animation: none; transition: none; }
+}
+
+/* Card cuyo gráfico crece hasta igualar la altura de la columna vecina */
+.tarjeta.grafico-flexible { display: flex; flex-direction: column; }
+.tarjeta.grafico-flexible > .dash-graph { display: flex; flex-direction: column; }
+.tarjeta.grafico-flexible > .dash-graph > .js-plotly-plot { flex: 1 1 auto; }

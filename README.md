@@ -31,7 +31,7 @@ no necesitas instalar nada de eso en tu sistema, sin importar el SO ni el editor
    ```bash
    docker compose up --build -d
    ```
-   La primera vez tarda unos minutos (construye la imagen). El `-d` lo corre en segundo plano.
+   La primera vez tarda unos minutos (construye la imagen).
 
 4. **Verificar que esté arriba**
    ```bash

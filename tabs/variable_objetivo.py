@@ -30,33 +30,41 @@ def layout():
             dbc.Col(card(
                 html.P(["Distribución de ", var("bdi_total"), " coloreada por tramo respecto al corte."],
                        className="card-subtitulo"),
-                grafico("vo-histograma", 380),
+                grafico("vo-histograma", 380, flexible=True),
                 titulo="Puntaje BDI-II",
+                className="estirar grafico-flexible",
             ), lg=8),
-            dbc.Col(card(
-                html.P(["Proporción de ", var("depressed")], className="card-subtitulo"),
-                grafico("vo-dona", 300),
-                titulo="Estado según el corte",
-                className="estirar",
-            ), lg=4),
+            dbc.Col([
+                card(
+                    html.P(["Proporción de ", var("depressed")], className="card-subtitulo"),
+                    grafico("vo-dona", 280, animar=False),
+                    titulo="Estado según el corte",
+                ),
+                interpretacion(
+                    f"`depressed` es una simplificación de `bdi_total` mediante el corte clínico "
+                    f"≥{CORTE_BDI}. Al binarizar se pierde granularidad (un adolescente con {g['min_sobre']} "
+                    f"y otro con {g['max_sobre']} quedan en la misma categoría \"1\"), pero se gana "
+                    "interpretabilidad clínica directa y es el formato natural si el objetivo final es "
+                    f"clasificación. Tenemos un claro desbalance de clase ({pct(r['prevalencia'])} de "
+                    "deprimidos), lo cual nos lleva a plantearnos la idea de usar métodos de balanceo "
+                    "para los algoritmos de clasificación."
+                ),
+            ], lg=4),
         ], className="fila"),
         dbc.Row([
             dbc.Col(card(
                 html.P("Mediana punteada y corte clínico discontinuo.", className="card-subtitulo"),
-                grafico("vo-boxplot", 220),
+                grafico("vo-boxplot", 220, animar=False),
                 titulo="Dispersión de BDI-II",
             ), lg=8),
             dbc.Col(interpretacion(
-                f"La distribución de `bdi_total` presenta sesgo a la derecha (asimetría "
-                f"{num(g['asimetria'], 2)}): la mediana ({num(r['mediana_bdi'], 0)}) queda por debajo "
-                f"de la media ({num(r['media_bdi'], 2)}) y el 90 % de la muestra puntúa "
-                f"{num(g['p90'], 0)} o menos. El {pct(g['prop_cero'])} registra un puntaje de 0.",
-                f"Al binarizar en BDI-II ≥ {CORTE_BDI}, {g['valores_distintos_sobre']} puntajes "
-                f"distintos (de {g['min_sobre']} a {g['max_sobre']}) quedan en una sola categoría. "
-                f"Además, {entero(g['n_cerca'])} adolescentes ({pct(g['prop_cerca'])}) puntúan entre "
-                f"{g['cerca_desde']} y {g['cerca_hasta']}, a {g['margen']} valores o menos del corte, "
-                "donde un punto de diferencia cambia la clase. Conservar `bdi_total` como variable "
-                "continua evita esa pérdida de granularidad.",
+                f"`bdi_total` presenta una distribución fuertemente sesgada a la derecha (skew de "
+                f"{num(g['asimetria'], 2)}, media {num(r['media_bdi'], 2)} y desviación estándar de "
+                f"{num(df['bdi_total'].std(), 2)}): la mayoría de los adolescentes reporta síntomas "
+                f"mínimos o nulos, un 50 % de los adolescentes presenta un puntaje menor o igual a "
+                f"{num(r['mediana_bdi'], 0)}, y una minoría concentra puntajes altos, generando la cola "
+                "larga de outliers que se ve en el boxplot.",
+                className="estirar",
             ), lg=4),
         ], className="fila"),
     ])

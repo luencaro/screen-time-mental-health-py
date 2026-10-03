@@ -124,7 +124,7 @@ $$
 r = 1 - \frac{2\,U_1}{n_1\,n_2}
 $$
 
-Con chicos como primer grupo, $r > 0$ indica valores más altos en chicas. Su magnitud se interpreta con los mismos umbrales que $\rho$.
+Con las chicas (o el grupo con depresión) como primer grupo, $r < 0$ indica valores más altos en ese grupo. Su magnitud se interpreta con los mismos umbrales que $\rho$.
 
 ## 6. Métricas de evaluación
 

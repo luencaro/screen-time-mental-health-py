@@ -53,7 +53,7 @@ def layout():
                 card(
                     html.P("Proporción de adolescentes según el corte clínico del BDI-II.",
                            className="card-subtitulo"),
-                    grafico("in-dona", 280),
+                    grafico("in-dona", 280, animar=False),
                     titulo="Estado depresivo en la muestra",
                 ),
                 card(_mapa_dashboard(), titulo="Contenido del dashboard", className="estirar"),

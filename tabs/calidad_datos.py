@@ -13,23 +13,36 @@ def _dos(v):
     return num(v, 2)
 
 
-def _comentarios_extremos(desc):
-    """Frases sobre asimetría y valores extremos, calculadas desde los descriptivos."""
-    frases = []
-    asimetricas = desc[desc["asimetria"].abs() >= 1].sort_values("asimetria", ascending=False)
-    for _, f in asimetricas.iterrows():
-        cola = "derecha" if f["asimetria"] > 0 else "izquierda"
-        frases.append(
-            f"`{f['variable']}` presenta asimetría {num(f['asimetria'], 2)} (cola a la {cola}): "
-            f"el 75 % de los valores está entre {_dos(f['min'])} y {_dos(f['p75'])}, "
-            f"mientras que el máximo llega a {_dos(f['max'])}."
-        )
-    moderadas = desc[desc["asimetria"].abs().between(0.5, 1, inclusive="left")]
-    if not moderadas.empty:
-        lista = ", ".join(f"`{v}` ({num(a, 2)})" for v, a in zip(moderadas["variable"],
-                                                                  moderadas["asimetria"]))
-        frases.append(f"Con asimetría moderada: {lista}.")
+def _texto_calidad(df, d) -> list[str]:
+    """Interpretación del notebook sobre dimensiones, nulos y duplicados."""
+    frases = [f"Tenemos un dataset con {entero(df.shape[0])} registros y {df.shape[1]} variables."]
+    if d["nulos_totales"] == 0 and d["claves_duplicadas"] == 0:
+        frases.append("El dataset se encuentra sin valores nulos ni duplicados en `subject_id`, lo que "
+                      "significa que el conjunto de datos está listo para análisis.")
+    else:
+        frases.append(f"El dataset tiene {entero(d['nulos_totales'])} valores nulos y "
+                      f"{entero(d['claves_duplicadas'])} duplicados en `subject_id`, que deben tratarse "
+                      "antes del análisis.")
     return frases
+
+
+def _texto_descriptivo(df, desc) -> list[str]:
+    """Interpretación del notebook sobre la tabla descriptiva."""
+    f = desc.set_index("variable")
+    sueno, jetlag = f.loc["avg_sleep_hours"], f.loc["social_jetlag_hours"]
+    return [
+        f"Tenemos que `avg_sleep_hours` tiene una media de {_dos(sueno['media'])} h con asimetría "
+        f"negativa (skew {_dos(sueno['asimetria'])}), reflejando un grupo que duerme muy poco y arrastra "
+        f"la distribución hacia la izquierda, con un mínimo de {_dos(sueno['min'])} h que es clínicamente "
+        "extremo y candidato a revisión como outlier; y que `social_jetlag_hours` presenta un mínimo "
+        f"negativo ({_dos(jetlag['min'])}), un valor atípico que conviene decidir si tratar como dato "
+        "válido o como posible error de captura antes de avanzar.",
+        f"Además, varias variables ya muestran asimetría notable (`sleep_quality_index` con skew "
+        f"{_dos(f.loc['sleep_quality_index', 'asimetria'])}, `est_leisure_screen_hours` con "
+        f"{_dos(f.loc['est_leisure_screen_hours', 'asimetria'])}), lo que anticipa colas largas en las "
+        "distribuciones y sugiere priorizar la mediana sobre la media al resumir estas variables en las "
+        "siguientes secciones.",
+    ]
 
 
 def layout():
@@ -38,7 +51,6 @@ def layout():
     q = stats.calidad(df)
     d = stats.duplicados(df)
     desc = stats.descriptivos(df, VARIABLES_NUMERICAS)
-    negativos = int((df["social_jetlag_hours"] < 0).sum())
 
     tabla_desc = tabla(desc.to_dict("records"), [
         {"clave": "variable", "titulo": "Variable", "tipo": "variable"},
@@ -77,19 +89,7 @@ def layout():
                     lg=4),
         ], className="fila"),
         dbc.Row([
-            dbc.Col(interpretacion(
-                f"El dataset tiene {entero(df.shape[0])} filas y {df.shape[1]} columnas, sin valores "
-                f"nulos ({entero(d['nulos_totales'])}) ni identificadores repetidos en `subject_id` "
-                f"({entero(d['claves_duplicadas'])}). No se requiere imputación ni deduplicación.",
-                *_comentarios_extremos(desc),
-                f"`social_jetlag_hours` admite valores negativos ({entero(negativos)} casos, mínimo "
-                f"{_dos(df['social_jetlag_hours'].min())} h): indican un punto medio del sueño más "
-                "temprano en fin de semana que entre semana, no un error de registro.",
-                f"`screen_time_index` toma valores entre {_dos(df['screen_time_index'].min())} y "
-                f"{_dos(df['screen_time_index'].max())}, dentro de la escala 1–6 esperada; "
-                f"`bdi_total` queda en {entero(df['bdi_total'].min())}–{entero(df['bdi_total'].max())}, "
-                "dentro del rango 0–63 del instrumento.",
-            ), lg=8),
+            dbc.Col(interpretacion(*_texto_calidad(df, d), *_texto_descriptivo(df, desc)), lg=8),
             dbc.Col(card(
                 html.P([
                     "Los valores extremos se revisan en detalle en la sección ",

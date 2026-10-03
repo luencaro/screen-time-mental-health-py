@@ -24,13 +24,22 @@ def _base(fig: go.Figure, tema: str, **layout) -> go.Figure:
 
 
 def _linea_vertical(fig: go.Figure, x: float, texto: str, color: str, estilo: str,
-                    tema: str, posicion: str = "top right") -> None:
-    """Línea vertical anotada (corte discontinuo o mediana punteada)."""
+                    tema: str, posicion: str = "top right", nivel: int = 0) -> None:
+    """Línea vertical anotada (corte discontinuo o mediana punteada).
+
+    ``nivel`` baja la etiqueta una línea de texto por nivel, para que las
+    etiquetas de dos líneas cercanas (mediana y corte) no se solapen.
+    """
     fig.add_vline(
         x=x, line_dash=estilo, line_color=color, line_width=1.5,
-        annotation_text=texto, annotation_position=posicion,
+        annotation_text=texto, annotation_position=posicion, annotation_yshift=-18 * nivel,
         annotation_font=dict(size=12, color=COLORES[tema]["texto"]),
     )
+
+
+def _mediana_texto(valor: float) -> str:
+    """Mediana sin decimales si es entera (5), con dos si no (1,75)."""
+    return num(valor, 0) if float(valor).is_integer() else num(valor, 2)
 
 
 def _bins(serie: pd.Series) -> dict:
@@ -86,7 +95,8 @@ def histograma_bdi(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
     )
     mediana = df["bdi_total"].median()
     _linea_vertical(fig, mediana, f"Mediana · {num(mediana, 0)}", c["linea_mediana"], "dot", tema)
-    _linea_vertical(fig, CORTE_BDI - 0.5, f"Corte clínico · {CORTE_BDI}", c["linea_corte"], "dash", tema)
+    _linea_vertical(fig, CORTE_BDI - 0.5, f"Corte clínico · {CORTE_BDI}", c["linea_corte"], "dash", tema,
+                    nivel=1)
     fig.update_xaxes(title="Puntaje BDI-II")
     fig.update_yaxes(title="Adolescentes")
     return _base(fig, tema, bargap=0.12, barmode="overlay")
@@ -102,9 +112,9 @@ def boxplot_bdi(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
         hoverinfo="x",
     ))
     mediana = df["bdi_total"].median()
-    _linea_vertical(fig, mediana, f"Mediana · {num(mediana, 0)}", c["linea_mediana"], "dot", tema,
-                    posicion="top left")
-    _linea_vertical(fig, CORTE_BDI, f"Corte clínico · {CORTE_BDI}", c["linea_corte"], "dash", tema)
+    _linea_vertical(fig, mediana, f"Mediana · {num(mediana, 0)}", c["linea_mediana"], "dot", tema)
+    _linea_vertical(fig, CORTE_BDI, f"Corte clínico · {CORTE_BDI}", c["linea_corte"], "dash", tema,
+                    nivel=1)
     fig.update_xaxes(title="Puntaje BDI-II", showgrid=True, gridcolor=c["cuadricula"])
     fig.update_yaxes(showticklabels=False, showgrid=False)
     return _base(fig, tema, showlegend=False, margin=dict(l=16, r=16, t=36, b=44))
@@ -172,35 +182,48 @@ def histograma_variable(df: pd.DataFrame, columna: str, separar: str | None = No
     """Histograma de una variable, opcionalmente separado por sexo o por estado.
 
     Al separar, cada grupo se normaliza a % del grupo para compararlos pese a
-    tamaños distintos.
+    tamaños distintos. Los conteos se calculan aquí y se dibujan como barras,
+    siempre con dos trazas (la segunda vacía si no se separa): así dcc.Graph
+    puede animar la transición al cambiar de variable o de agrupación.
     """
     c = COLORES[tema]
     bins = _bins(df[columna])
-    fig = go.Figure()
+    bordes = np.arange(bins["start"], bins["end"] + bins["size"] * 0.5, bins["size"])
+    centros = (bordes[:-1] + bordes[1:]) / 2
+    rangos = [f"{num(a, 2)}–{num(b, 2)}" for a, b in zip(bordes[:-1], bordes[1:])]
+
     if separar == "sex":
         grupos = [(df["sex"] == s, ETIQUETAS_SEXO[s], MAPA_SEXO(tema)[s]) for s in ETIQUETAS_SEXO]
     elif separar == "depressed":
         grupos = [(df["depressed"] == e, ETIQUETAS_ESTADO[e], MAPA_ESTADO(tema)[e]) for e in (0, 1)]
     else:
-        grupos = [(pd.Series(True, index=df.index), "Todos", c["linea_corte"])]
+        grupos = [(pd.Series(True, index=df.index), "Todos", c["linea_corte"]),
+                  (pd.Series(False, index=df.index), "", c["linea_corte"])]
 
-    norma = "percent" if separar else None
+    fig = go.Figure()
     for mascara, nombre, color in grupos:
-        fig.add_histogram(
-            x=df.loc[mascara, columna], name=nombre, xbins=bins, histnorm=norma,
-            marker_color=color, opacity=0.65 if separar else 0.85,
-            hovertemplate=(f"{nombre} · %{{x}} · <b>%{{y:.1f}} %</b><extra></extra>" if separar
-                           else "%{x} · <b>%{y:,} adolescentes</b><extra></extra>"),
+        valores = df.loc[mascara, columna]
+        conteo, _ = np.histogram(valores, bins=bordes)
+        y = conteo / len(valores) * 100 if separar else conteo
+        if not len(valores):
+            y = np.zeros_like(centros)
+        fig.add_bar(
+            x=centros, y=y, width=bins["size"] * 0.88, name=nombre, customdata=rangos,
+            marker_color=color, opacity=0.65 if separar else 0.85, showlegend=bool(separar),
+            hovertemplate=(f"{nombre} · %{{customdata}} · <b>%{{y:.1f}} %</b><extra></extra>" if separar
+                           else "%{customdata} · <b>%{y:,} adolescentes</b><extra></extra>"),
         )
     mediana = df[columna].median()
-    _linea_vertical(fig, mediana, f"Mediana · {num(mediana, 2)}", c["linea_mediana"], "dot", tema)
+    _linea_vertical(fig, mediana, f"Mediana · {_mediana_texto(mediana)}", c["linea_mediana"], "dot", tema)
     if columna == "bdi_total":
         _linea_vertical(fig, CORTE_BDI - 0.5, f"Corte clínico · {CORTE_BDI}", c["linea_corte"],
-                        "dash", tema, posicion="top left")
-    fig.update_xaxes(title=ETIQUETAS[columna])
+                        "dash", tema, nivel=1)
+    # Rangos explícitos: Plotly.animate no recalcula el autorango al animar
+    y_max = max(float(np.max(t.y)) for t in fig.data) * 1.12
+    fig.update_xaxes(title=ETIQUETAS[columna], range=[bordes[0], bordes[-1]])
     fig.update_yaxes(title="% del grupo" if separar else "Adolescentes",
-                     ticksuffix=" %" if separar else "")
-    return _base(fig, tema, barmode="overlay", bargap=0.12, showlegend=bool(separar))
+                     ticksuffix=" %" if separar else "", range=[0, y_max])
+    return _base(fig, tema, barmode="overlay", showlegend=bool(separar))
 
 
 def boxplot_variable(df: pd.DataFrame, columna: str, separar: str | None = None,
@@ -220,7 +243,9 @@ def boxplot_variable(df: pd.DataFrame, columna: str, separar: str | None = None,
             marker=dict(color=color, size=4), line=dict(color=color, width=1.5),
             fillcolor=color, opacity=0.85, hoverinfo="x",
         )
-    fig.update_xaxes(title=ETIQUETAS[columna], showgrid=True, gridcolor=c["cuadricula"])
+    margen = (df[columna].max() - df[columna].min()) * 0.04
+    fig.update_xaxes(title=ETIQUETAS[columna], showgrid=True, gridcolor=c["cuadricula"],
+                     range=[df[columna].min() - margen, df[columna].max() + margen])
     fig.update_yaxes(showgrid=False, autorange="reversed")
     return _base(fig, tema, showlegend=False, margin=dict(l=96, r=12, t=16, b=44))
 

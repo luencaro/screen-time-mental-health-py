@@ -4,11 +4,11 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, html
 
 from analysis import figures, stats
-from components.formato import entero, num
+from components.formato import entero, estadistico, num, texto_p
 from components.ui import (card, encabezado_seccion, fila_kpis, grafico, interpretacion, kpi,
                            tabla)
-from data.load_data import (ETIQUETAS, ETIQUETAS_ESTADO, ETIQUETAS_SEXO, VARIABLES_NUMERICAS,
-                            cargar_datos)
+from data.load_data import (CORTE_BDI, ETIQUETAS, ETIQUETAS_ESTADO, ETIQUETAS_SEXO,
+                            VARIABLES_NUMERICAS, cargar_datos)
 
 OPCIONES_SEPARAR = [
     {"label": "Sin separar", "value": "todos"},
@@ -34,28 +34,89 @@ def _por_grupo(df, variable, separar):
     return t
 
 
+# Qué significa un valor más alto o más bajo de cada variable
+GLOSA = {
+    "screen_time_index": ("más tiempo de pantalla", "menos tiempo de pantalla"),
+    "est_leisure_screen_hours": ("más horas de pantalla de ocio", "menos horas de pantalla de ocio"),
+    "sleep_quality_index": ("peor calidad de sueño", "mejor calidad de sueño"),
+    "avg_sleep_hours": ("más horas de sueño", "menos horas de sueño"),
+    "midsleep_weekend_hours": ("horarios de sueño más tardíos", "horarios de sueño más tempranos"),
+    "social_jetlag_hours": ("mayor jet lag social", "menor jet lag social"),
+    "bdi_total": ("más síntomas depresivos", "menos síntomas depresivos"),
+}
+PREDICTORES = [v for v in VARIABLES_NUMERICAS if v != "bdi_total"]
+
+
+def _linea_mw(mw, grupo_a: str, grupo_b: str, frase_a: str) -> str:
+    """Resultado de Mann-Whitney en el formato del notebook."""
+    return (f"Mann-Whitney U: Mdn = {num(mw['mediana_a'], 2)} ({grupo_a}) vs "
+            f"{num(mw['mediana_b'], 2)} ({grupo_b}), U = {estadistico(mw['u'])}, "
+            f"{texto_p(mw['p'])}, r = {num(mw['r_biserial'], 3)}"
+            f"{'' if mw['p'] < 0.05 else ' (sin diferencia significativa)'}. "
+            f"r negativo indica valores mayores en {frase_a}.")
+
+
 def _texto(df, variable, separar):
-    """Interpretación calculada para la selección actual."""
+    """Interpretación para la selección actual, siguiendo el texto del notebook."""
     d = stats.descriptivos(df, [variable]).iloc[0]
-    forma = ("aproximadamente simétrica" if abs(d["asimetria"]) < 0.5
-             else f"con cola a la {'derecha' if d['asimetria'] > 0 else 'izquierda'}")
-    frases = [
-        f"`{variable}` tiene media {num(d['media'], 2)} y mediana {num(d['mediana'], 2)}; "
-        f"su distribución es {forma} (asimetría {num(d['asimetria'], 2)}). "
-        f"La mitad central de los valores está entre {num(d['p25'], 2)} y {num(d['p75'], 2)}."
-    ]
-    if separar:
-        g = _por_grupo(df, variable, separar)
-        mw_grupo = "sex" if separar == "sex" else "depressed"
-        niveles = ("Boy", "Girl") if separar == "sex" else (0, 1)
-        mw = stats.mann_whitney(df, [variable], grupo=mw_grupo, niveles=niveles).iloc[0]
-        a, b = g.iloc[0], g.iloc[1]
-        frases.append(
-            f"Mediana en {a['grupo'].lower()}: {num(a['mediana'], 2)}; en {b['grupo'].lower()}: "
-            f"{num(b['mediana'], 2)}. Mann-Whitney: r biserial = {num(mw['r_biserial'], 3)} "
-            f"(efecto {stats.magnitud(mw['r_biserial'])}). Cada histograma se expresa en % de su "
-            "propio grupo para compararlos pese a tamaños distintos."
-        )
+    forma = ("es aproximadamente simétrica" if abs(d["asimetria"]) < 0.5
+             else f"presenta cola a la {'derecha' if d['asimetria'] > 0 else 'izquierda'}")
+    mayor, menor = GLOSA[variable]
+
+    if separar is None:
+        frases = [
+            f"`{variable}` tiene media {num(d['media'], 2)} y mediana {num(d['mediana'], 2)}; su "
+            f"distribución {forma} (skew {num(d['asimetria'], 2)})."
+        ]
+        if variable != "bdi_total":
+            rho = stats.spearman_pares(df, [variable], ["bdi_total"]).iloc[0]
+            signo = "positiva" if rho["rho"] > 0 else "negativa"
+            efecto = "más" if rho["rho"] > 0 else "menos"
+            frases.append(
+                f"Frente a `bdi_total`, la relación es {signo} (r = {num(rho['rho'], 3)}, "
+                f"{texto_p(rho['p'])}, efecto {stats.magnitud(rho['rho'])}): a {mayor}, {efecto} "
+                "síntomas depresivos."
+            )
+        return frases
+
+    if separar == "sex":
+        mw = stats.mann_whitney(df, [variable], grupo="sex", niveles=("Girl", "Boy")).iloc[0]
+        if variable == "bdi_total" or abs(mw["r_biserial"]) >= 0.2:
+            hacia = "más altos" if mw["r_biserial"] < 0 else "más bajos"
+            glosa = mayor if mw["r_biserial"] < 0 else menor
+            primera = (f"La distribución de las chicas está desplazada hacia valores {hacia} de "
+                       f"`{variable}`, es decir, {glosa}.")
+        else:
+            primera = ("Las curvas de chicos y chicas se solapan casi por completo. Este hallazgo, en "
+                       "conjunto con la brecha de género en depresión, sugiere que hay factores externos "
+                       "al dataset (hormonales, sociales u otros no capturados aquí) detrás de esa brecha.")
+        return [primera, _linea_mw(mw, "chicas", "chicos", "las chicas")]
+
+    # Por estado depresivo
+    if variable == "bdi_total":
+        return [f"`bdi_total` define el estado depresivo (corte ≥ {CORTE_BDI}), por lo que ambos grupos "
+                "quedan separados por construcción."]
+    mw = stats.mann_whitney(df, [variable], grupo="depressed", niveles=(1, 0)).iloc[0]
+    r = mw["r_biserial"]
+    hacia, glosa = ("más altos", mayor) if r < 0 else ("más bajos", menor)
+    if abs(r) >= 0.3:
+        primera = (f"Acá sí hay separación visible: el grupo deprimido está claramente desplazado hacia "
+                   f"valores {hacia}, es decir, {glosa}.")
+    elif abs(r) >= 0.1:
+        primera = (f"Hay una separación moderada: el grupo deprimido está desplazado hacia valores "
+                   f"{hacia}, es decir, {glosa}.")
+    else:
+        primera = (f"La separación es pequeña: el grupo deprimido apenas se desplaza hacia valores "
+                   f"{hacia} ({glosa}).")
+    frases = [primera, _linea_mw(mw, "deprimidos", "no deprimidos", "el grupo con depresión")]
+    ranking = (stats.mann_whitney(df, PREDICTORES, grupo="depressed", niveles=(1, 0))
+               .assign(abs_r=lambda t: t["r_biserial"].abs()).sort_values("abs_r", ascending=False))
+    orden = list(ranking["variable"])
+    if variable == orden[0]:
+        frases.append(f"Esto sugiere que `{orden[0]}` es el predictor con más señal, seguido de "
+                      f"`{orden[1]}`.")
+    elif variable == orden[1]:
+        frases.append(f"Es el segundo predictor con más señal, después de `{orden[0]}`.")
     return frases
 
 
@@ -92,7 +153,7 @@ def layout():
                 titulo="Histograma",
             ), lg=8),
             dbc.Col([
-                card(grafico("num-boxplot", 200), titulo="Dispersión"),
+                card(grafico("num-boxplot", 200, animar=False), titulo="Dispersión"),
                 html.Div(id="num-interpretacion", className="estirar"),
             ], lg=4),
         ], className="fila"),

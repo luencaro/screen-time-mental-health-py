@@ -32,3 +32,9 @@ def valor_p(p: float) -> str:
 def texto_p(p: float) -> str:
     """Valor p con su operador para frases ('p < 0,001' o 'p = 0,023')."""
     return f"p {valor_p(p)}" if p < 0.001 else f"p = {valor_p(p)}"
+
+
+def estadistico(valor: float) -> str:
+    """Estadístico de prueba: entero con punto de miles, o con un decimal si lo tiene
+    (U de Mann-Whitney puede terminar en ,5)."""
+    return entero(valor) if float(valor).is_integer() else num(valor, 1)

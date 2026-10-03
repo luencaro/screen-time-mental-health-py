@@ -11,6 +11,14 @@ from components.secciones import POR_SLUG
 
 CONFIG_GRAFICO = {"displayModeBar": False, "responsive": True}
 
+# Transición suave entre figuras: dcc.Graph usa Plotly.animate cuando la nueva
+# figura tiene el mismo número de trazas. redraw=True aplica al final los
+# cambios que Plotly no anima (formas, anotaciones, cajas, donas).
+ANIMACION_GRAFICO = {
+    "frame": {"duration": 550, "redraw": True},
+    "transition": {"duration": 550, "easing": "cubic-in-out"},
+}
+
 
 def var(nombre: str) -> html.Code:
     """Nombre de variable del dataset en IBM Plex Mono."""
@@ -64,12 +72,12 @@ def badge(texto: str, variante: str = "primaria") -> html.Span:
     return html.Span(texto, className=f"insignia insignia--{variante}")
 
 
-def interpretacion(*hijos, titulo: str = "Interpretación") -> html.Div:
+def interpretacion(*hijos, titulo: str = "Interpretación", className: str = "") -> html.Div:
     """Bloque de interpretación: overline en primario y texto de cuerpo."""
     parrafos = [html.P(rico(h)) if isinstance(h, str) else h for h in hijos]
     return html.Div(
         [html.Div(titulo.upper(), className="overline")] + parrafos,
-        className="interpretacion",
+        className=f"interpretacion {className}".strip(),
     )
 
 
@@ -99,17 +107,24 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
     )
 
 
-def grafico(id_: str | dict, altura: int = 360, figura=None, ancho_minimo: int | None = None):
+def grafico(id_: str | dict, altura: int = 360, figura=None, ancho_minimo: int | None = None,
+            animar: bool = True, flexible: bool = False):
     """dcc.Graph con la barra de herramientas oculta y altura fija.
 
     Con ``ancho_minimo`` el gráfico se desplaza horizontalmente en pantallas
-    estrechas en lugar de comprimirse.
+    estrechas en lugar de comprimirse. ``animar=False`` para gráficos cuyas
+    trazas Plotly no puede animar (cajas, donas, heatmaps): se actualizan con
+    un fundido corto (assets/animacion_graficos.js) en lugar de un salto.
+    Con ``flexible=True`` el gráfico crece hasta llenar el alto de su card
+    (usar con ``card(..., className="estirar grafico-flexible")``), para que la
+    columna más corta de una fila no deje espacio vacío.
     """
     props = {"figure": figura} if figura is not None else {}
-    estilo = {"height": f"{altura}px"}
+    estilo = {"minHeight": f"{altura}px", "flex": "1 1 auto"} if flexible else {"height": f"{altura}px"}
     if ancho_minimo:
         estilo["minWidth"] = f"{ancho_minimo}px"
-    g = dcc.Graph(id=id_, config=CONFIG_GRAFICO, style=estilo, **props)
+    g = dcc.Graph(id=id_, config=CONFIG_GRAFICO, style=estilo, animate=animar,
+                  animation_options=ANIMACION_GRAFICO, **props)
     return html.Div(g, className="grafico-desplazable") if ancho_minimo else g
 
 
