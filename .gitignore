@@ -24,3 +24,5 @@ docker/*.log
 .DS_Store
 .vscode/
 .idea/
+
+design/
