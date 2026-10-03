@@ -1,0 +1,85 @@
+/* Guía de estilo · 4d Pizarra cálida
+   Modo claro en :root. Modo oscuro: añade data-bs-theme="dark" al <html> (DBC / Bootstrap 5.3). */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ── Colores de interfaz ───────────────────────── */
+  --color-primario: #4F5B7A;            /* pizarra: nav activo, enlaces, línea de corte */
+  --color-primario-suave: #ECEEF4;      /* fondo de nav activo, badges, bloque de interpretación */
+  --color-secundario: #3F7A70;          /* acento cálido secundario (texto sobre blanco) */
+  --color-fondo: #F8F6F3;
+  --color-superficie: #FFFFFF;          /* cards, header, tooltips */
+  --color-texto: #2A2724;
+  --color-texto-secundario: #5F5A54;
+  --color-borde: #E8E3DC;
+
+  /* ── Colores de gráficos ───────────────────────── */
+  --color-chicos: #9FC9C0;
+  --color-chicas: #D9A7C7;
+  --color-no-deprimido: #A7C4E5;
+  --color-deprimido: #F0B08F;
+  --color-no-deprimido-texto: #3F6591;  /* KPI y etiquetas sobre superficie */
+  --color-deprimido-texto: #A45A36;
+  --color-linea-corte: #4F5B7A;         /* BDI-II = 14, discontinua */
+  --color-linea-mediana: #5F5A54;       /* punteada */
+  --color-grafico-cuadricula: #E8E3DC;
+  --color-grafico-fondo: transparent;
+
+  /* ── Tipografía ────────────────────────────────── */
+  --fuente-base: "IBM Plex Sans", system-ui, sans-serif;
+  --fuente-mono: "IBM Plex Mono", ui-monospace, monospace;  /* nombres de variables */
+  --texto-titulo: 28px;                 /* h1 de sección */
+  --texto-subtitulo: 15px;              /* título de card */
+  --texto-cuerpo: 14px;
+  --texto-pequeno: 13px;                /* etiquetas KPI, breadcrumb */
+  --texto-leyenda: 12px;                /* badges, overlines */
+  --texto-kpi: 30px;
+  --interlineado-cuerpo: 1.6;
+  --peso-regular: 400;
+  --peso-medio: 500;
+  --peso-semibold: 600;
+
+  /* ── Espaciados ────────────────────────────────── */
+  --espaciado-xs: 4px;
+  --espaciado-sm: 8px;
+  --espaciado-md: 20px;                 /* gutter del grid y padding de card */
+  --espaciado-lg: 32px;                 /* padding vertical de la página */
+  --espaciado-xl: 40px;                 /* padding horizontal de la página */
+
+  /* ── Radios y sombras ──────────────────────────── */
+  --radio-card: 8px;
+  --radio-control: 6px;                 /* botones de nav, segmentado */
+  --radio-menu: 10px;                   /* desplegables */
+  --radio-badge: 999px;
+  --borde-card: 1px solid var(--color-borde);
+  --sombra-card: 0 1px 2px rgba(42, 39, 36, 0.04);
+  --sombra-menu: 0 12px 32px rgba(42, 39, 36, 0.12);
+  --transicion-tema: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+
+[data-bs-theme="dark"] {
+  /* ── Colores de interfaz ───────────────────────── */
+  --color-primario: #A9B6D8;
+  --color-primario-suave: #2C3040;
+  --color-secundario: #8FBAB1;
+  --color-fondo: #1A1816;
+  --color-superficie: #242120;
+  --color-texto: #EEEAE5;
+  --color-texto-secundario: #ACA59D;
+  --color-borde: #36322F;
+
+  /* ── Colores de gráficos ───────────────────────── */
+  --color-chicos: #8FBAB1;
+  --color-chicas: #CB98B9;
+  --color-no-deprimido: #97B5D8;
+  --color-deprimido: #E6A283;
+  --color-no-deprimido-texto: #A7C4E5;
+  --color-deprimido-texto: #F0B08F;
+  --color-linea-corte: #A9B6D8;
+  --color-linea-mediana: #ACA59D;
+  --color-grafico-cuadricula: #36322F;
+
+  /* ── Sombras ───────────────────────────────────── */
+  --sombra-card: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --sombra-menu: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
