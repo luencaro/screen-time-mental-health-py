@@ -72,6 +72,7 @@ def descriptivos(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
         x = df[col]
         filas.append({
             "variable": col,
+            "N": x.count(),
             "media": x.mean(),
             "mediana": x.median(),
             "desv": x.std(),

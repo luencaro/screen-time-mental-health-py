@@ -61,12 +61,50 @@ def layout():
         {"clave": "max", "titulo": "Máx.", "tipo": "numero", "formato": _dos},
         {"clave": "asimetria", "titulo": "Asimetría", "tipo": "numero", "formato": _dos},
     ])
-    tabla_tipos = tabla(q.to_dict("records"), [
-        {"clave": "variable", "titulo": "Variable", "tipo": "variable"},
-        {"clave": "tipo", "titulo": "Tipo"},
-        {"clave": "unicos", "titulo": "Únicos", "tipo": "numero", "formato": entero},
-        {"clave": "nulos", "titulo": "Nulos", "tipo": "numero", "formato": entero},
-    ])
+    tabla_tipos = tabla(
+    q.to_dict("records"),
+    [
+        {
+            "clave": "variable",
+            "titulo": "Variable",
+            "tipo": "variable"
+        },
+
+        {
+            "clave": "tipo",
+            "titulo": "Tipo"
+        },
+
+        {
+            "clave": "unicos",
+            "titulo": "Únicos",
+            "tipo": "numero",
+            "formato": entero
+        },
+
+        {
+            "clave": "pct_unicos",
+            "titulo": "% únicos",
+            "tipo": "numero",
+            "formato": _dos
+        },
+
+        {
+            "clave": "nulos",
+            "titulo": "Nulos",
+            "tipo": "numero",
+            "formato": entero
+        },
+
+        {
+            "clave": "completitud",
+            "titulo": "Completitud",
+            "tipo": "numero",
+            "formato": lambda x: f"{x:.1f}%"
+        },
+    ]
+),
+    
 
     return html.Div([
         encabezado_seccion("calidad_datos", [f"{entero(df.shape[0])} filas", f"{df.shape[1]} variables"]),
