@@ -47,12 +47,18 @@ def resumen_muestra(df: pd.DataFrame) -> dict:
 
 # ── Calidad de datos ───────────────────────────────────────────────────
 def calidad(df: pd.DataFrame) -> pd.DataFrame:
-    """Por columna: tipo, nulos, valores únicos."""
+    """Por columna: tipo, nulos, únicos, % únicos y completitud."""
+    n_filas = len(df)
+    nulos = df.isna().sum()
+    unicos = df.nunique()
+
     return pd.DataFrame({
         "variable": df.columns,
         "tipo": [str(t) for t in df.dtypes],
-        "nulos": df.isna().sum().values,
-        "unicos": df.nunique().values,
+        "unicos": unicos.values,
+        "pct_unicos": (100 * unicos / n_filas).round(2).values,
+        "nulos": nulos.values,
+        "completitud": (100 * (1 - nulos / n_filas)).round(1).values,
     })
 
 
@@ -72,6 +78,7 @@ def descriptivos(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
         x = df[col]
         filas.append({
             "variable": col,
+            "N": x.count(),
             "media": x.mean(),
             "mediana": x.median(),
             "desv": x.std(),

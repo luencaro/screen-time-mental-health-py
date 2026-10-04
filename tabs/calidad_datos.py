@@ -43,6 +43,61 @@ def _texto_descriptivo(df, desc) -> list[str]:
         "distribuciones y sugiere priorizar la mediana sobre la media al resumir estas variables en las "
         "siguientes secciones.",
     ]
+    
+def _texto_resumen_inicial(df, desc) -> list:
+    """Resumen descriptivo inicial de las variables numéricas principales."""
+    f = desc.set_index("variable")
+
+    def p25_p75(col):
+        return _dos(f.loc[col, "p25"]), _dos(f.loc[col, "p75"])
+
+    def media(col):
+        return _dos(f.loc[col, "media"])
+
+    s_p25, s_p75 = p25_p75("screen_time_index")
+    e_p25, e_p75 = p25_p75("est_leisure_screen_hours")
+    q_p25, q_p75 = p25_p75("sleep_quality_index")
+    a_p25, a_p75 = p25_p75("avg_sleep_hours")
+    m_p25, m_p75 = p25_p75("midsleep_weekend_hours")
+    j_p25, j_p75 = p25_p75("social_jetlag_hours")
+    b_p25, b_p75 = p25_p75("bdi_total")
+
+    return [
+        "En la siguiente tabla se presenta un resumen descriptivo de las principales variables "
+        "numéricas del conjunto de datos, incluyendo su media y el intervalo correspondiente al "
+        "50 % central de las observaciones.",
+
+        f"`screen_time_index`: presenta una media de {media('screen_time_index')} horas estimadas "
+        f"de uso de pantallas. El 50 % central de los individuos presenta valores entre {s_p25} y "
+        f"{s_p75} horas, lo que indica una concentración de las observaciones dentro de este intervalo.",
+
+        f"`est_leisure_screen_hours`: presenta una media de {media('est_leisure_screen_hours')} horas "
+        f"estimadas de uso de pantallas durante el tiempo libre. El 50 % central de los individuos se "
+        f"encuentra entre {e_p25} y {e_p75} horas de uso.",
+
+        f"`sleep_quality_index`: presenta una media de {media('sleep_quality_index')} puntos en el "
+        f"índice de calidad del sueño. El 50 % central de los individuos presenta valores entre "
+        f"{q_p25} y {q_p75} puntos. Al tratarse de un índice, estos valores representan una puntuación "
+        "de calidad del sueño y no horas de sueño.",
+
+        f"`avg_sleep_hours`: presenta una media de {media('avg_sleep_hours')} horas de sueño promedio. "
+        f"El 50 % central de los individuos registra entre {a_p25} y {a_p75} horas de sueño, mostrando "
+        "que la mayor concentración de observaciones se encuentra alrededor de este intervalo.",
+
+        f"`midsleep_weekend_hours`: presenta una media de {media('midsleep_weekend_hours')} horas "
+        f"correspondientes al punto medio del periodo de sueño durante los fines de semana. El 50 % "
+        f"central de los individuos presenta valores entre {m_p25} y {m_p75} horas.",
+
+        f"`social_jetlag_hours`: presenta una media de {media('social_jetlag_hours')} horas de desfase "
+        f"entre los horarios de sueño de los días habituales y los fines de semana. El 50 % central "
+        f"de los individuos presenta un desfase entre {j_p25} y {j_p75} horas.",
+
+        f"`bdi_total`: presenta una media de {media('bdi_total')} puntos en la escala de síntomas "
+        f"depresivos. El 50 % central de los individuos obtiene puntuaciones entre {b_p25} y {b_p75} "
+        "puntos. Es importante señalar que esta variable representa una puntuación de síntomas "
+        "depresivos y no una medida directa de \"horas\" o de diagnóstico de depresión.",
+    ]    
+    
 
 
 def layout():
@@ -52,21 +107,58 @@ def layout():
     d = stats.duplicados(df)
     desc = stats.descriptivos(df, VARIABLES_NUMERICAS)
 
-    tabla_desc = tabla(desc.to_dict("records"), [
+    tabla_desc = tabla(desc.to_dict("records"),[
         {"clave": "variable", "titulo": "Variable", "tipo": "variable"},
+        {"clave": "N", "titulo": "N", "tipo": "numero", "formato": entero},
         {"clave": "media", "titulo": "Media", "tipo": "numero", "formato": _dos},
         {"clave": "mediana", "titulo": "Mediana", "tipo": "numero", "formato": _dos},
-        {"clave": "desv", "titulo": "Desv. estándar", "tipo": "numero", "formato": _dos},
+        {"clave": "desv", "titulo": "SD", "tipo": "numero", "formato": _dos},
         {"clave": "min", "titulo": "Mín.", "tipo": "numero", "formato": _dos},
+        {"clave": "p25", "titulo": "Q1", "tipo": "numero", "formato": _dos},
+        {"clave": "p75", "titulo": "Q3", "tipo": "numero", "formato": _dos},
         {"clave": "max", "titulo": "Máx.", "tipo": "numero", "formato": _dos},
-        {"clave": "asimetria", "titulo": "Asimetría", "tipo": "numero", "formato": _dos},
+    ]
+)
+    tabla_tipos = tabla(q.to_dict("records"),
+    [{       "clave": "variable",
+            "titulo": "Variable",
+            "tipo": "variable"
+        },
+
+        {
+            "clave": "tipo",
+            "titulo": "Tipo"
+        },
+
+        {
+            "clave": "unicos",
+            "titulo": "Únicos",
+            "tipo": "numero",
+            "formato": entero
+        },
+
+        {
+            "clave": "pct_unicos",
+            "titulo": "% únicos",
+            "tipo": "numero",
+            "formato": _dos
+        },
+
+        {
+            "clave": "nulos",
+            "titulo": "Nulos",
+            "tipo": "numero",
+            "formato": entero
+        },
+
+        {
+            "clave": "completitud",
+            "titulo": "Completitud",
+            "tipo": "numero",
+            "formato": lambda x: f"{x:.1f}%"
+        },
     ])
-    tabla_tipos = tabla(q.to_dict("records"), [
-        {"clave": "variable", "titulo": "Variable", "tipo": "variable"},
-        {"clave": "tipo", "titulo": "Tipo"},
-        {"clave": "unicos", "titulo": "Únicos", "tipo": "numero", "formato": entero},
-        {"clave": "nulos", "titulo": "Nulos", "tipo": "numero", "formato": entero},
-    ])
+    
 
     return html.Div([
         encabezado_seccion("calidad_datos", [f"{entero(df.shape[0])} filas", f"{df.shape[1]} variables"]),
@@ -98,5 +190,12 @@ def layout():
                 ]),
                 titulo="Siguiente paso",
             ), lg=4),
+        ], className="fila"),
+        dbc.Row([
+            dbc.Col(card(
+                _texto_resumen_inicial(df, desc),
+                titulo="Resumen estadístico inicial",
+                className="estirar",
+            ), lg=12),
         ], className="fila"),
     ])
