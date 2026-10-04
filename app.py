@@ -10,7 +10,7 @@ from dash import Dash, Input, Output, clientside_callback, dcc, html
 
 from components.secciones import BLOQUES, POR_SLUG, SECCIONES, secciones_de, slug_desde_ruta
 from components.ui import aviso_sin_datos, encabezado_seccion
-from data.load_data import COMANDO_DESCARGA, DatosNoDisponibles
+from data.load_data import URL_DATASET, DatosNoDisponibles
 
 # Una pestaña por sección; cada módulo expone layout() y, si aplica, register_callbacks(app)
 PESTANAS = {s["slug"]: importlib.import_module(f"tabs.{s['slug']}") for s in SECCIONES}
@@ -104,7 +104,7 @@ def renderizar(ruta):
     try:
         contenido = PESTANAS[slug].layout()
     except DatosNoDisponibles as error:
-        contenido = html.Div([encabezado_seccion(slug), aviso_sin_datos(str(error), COMANDO_DESCARGA)])
+        contenido = html.Div([encabezado_seccion(slug), aviso_sin_datos(str(error), URL_DATASET)])
     bloque = POR_SLUG[slug]["bloque"]
     clases = ["activo" if b == bloque else "" for b in BLOQUES]
     activos = [s["slug"] == slug for s in SECCIONES]
@@ -135,4 +135,4 @@ for _modulo in PESTANAS.values():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="127.0.0.1", port=8050)
+    app.run(debug=False, host="0.0.0.0", port=8050)

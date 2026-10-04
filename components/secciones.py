@@ -31,8 +31,6 @@ SECCIONES = [
     # Cierre
     {"slug": "hallazgos", "bloque": "Cierre", "nombre": "Hallazgos",
      "descripcion": "Síntesis de resultados e implicaciones para el modelado"},
-    {"slug": "limitaciones", "bloque": "Cierre", "nombre": "Limitaciones",
-     "descripcion": "Alcance del análisis y siguiente paso"},
 ]
 
 for _i, _s in enumerate(SECCIONES, start=1):

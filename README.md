@@ -3,58 +3,63 @@ Dataset: [Screen Time vs Mental Health (ML-ready)](https://www.kaggle.com/datase
 
 ## Requisitos
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/Mac) o Docker Engine + Docker Compose (Linux)
-- (Opcional) [Kaggle CLI](https://www.kaggle.com/docs/api) para descargar el dataset por comando
+- **Docker Desktop** ([descarga](https://www.docker.com/products/docker-desktop/)). En Windows, durante la instalación deja marcada la opción **"Use WSL 2"**; si lo pide, reinicia el equipo.
+- Abrir Docker Desktop y esperar a que diga **"Engine running"** antes de seguir.
 
-Todo lo demás (Python, conda, librerías) vive dentro del contenedor Docker
+No hace falta instalar Python, conda ni ninguna librería: todo corre dentro de los contenedores.
 
-## Inicializar el proyecto (cualquier SO, cualquier editor)
+## Cómo ejecutar el proyecto (Windows)
 
-1. **Clonar el repo**
-   ```bash
+Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son los mismos en macOS/Linux.
+
+1. **Obtener el proyecto**
+
+   Con Git:
+   ```powershell
    git clone <url-del-repo>
    cd screen-time-mental-health-py
    ```
+   Sin Git: en GitHub, botón **Code → Download ZIP**, descomprimir y abrir PowerShell dentro de la carpeta descomprimida (en el Explorador: clic derecho en la carpeta → **"Abrir en Terminal"**).
 
-2. **Descargar el dataset** (no viene versionado en el repo)
-   ```bash
-   kaggle datasets download -d kylefengkfeng209/screen-time-vs-mental-health-ml-ready -p data/raw --unzip
+2. **Descargar el dataset manualmente** (no viene incluido en el repo)
+   1. Entrar a [Screen Time vs Mental Health (ML-ready)](https://www.kaggle.com/datasets/kylefengkfeng209/screen-time-vs-mental-health-ml-ready) e iniciar sesión en Kaggle.
+   2. Clic en **Download** → **Download dataset as zip**.
+   3. Descomprimir el `.zip` y copiar el archivo `screen_time_mental_health.csv` **directamente** dentro de la carpeta `data\raw\` del proyecto.
+
+   Debe quedar exactamente así (ojo: "Extraer todo" de Windows crea una subcarpeta; el CSV no puede quedar dentro de ella):
    ```
-   O descárgalo manualmente desde Kaggle y descomprímelo en `data/raw/`.
+   screen-time-mental-health-py\data\raw\screen_time_mental_health.csv
+   ```
 
-3. **Levantar el contenedor**
-   ```bash
+3. **Levantar el proyecto**
+   ```powershell
    docker compose up --build -d
    ```
-   La primera vez tarda unos minutos (construye la imagen).
+   La primera vez tarda varios minutos (descarga e instala las dependencias). Las siguientes veces es casi inmediato.
 
-4. **Verificar que esté arriba**
-   ```bash
-   docker compose ps
+4. **Abrir el dashboard** en el navegador: <http://localhost:8050>
+
+5. **(Opcional) Abrir JupyterLab** para ver `notebooks/EDA.ipynb`:
+   ```powershell
+   docker compose logs jupyter
    ```
+   Copiar el enlace que empieza por `http://127.0.0.1:8888/lab?token=...` y pegarlo en el navegador.
 
-5. **Apagar cuando termines**
-   ```bash
+6. **Apagar cuando termines**
+   ```powershell
    docker compose down
    ```
-   (Los archivos no se pierden — solo se detiene el contenedor.)
+   Los archivos no se pierden; solo se detienen los contenedores.
 
+### Problemas frecuentes
 
-## Dashboard (Dash)
-
-Requiere Python 3.11 y el dataset en `data/raw/` (ver paso 2).
-
-**Entrar en el contenedor**
-```bash
-docker compose exec jupyter bash
-```
-
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py                      # abre http://127.0.0.1:8050
-```
+| Síntoma | Solución |
+|---|---|
+| `docker` no se reconoce como comando | Docker Desktop no está instalado o no está abierto. Abrirlo, esperar "Engine running" y abrir una PowerShell nueva. |
+| `error during connect` / `cannot find the file specified` | Docker Desktop está instalado pero el motor no ha arrancado. Esperar a que diga "Engine running". |
+| El dashboard muestra "Dataset no disponible" | El CSV no está en `data\raw\screen_time_mental_health.csv` (revisar el nombre y que no esté en una subcarpeta). Corregir y recargar la página. |
+| `port is already allocated` (8050 u 8888) | Otro programa usa ese puerto. Cerrarlo, o ejecutar `docker compose down` si quedó otra copia del proyecto encendida. |
+| La página no carga justo después de levantar | Esperar unos segundos; ver el estado con `docker compose logs dashboard`. |
 
 ## Estructura del proyecto
 
@@ -62,10 +67,10 @@ python app.py                      # abre http://127.0.0.1:8050
 screen-time-mental-health-py/
 ├── .devcontainer/            # configuración de Dev Containers para VS Code
 ├── .github/workflows/        # despliegue del Jupyter Book (deploy-book.yml)
-├── docker/                   # Dockerfile + environment.yml (dependencias conda)
+├── docker/                   # Dockerfile (Jupyter) + Dockerfile.dashboard + environment.yml
 ├── docker-compose.yml
 ├── myst.yml                  # configuración y tabla de contenidos del Jupyter Book (MyST)
-├── requirements.txt          # dependencias del dashboard vía pip (fuera de Docker)
+├── requirements.txt          # dependencias del dashboard (las instala Dockerfile.dashboard)
 │
 ├── data/
 │   ├── raw/                  # dataset original (no versionado)
@@ -107,7 +112,7 @@ screen-time-mental-health-py/
 │   ├── inicio.py, marco_teorico.py, objetivos.py, metodologia.py          # Proyecto
 │   ├── calidad_datos.py, variable_objetivo.py, analisis_sexo.py,          # EDA
 │   │   analisis_numerico.py, correlaciones.py, outliers.py
-│   └── hallazgos.py, limitaciones.py                                      # Cierre
+│   └── hallazgos.py                                                       # Cierre
 └── assets/                   # archivos estáticos que Dash carga automáticamente
     ├── style.css             # variables de diseño (colores, tipografía, espaciados; claro y oscuro)
     ├── componentes.css       # estilos de los componentes (usan solo las variables de style.css)
@@ -121,9 +126,12 @@ screen-time-mental-health-py/
 
 | Acción | Comando |
 |---|---|
-| Levantar el entorno | `docker compose up --build -d` |
-| Entrar a la terminal del contenedor | `docker compose exec jupyter bash` |
+| Levantar Jupyter y el dashboard | `docker compose up --build -d` |
+| Ver el estado de los contenedores | `docker compose ps` |
+| Ver logs del dashboard | `docker compose logs dashboard` |
 | Ver logs / token de Jupyter | `docker compose logs jupyter` |
+| Entrar a la terminal de Jupyter | `docker compose exec jupyter bash` |
+| Reiniciar el dashboard tras cambiar código | `docker compose restart dashboard` |
 | Apagar el entorno | `docker compose down` |
 | Compilar el Jupyter Book | `cd book && jupyter book build` (dentro del contenedor) |
-| Instalar un paquete nuevo | Agrégalo a `docker/environment.yml` → `docker compose up --build -d` (o "Rebuild Container" en VS Code) |
+| Instalar un paquete nuevo | Notebook: `docker/environment.yml`; dashboard: `requirements.txt` → `docker compose up --build -d` |

@@ -8,3 +8,13 @@ services:
     volumes:
       - .:/workspace
     container_name: screen-time-jupyter
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dashboard
+    ports:
+      - "8050:8050"
+    volumes:
+      - .:/workspace
+    container_name: screen-time-dashboard

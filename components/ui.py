@@ -170,14 +170,15 @@ def markdown(texto: str, className: str = "", formulas: bool = True) -> dcc.Mark
                         mathjax=formulas)
 
 
-def aviso_sin_datos(motivo: str, comando: str) -> html.Div:
+def aviso_sin_datos(motivo: str, url: str) -> html.Div:
     """Mensaje claro cuando el CSV no está disponible."""
     return card(
         html.P(motivo),
-        html.P("Descarga el dataset desde la raíz del proyecto con Kaggle CLI:"),
-        html.Pre(html.Code(comando), className="bloque-codigo"),
-        html.P("O descárgalo manualmente desde Kaggle y descomprímelo en data/raw/. "
-               "Después recarga la página."),
+        html.P(["Descarga el dataset manualmente desde ",
+                html.A("Kaggle", href=url, target="_blank"),
+                " (botón Download), descomprime el .zip y copia "
+                "screen_time_mental_health.csv directamente en la carpeta data/raw/ "
+                "del proyecto. Después recarga la página."]),
         titulo="Dataset no disponible",
         className="aviso",
     )

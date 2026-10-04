@@ -1,8 +1,8 @@
 """Carga, validación y caché del dataset *Screen Time vs Mental Health*.
 
 El CSV no se versiona. Si no está disponible, ``cargar_datos`` lanza
-``DatosNoDisponibles`` con un mensaje y el comando de descarga, para que la
-app pueda mostrarlo sin romperse.
+``DatosNoDisponibles`` con un mensaje, y la app muestra el enlace de descarga
+manual sin romperse.
 """
 
 from functools import lru_cache
@@ -13,10 +13,7 @@ import pandas as pd
 RAIZ = Path(__file__).resolve().parent.parent
 RUTA_CSV = RAIZ / "data" / "raw" / "screen_time_mental_health.csv"
 
-COMANDO_DESCARGA = (
-    "kaggle datasets download -d kylefengkfeng209/screen-time-vs-mental-health-ml-ready "
-    "-p data/raw --unzip"
-)
+URL_DATASET = "https://www.kaggle.com/datasets/kylefengkfeng209/screen-time-vs-mental-health-ml-ready"
 
 # Columnas esperadas y su tipo lógico
 COLUMNAS = {
