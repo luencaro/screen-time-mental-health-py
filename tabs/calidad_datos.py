@@ -60,7 +60,7 @@ def layout():
         {"clave": "min", "titulo": "Mín.", "tipo": "numero", "formato": _dos},
         {"clave": "max", "titulo": "Máx.", "tipo": "numero", "formato": _dos},
         {"clave": "asimetria", "titulo": "Asimetría", "tipo": "numero", "formato": _dos},
-    ])
+    ]),
     tabla_tipos = tabla(
     q.to_dict("records"),
     [
