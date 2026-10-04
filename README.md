@@ -39,6 +39,23 @@ Todo lo demás (Python, conda, librerías) vive dentro del contenedor Docker
    ```
    (Los archivos no se pierden — solo se detiene el contenedor.)
 
+
+## Dashboard (Dash)
+
+Requiere Python 3.11 y el dataset en `data/raw/` (ver paso 2).
+
+**Entrar en el contenedor**
+```bash
+docker compose exec jupyter bash
+```
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python app.py                      # abre http://127.0.0.1:8050
+```
+
 ## Estructura del proyecto
 
 ```
@@ -98,17 +115,6 @@ screen-time-mental-health-py/
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
     ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
     └── logo_uninorte.png
-```
-
-## Dashboard (Dash)
-
-Requiere Python 3.11 y el dataset en `data/raw/` (ver paso 2).
-
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py                      # abre http://127.0.0.1:8050
 ```
 
 ## Comandos útiles
