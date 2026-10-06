@@ -26,7 +26,7 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    2. Clic en **Download** → **Download dataset as zip**.
    3. Descomprimir el `.zip` y copiar el archivo `screen_time_mental_health.csv` **directamente** dentro de la carpeta `data\raw\` del proyecto.
 
-   Debe quedar exactamente así (ojo: "Extraer todo" de Windows crea una subcarpeta; el CSV no puede quedar dentro de ella):
+   Debe quedar exactamente así:
    ```
    screen-time-mental-health-py\data\raw\screen_time_mental_health.csv
    ```
@@ -35,10 +35,19 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    ```powershell
    docker compose up --build -d
    ```
-   La primera vez tarda varios minutos (descarga e instala las dependencias). Las siguientes veces es casi inmediato.
+   La primera vez tarda varios minutos (descarga e instala las dependencias).
 
-4. **Abrir el dashboard** en el navegador: <http://localhost:8050>
+4. **Abrir el dashboard**
+   1. Verificar que los dos contenedores estén encendidos:
+      ```powershell
+      docker compose ps
+      ```
+      Deben aparecer `screen-time-dashboard` y `screen-time-jupyter` con estado **Up** (o **running**).
+   2. Abrir un navegador (Chrome, Edge o Firefox) y entrar a:
 
+      **<http://localhost:8050>**
+
+ 
 5. **(Opcional) Abrir JupyterLab** para ver `notebooks/EDA.ipynb`:
    ```powershell
    docker compose logs jupyter
