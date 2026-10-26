@@ -7,6 +7,7 @@ envoltorio de gráficos. Todo el estilo vive en assets/*.css con variables.
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
+from components.enlaces import NOTEBOOK_EDA
 from components.secciones import POR_SLUG
 
 CONFIG_GRAFICO = {"displayModeBar": False, "responsive": True}
@@ -82,8 +83,15 @@ def interpretacion(*hijos, titulo: str = "Interpretación", className: str = "")
 
 
 def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
-    """Breadcrumb (bloque / sección) + H1 de sección + badges a la derecha."""
+    """Breadcrumb (bloque / sección) + H1 de sección + badges a la derecha.
+
+    En las secciones del EDA se añade un enlace al notebook en el Jupyter Book.
+    """
     seccion = POR_SLUG[slug]
+    extras = []
+    if seccion["bloque"] == "EDA":
+        extras.append(html.A("Ver en el Jupyter Book ↗", href=NOTEBOOK_EDA, target="_blank",
+                             rel="noopener noreferrer", className="enlace-libro"))
     return html.Div(
         [
             html.Nav(
@@ -98,7 +106,7 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
             html.Div(
                 [
                     html.H1(seccion["nombre"], className="titulo-seccion"),
-                    html.Div([badge(b) for b in (badges or [])], className="badges"),
+                    html.Div([badge(b) for b in (badges or [])] + extras, className="badges"),
                 ],
                 className="encabezado-fila",
             ),

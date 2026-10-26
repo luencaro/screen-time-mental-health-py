@@ -251,7 +251,22 @@ code, .variable, .mono {
   color: var(--color-texto);
 }
 
-.badges { display: flex; gap: var(--espaciado-sm); flex-wrap: wrap; }
+.badges { display: flex; gap: var(--espaciado-sm); flex-wrap: wrap; align-items: center; }
+
+/* Enlace al notebook del EDA en el Jupyter Book (encabezado de sección) */
+.enlace-libro {
+  font-size: var(--texto-leyenda);
+  font-weight: var(--peso-semibold);
+  line-height: 1;
+  padding: 6px 12px;
+  border-radius: var(--radio-badge);
+  background: var(--color-primario);
+  color: var(--color-superficie);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: var(--transicion-tema), opacity .15s ease;
+}
+.enlace-libro:hover, .enlace-libro:focus-visible { color: var(--color-superficie); opacity: .85; }
 
 /* ── Card ──────────────────────────────────────── */
 .tarjeta {
@@ -485,6 +500,11 @@ code, .variable, .mono {
 
 .equipo-enlace:hover,
 .equipo-enlace:focus-visible { background: var(--color-primario-suave); }
+
+.subtitulo-inicial { margin-top: 0; }
+.recurso { display: flex; flex-direction: column; }
+.recurso-descripcion { color: var(--color-texto-secundario); margin-bottom: var(--espaciado-md); }
+.recurso-enlace { margin-top: auto; }
 
 /* ── Aviso y código ────────────────────────────── */
 .bloque-codigo {

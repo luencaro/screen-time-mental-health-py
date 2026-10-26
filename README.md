@@ -115,13 +115,14 @@ screen-time-mental-health-py/
 ├── components/
 │   ├── ui.py                 # card, KPI, badge, interpretación, tabla, encabezado, gráfico
 │   ├── secciones.py          # registro de secciones del menú (bloque, número, descripción)
+│   ├── enlaces.py            # enlaces públicos: repositorio, Jupyter Book y dataset
 │   ├── formato.py            # formato numérico en español (coma decimal, punto de miles)
 │   └── plotly_theme.py       # paleta de datos y plantillas Plotly claro/oscuro
 ├── tabs/                     # una sección del dashboard por archivo, cada una con layout()
 │   ├── inicio.py, marco_teorico.py, objetivos.py, metodologia.py          # Proyecto
 │   ├── calidad_datos.py, variable_objetivo.py, analisis_sexo.py,          # EDA
 │   │   analisis_numerico.py, correlaciones.py, outliers.py
-│   └── equipo.py                                                          # Equipo
+│   └── acerca.py                                                          # Acerca de
 └── assets/                   # archivos estáticos que Dash carga automáticamente
     ├── style.css             # variables de diseño (colores, tipografía, espaciados; claro y oscuro)
     ├── componentes.css       # estilos de los componentes (usan solo las variables de style.css)

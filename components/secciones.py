@@ -3,7 +3,7 @@
 Lo usan el menú superior (app.py) y el encabezado de cada pestaña (breadcrumb).
 """
 
-BLOQUES = ["Proyecto", "EDA", "Equipo"]
+BLOQUES = ["Proyecto", "EDA", "Acerca de"]
 
 SECCIONES = [
     # Proyecto
@@ -28,9 +28,9 @@ SECCIONES = [
      "descripcion": "Spearman entre pantalla, sueño y BDI-II"},
     {"slug": "outliers", "bloque": "EDA", "nombre": "Outliers",
      "descripcion": "Valores atípicos por IQR y su relevancia clínica"},
-    # Equipo
-    {"slug": "equipo", "bloque": "Equipo", "nombre": "Equipo",
-     "descripcion": "Integrantes del proyecto y sus perfiles"},
+    # Acerca de
+    {"slug": "acerca", "bloque": "Acerca de", "nombre": "Equipo y recursos",
+     "descripcion": "Integrantes, repositorio, Jupyter Book y dataset"},
 ]
 
 for _i, _s in enumerate(SECCIONES, start=1):

@@ -1,6 +1,6 @@
-"""Pestaña 11 · Equipo: integrantes del proyecto con foto, carrera, semestre y enlaces.
+"""Pestaña 11 · Equipo y recursos: integrantes del proyecto y enlaces públicos.
 
-Para cambiar la información basta con editar INTEGRANTES. Las fotos van en
+Para cambiar la información del equipo basta con editar INTEGRANTES. Las fotos van en
 assets/equipo/ (cuadradas, idealmente ≥ 400 px); si falta una foto se muestran
 las iniciales.
 """
@@ -10,6 +10,7 @@ from pathlib import Path
 import dash_bootstrap_components as dbc
 from dash import get_asset_url, html
 
+from components import enlaces
 from components.ui import badge, card, encabezado_seccion
 
 CARPETA_FOTOS = Path(__file__).resolve().parent.parent / "assets" / "equipo"
@@ -31,6 +32,16 @@ INTEGRANTES = [
         "github": "https://github.com/usuario",
         "linkedin": "https://www.linkedin.com/in/usuario",
     },
+]
+
+
+RECURSOS = [
+    {"titulo": "Repositorio", "descripcion": "Código del dashboard, notebooks y análisis en GitHub.",
+     "url": enlaces.REPOSITORIO, "boton": "Abrir en GitHub"},
+    {"titulo": "Jupyter Book", "descripcion": "Documento del proyecto: marco teórico, metodología y EDA.",
+     "url": enlaces.JUPYTER_BOOK, "boton": "Abrir el libro"},
+    {"titulo": "Dataset", "descripcion": "Screen Time vs Mental Health (ML-ready) en Kaggle.",
+     "url": enlaces.DATASET, "boton": "Abrir en Kaggle"},
 ]
 
 
@@ -72,10 +83,21 @@ def _tarjeta(persona: dict) -> html.Div:
     )
 
 
+def _recurso(r: dict) -> html.Div:
+    return card(
+        html.P(r["descripcion"], className="recurso-descripcion"),
+        html.Div(_enlace(f"{r['boton']} ↗", r["url"]), className="recurso-enlace"),
+        titulo=r["titulo"],
+        className="estirar recurso",
+    )
+
+
 def layout():
-    """Estructura: una card por integrante."""
+    """Estructura: una card por integrante → recursos del proyecto."""
     return html.Div([
-        encabezado_seccion("equipo", [f"{len(INTEGRANTES)} integrantes"]),
-        dbc.Row([dbc.Col(_tarjeta(p), md=6, lg=5) for p in INTEGRANTES],
-                className="fila justify-content-center"),
+        encabezado_seccion("acerca", [f"{len(INTEGRANTES)} integrantes", "Universidad del Norte"]),
+        html.H2("Equipo", className="subtitulo-seccion subtitulo-inicial"),
+        dbc.Row([dbc.Col(_tarjeta(p), md=6) for p in INTEGRANTES], className="fila"),
+        html.H2("Recursos del proyecto", className="subtitulo-seccion"),
+        dbc.Row([dbc.Col(_recurso(r), md=4) for r in RECURSOS], className="fila"),
     ])
