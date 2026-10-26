@@ -5,7 +5,7 @@ from dash import html
 
 from components.ui import badge, card, encabezado_seccion, markdown
 from content import libro
-from content.fichas import estudios
+from content.fichas import ANTECEDENTES_RESUMEN, NOMBRES_FORMULAS, estudios
 
 
 def _card_estudio(e: dict) -> html.Div:
@@ -31,12 +31,12 @@ def _card_estudio(e: dict) -> html.Div:
 
 
 def _base_estadistica() -> list:
-    """Encabezado, introducción y una card por subsección de book/base_estadistica.md."""
-    intro, partes = libro.subsecciones("base_estadistica.md", "Base estadística")
+    """Encabezado y una card con las fórmulas de cada subsección de book/base_estadistica.md."""
+    _, partes = libro.subsecciones("base_estadistica.md", "Base estadística")
     return [
         html.H2("Base estadística del estudio", className="subtitulo-seccion"),
-        html.Div(markdown(intro), className="intro-bloque"),
-        html.Div([card(markdown(cuerpo), titulo=titulo) for titulo, cuerpo in partes],
+        html.Div([card(markdown(libro.solo_formulas(cuerpo, NOMBRES_FORMULAS.get(titulo))), titulo=titulo)
+                  for titulo, cuerpo in partes],
                  className="rejilla-mosaico"),
     ]
 
@@ -44,11 +44,11 @@ def _base_estadistica() -> list:
 def layout():
     """Estructura: antecedentes → base estadística → cards de estudios."""
     lista = estudios()
-    antecedentes = libro.seccion("intro.md", "Antecedentes")
+    antecedentes = libro.convertir_citas(ANTECEDENTES_RESUMEN)
 
     return html.Div([
         encabezado_seccion("marco_teorico", [f"{len(lista)} estudios", "Base estadística"]),
-        dbc.Row(dbc.Col(card(markdown(antecedentes, className="dos-columnas"),
+        dbc.Row(dbc.Col(card(markdown(antecedentes),
                              titulo="Antecedentes")), className="fila"),
         *_base_estadistica(),
         html.H2("Estudios revisados", className="subtitulo-seccion"),

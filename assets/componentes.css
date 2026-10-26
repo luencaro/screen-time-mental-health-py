@@ -72,8 +72,10 @@ code, .variable, .mono {
 
 .logo-placa img { height: 36px; width: auto; display: block; }
 
-/* En modo oscuro el logo va sobre una placa blanca */
-[data-bs-theme="dark"] .logo-placa a { background: var(--bs-white); }
+/* Versión del logo según el tema: textos negros en claro, claros en oscuro */
+.logo-placa img.logo-oscuro { display: none; }
+[data-bs-theme="dark"] .logo-placa img.logo-claro { display: none; }
+[data-bs-theme="dark"] .logo-placa img.logo-oscuro { display: block; }
 
 /* ── Menú superior ─────────────────────────────── */
 .menu-superior {
@@ -206,7 +208,7 @@ code, .variable, .mono {
 .pagina {
   max-width: 1440px;
   margin: 0 auto;
-  padding: var(--espaciado-lg) var(--espaciado-xl);
+  padding: var(--espaciado-lg) var(--espaciado-xl) calc(var(--espaciado-lg) + var(--espaciado-md));
 }
 
 .fila {
@@ -215,6 +217,7 @@ code, .variable, .mono {
   margin-bottom: var(--espaciado-md);
 }
 
+.fila:last-child { margin-bottom: 0; }
 .fila > [class*="col"] { display: flex; flex-direction: column; gap: var(--espaciado-md); }
 .fila > [class*="col"] > * { flex: 0 0 auto; }
 .fila > [class*="col"] > .estirar { flex: 1 1 auto; }
@@ -264,14 +267,14 @@ code, .variable, .mono {
 .card-titulo {
   font-size: var(--texto-subtitulo);
   font-weight: var(--peso-semibold);
-  margin: 0 0 var(--espaciado-sm);
+  margin: 0 0 var(--espaciado-smd);
   color: var(--color-texto);
 }
 
 .card-subtitulo {
   font-size: var(--texto-pequeno);
   color: var(--color-texto-secundario);
-  margin: calc(-1 * var(--espaciado-xs)) 0 var(--espaciado-sm);
+  margin: calc(-1 * var(--espaciado-sm)) 0 var(--espaciado-smd);
 }
 
 .tarjeta p:last-child { margin-bottom: 0; }
@@ -421,11 +424,67 @@ code, .variable, .mono {
 .objetivo-num { font-family: var(--fuente-mono); color: var(--color-texto-secundario); min-width: 24px; }
 .objetivo-cuerpo p { margin-bottom: var(--espaciado-xs); }
 
-.lista-hallazgos { list-style: none; padding: 0; margin: 0; }
-.lista-hallazgos li { padding: 12px 0; border-bottom: var(--borde-card); }
-.lista-hallazgos li:first-child { padding-top: 0; }
-.lista-hallazgos li:last-child { border-bottom: none; padding-bottom: 0; }
-.lista-hallazgos strong { font-weight: var(--peso-semibold); }
+/* ── Equipo ────────────────────────────────────── */
+.equipo-perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: var(--espaciado-sm) 0;
+}
+
+.equipo-foto {
+  width: 152px;
+  height: 152px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primario-suave);
+  color: var(--color-primario);
+  font-size: 44px;
+  font-weight: var(--peso-semibold);
+  border: 4px solid var(--color-superficie);
+  box-shadow: 0 0 0 1px var(--color-borde);
+  margin-bottom: var(--espaciado-md);
+}
+
+.equipo-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.equipo-nombre {
+  font-size: 20px;
+  font-weight: var(--peso-semibold);
+  line-height: 1.3;
+  margin: 0 0 var(--espaciado-sm);
+  color: var(--color-texto);
+}
+
+.equipo-semestre { margin-bottom: var(--espaciado-md); }
+.equipo-datos { margin-bottom: var(--espaciado-md); }
+.equipo-datos dd + dd { margin-top: var(--espaciado-xs); }
+
+.equipo-enlaces {
+  display: flex;
+  gap: var(--espaciado-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.equipo-enlace {
+  font-size: var(--texto-pequeno);
+  font-weight: var(--peso-medio);
+  text-decoration: none;
+  padding: 6px 16px;
+  border: var(--borde-card);
+  border-radius: var(--radio-control);
+  transition: var(--transicion-tema);
+}
+
+.equipo-enlace:hover,
+.equipo-enlace:focus-visible { background: var(--color-primario-suave); }
 
 /* ── Aviso y código ────────────────────────────── */
 .bloque-codigo {

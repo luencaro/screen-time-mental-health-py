@@ -62,6 +62,37 @@ ESTUDIOS = [
 ]
 
 
+# Versión breve de la sección Antecedentes de book/intro.md para el dashboard
+ANTECEDENTES_RESUMEN = (
+    "El aumento de la depresión adolescente ha impulsado el estudio de su relación con el tiempo "
+    "de pantalla. La evidencia apunta a que el efecto no suele ser directo, sino que pasa por el "
+    "sueño (calidad, duración y cronotipo) y por el afrontamiento {cite}`hokby2023longitudinal,lemke2023associations`, "
+    "con diferencias por género: en chicas la mediación del sueño es mayor {cite}`hokby2025adolescents`. "
+    "Las revisiones confirman una asociación consistente pero con alta heterogeneidad "
+    "metodológica {cite}`saleem2024exploring`, y los enfoques de aprendizaje automático muestran "
+    "buena capacidad predictiva del riesgo depresivo {cite}`chen2026predicting`. Estas limitaciones "
+    "—diseños mayormente transversales y medición heterogénea del uso de pantallas— motivan el "
+    "presente estudio."
+)
+
+
+# Nombre de cada fórmula de book/base_estadistica.md, en el orden en que aparecen por sección
+NOMBRES_FORMULAS = {
+    "1. Estadística descriptiva": ["Media muestral", "Varianza y desviación estándar muestral",
+                                   "Rango intercuartílico", "Estandarización (z-score)"],
+    "2. Detección de valores atípicos": ["Límites de Tukey"],
+    "3. Variable objetivo y prevalencia": ["Variable objetivo y prevalencia"],
+    "4. Correlación": ["Coeficiente de Pearson", "Coeficiente de Spearman",
+                       "Significancia de Spearman"],
+    "5. Pruebas de hipótesis y decisión mediante valor p": [
+        "Valor p", "Frecuencias esperadas y estadístico χ²", "V de Cramér", "Odds ratio",
+        "Estadístico U", "Correlación biserial de rangos"],
+    "6. Métricas de evaluación": ["MAE, MSE y RMSE", "Coeficiente de determinación",
+                                  "Accuracy, precisión y recall", "F1",
+                                  "Precisión promedio (AUC-PR)"],
+}
+
+
 def estudios() -> list[dict]:
     """Estudios con cita autor-año, año y título desde references.bib."""
     refs = referencias()

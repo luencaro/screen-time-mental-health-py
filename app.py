@@ -4,6 +4,7 @@ Ejecutar desde la raíz del proyecto:  python app.py  →  http://127.0.0.1:8050
 """
 
 import importlib
+import os
 
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, clientside_callback, dcc, html
@@ -60,7 +61,12 @@ cabecera = html.Header(
         [
             html.Div(
                 html.A(
-                    html.Img(src=app.get_asset_url("logo_uninorte.png"), alt="Universidad del Norte"),
+                    [
+                        html.Img(src=app.get_asset_url("logo_uninorte.png"), alt="Universidad del Norte",
+                                 className="logo-claro"),
+                        html.Img(src=app.get_asset_url("logo_uninorte_oscuro.png"),
+                                 alt="Universidad del Norte", className="logo-oscuro"),
+                    ],
                     href="/",
                 ),
                 className="logo-placa",
@@ -135,4 +141,5 @@ for _modulo in PESTANAS.values():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8050)
+    # DASH_DEBUG=1 recarga el dashboard al guardar cambios (solo para desarrollo)
+    app.run(debug=os.environ.get("DASH_DEBUG") == "1", host="0.0.0.0", port=8050)

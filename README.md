@@ -121,7 +121,7 @@ screen-time-mental-health-py/
 │   ├── inicio.py, marco_teorico.py, objetivos.py, metodologia.py          # Proyecto
 │   ├── calidad_datos.py, variable_objetivo.py, analisis_sexo.py,          # EDA
 │   │   analisis_numerico.py, correlaciones.py, outliers.py
-│   └── hallazgos.py                                                       # Cierre
+│   └── equipo.py                                                          # Equipo
 └── assets/                   # archivos estáticos que Dash carga automáticamente
     ├── style.css             # variables de diseño (colores, tipografía, espaciados; claro y oscuro)
     ├── componentes.css       # estilos de los componentes (usan solo las variables de style.css)

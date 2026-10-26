@@ -17,4 +17,6 @@ services:
       - "8050:8050"
     volumes:
       - .:/workspace
+    environment:
+      - DASH_DEBUG=1
     container_name: screen-time-dashboard

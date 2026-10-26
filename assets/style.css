@@ -42,9 +42,10 @@
   /* ── Espaciados ────────────────────────────────── */
   --espaciado-xs: 4px;
   --espaciado-sm: 8px;
-  --espaciado-md: 20px;                 /* gutter del grid y padding de card */
-  --espaciado-lg: 32px;                 /* padding vertical de la página */
-  --espaciado-xl: 40px;                 /* padding horizontal de la página */
+  --espaciado-smd: 12px;                /* separación interna de listas y títulos de card */
+  --espaciado-md: 24px;                 /* gutter del grid y padding de card */
+  --espaciado-lg: 36px;                 /* padding vertical de la página */
+  --espaciado-xl: 48px;                 /* padding horizontal de la página */
 
   /* ── Radios y sombras ──────────────────────────── */
   --radio-card: 8px;
