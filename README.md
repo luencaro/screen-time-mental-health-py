@@ -129,6 +129,7 @@ screen-time-mental-health-py/
     ├── menu_hover.js         # abre los menús desplegables al pasar el cursor
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
     ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
+    ├── iconos/               # iconos SVG de IBM Carbon (GitHub, LinkedIn, libro, datos, tema…)
     └── logo_uninorte.png
 ```
 

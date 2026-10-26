@@ -5,7 +5,7 @@ envoltorio de gráficos. Todo el estilo vive en assets/*.css con variables.
 """
 
 import dash_bootstrap_components as dbc
-from dash import dcc, html
+from dash import dcc, get_asset_url, html
 
 from components.enlaces import NOTEBOOK_EDA
 from components.secciones import POR_SLUG
@@ -24,6 +24,18 @@ ANIMACION_GRAFICO = {
 def var(nombre: str) -> html.Code:
     """Nombre de variable del dataset en IBM Plex Mono."""
     return html.Code(nombre, className="variable")
+
+
+def icono(nombre: str, tamano: int = 16) -> html.Span:
+    """Icono de IBM Carbon (assets/iconos/<nombre>.svg) que toma el color del texto.
+
+    Es decorativo: acompaña siempre a un texto visible, por eso va con aria-hidden.
+    """
+    return html.Span(
+        className="icono",
+        style={"--icono": f"url({get_asset_url(f'iconos/{nombre}.svg')})", "--icono-tamano": f"{tamano}px"},
+        **{"aria-hidden": "true"},
+    )
 
 
 def rico(texto: str) -> list:
@@ -90,7 +102,8 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
     seccion = POR_SLUG[slug]
     extras = []
     if seccion["bloque"] == "EDA":
-        extras.append(html.A("Ver en el Jupyter Book ↗", href=NOTEBOOK_EDA, target="_blank",
+        extras.append(html.A([icono("libro", 14), "Ver en el Jupyter Book", icono("externo", 12)],
+                             href=NOTEBOOK_EDA, target="_blank",
                              rel="noopener noreferrer", className="enlace-libro"))
     return html.Div(
         [

@@ -10,7 +10,7 @@ import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, clientside_callback, dcc, html
 
 from components.secciones import BLOQUES, POR_SLUG, SECCIONES, secciones_de, slug_desde_ruta
-from components.ui import aviso_sin_datos, encabezado_seccion
+from components.ui import aviso_sin_datos, encabezado_seccion, icono
 from data.load_data import URL_DATASET, DatosNoDisponibles
 
 # Una pestaña por sección; cada módulo expone layout() y, si aplica, register_callbacks(app)
@@ -74,7 +74,11 @@ cabecera = html.Header(
             html.Ul([_menu_bloque(b) for b in BLOQUES], className="menu-superior nav"),
             dbc.RadioItems(
                 id="selector-tema",
-                options=[{"label": "Claro", "value": "claro"}, {"label": "Oscuro", "value": "oscuro"}],
+                options=[
+                    {"label": html.Span([icono("sol", 14), "Claro"], className="con-icono"), "value": "claro"},
+                    {"label": html.Span([icono("luna", 14), "Oscuro"], className="con-icono"),
+                     "value": "oscuro"},
+                ],
                 value="claro",
                 inline=True,
                 class_name="segmentado selector-tema",

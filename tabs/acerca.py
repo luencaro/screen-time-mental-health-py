@@ -11,7 +11,7 @@ import dash_bootstrap_components as dbc
 from dash import get_asset_url, html
 
 from components import enlaces
-from components.ui import badge, card, encabezado_seccion
+from components.ui import badge, card, encabezado_seccion, icono
 
 CARPETA_FOTOS = Path(__file__).resolve().parent.parent / "assets" / "equipo"
 
@@ -37,11 +37,11 @@ INTEGRANTES = [
 
 RECURSOS = [
     {"titulo": "Repositorio", "descripcion": "Código del dashboard, notebooks y análisis en GitHub.",
-     "url": enlaces.REPOSITORIO, "boton": "Abrir en GitHub"},
+     "url": enlaces.REPOSITORIO, "boton": "Abrir en GitHub", "icono": "github"},
     {"titulo": "Jupyter Book", "descripcion": "Documento del proyecto: marco teórico, metodología y EDA.",
-     "url": enlaces.JUPYTER_BOOK, "boton": "Abrir el libro"},
+     "url": enlaces.JUPYTER_BOOK, "boton": "Abrir el libro", "icono": "libro"},
     {"titulo": "Dataset", "descripcion": "Screen Time vs Mental Health (ML-ready) en Kaggle.",
-     "url": enlaces.DATASET, "boton": "Abrir en Kaggle"},
+     "url": enlaces.DATASET, "boton": "Abrir en Kaggle", "icono": "datos"},
 ]
 
 
@@ -59,10 +59,11 @@ def _foto(persona: dict) -> html.Div:
     return html.Div(contenido, className="equipo-foto")
 
 
-def _enlace(texto: str, url: str | None):
+def _enlace(contenido: list, url: str | None):
     if not url:
         return None
-    return html.A(texto, href=url, target="_blank", rel="noopener noreferrer", className="equipo-enlace")
+    return html.A(contenido, href=url, target="_blank", rel="noopener noreferrer",
+                  className="equipo-enlace")
 
 
 def _tarjeta(persona: dict) -> html.Div:
@@ -76,8 +77,9 @@ def _tarjeta(persona: dict) -> html.Div:
                 html.Dt("Carreras" if len(carreras) > 1 else "Carrera"),
                 *[html.Dd(c) for c in carreras],
             ], className="dato-lista equipo-datos"),
-            html.Div([_enlace("GitHub", persona.get("github")),
-                      _enlace("LinkedIn", persona.get("linkedin"))], className="equipo-enlaces"),
+            html.Div([_enlace([icono("github"), "GitHub"], persona.get("github")),
+                      _enlace([icono("linkedin"), "LinkedIn"], persona.get("linkedin"))],
+                     className="equipo-enlaces"),
         ], className="equipo-perfil"),
         className="estirar",
     )
@@ -85,9 +87,9 @@ def _tarjeta(persona: dict) -> html.Div:
 
 def _recurso(r: dict) -> html.Div:
     return card(
+        html.H2([icono(r["icono"], 20), r["titulo"]], className="card-titulo con-icono"),
         html.P(r["descripcion"], className="recurso-descripcion"),
-        html.Div(_enlace(f"{r['boton']} ↗", r["url"]), className="recurso-enlace"),
-        titulo=r["titulo"],
+        html.Div(_enlace([r["boton"], icono("externo", 14)], r["url"]), className="recurso-enlace"),
         className="estirar recurso",
     )
 

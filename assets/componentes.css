@@ -22,6 +22,21 @@ body {
 a { color: var(--color-primario); }
 a:hover { color: var(--color-primario); }
 
+/* Iconos IBM Carbon: el SVG hace de máscara y el color sale del texto (claro/oscuro) */
+.icono {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: var(--icono-tamano, 16px);
+  height: var(--icono-tamano, 16px);
+  background-color: currentColor;
+  -webkit-mask: var(--icono) center / contain no-repeat;
+  mask: var(--icono) center / contain no-repeat;
+}
+
+.con-icono { display: inline-flex; align-items: center; gap: var(--espaciado-sm); }
+.card-titulo.con-icono { display: flex; }
+.card-titulo.con-icono .icono { color: var(--color-primario); }
+
 code, .variable, .mono {
   font-family: var(--fuente-mono);
 }
@@ -264,6 +279,9 @@ code, .variable, .mono {
   color: var(--color-superficie);
   text-decoration: none;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transition: var(--transicion-tema), opacity .15s ease;
 }
 .enlace-libro:hover, .enlace-libro:focus-visible { color: var(--color-superficie); opacity: .85; }
@@ -489,6 +507,9 @@ code, .variable, .mono {
 }
 
 .equipo-enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaciado-sm);
   font-size: var(--texto-pequeno);
   font-weight: var(--peso-medio);
   text-decoration: none;
