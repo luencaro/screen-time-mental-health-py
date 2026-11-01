@@ -1,5 +1,7 @@
 services:
   jupyter:
+    # Nombre fijo de la imagen: .devcontainer/ la construye con initializeCommand y luego la reutiliza
+    image: screen-time-jupyter:cpu
     build:
       context: .
       dockerfile: docker/Dockerfile

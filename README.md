@@ -54,6 +54,21 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    ```
    Copiar el enlace que empieza por `http://127.0.0.1:8888/lab?token=...` y pegarlo en el navegador.
 
+   Los modelos de clasificación no vienen en el repo: para generarlos hay que ejecutar `notebooks/Modelado.ipynb` (quedan en `data/processed/modelado/`).
+
+   **Modelado por fases** (después de `Modelado.ipynb`, que crea el split):
+   1. Fase 1: ejecutar los 9 notebooks `notebooks/clf_<modelo>.ipynb`, en cualquier orden. Cada uno compara tres estrategias de desbalance (nativo, pesos de clase y SMOTENC, que trata `sex` como categórica) y guarda el ganador en `data/processed/modelado/fase1/`.
+   2. Fases 2 y 3: ejecutar `notebooks/clf_comparacion.ipynb`. Compara los ganadores, elige el modelo y su umbral, y guarda el modelo final en `data/processed/modelado/final/`.
+
+   **(Opcional) Entrenar con GPU NVIDIA.** Requiere una GPU NVIDIA con su driver y el [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) configurado para Docker. Se levanta con el override de GPU:
+   ```powershell
+   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build -d
+   ```
+   En VS Code: **Dev Containers: Reopen in Container** y elegir la configuración **"(GPU)"** (`.devcontainer/gpu/`).
+   - **Qué usa GPU:** XGBoost, CatBoost y LightGBM. Con el override, el build instala automáticamente sus variantes CUDA de conda-forge.
+   - **Qué usa CPU:** los modelos de scikit-learn (logísticas, Random Forest, KNN y SVC).
+   - **Sin GPU:** todo funciona igual en CPU, sin cambiar nada.
+
 6. **Apagar cuando termines**
    ```powershell
    docker compose down
@@ -78,6 +93,7 @@ screen-time-mental-health-py/
 ├── .github/workflows/        # despliegue del Jupyter Book (deploy-book.yml)
 ├── docker/                   # Dockerfile (Jupyter) + Dockerfile.dashboard + environment.yml
 ├── docker-compose.yml
+├── docker-compose.gpu.yml    # override opcional: reserva la GPU NVIDIA para el servicio jupyter
 ├── myst.yml                  # configuración y tabla de contenidos del Jupyter Book (MyST)
 ├── requirements.txt          # dependencias del dashboard (las instala Dockerfile.dashboard)
 │
@@ -87,8 +103,12 @@ screen-time-mental-health-py/
 │   └── load_data.py          # carga, validación de columnas y tipos, y caché del CSV
 │
 ├── notebooks/
-│   └── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
+│   ├── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
+│   ├── Modelado.ipynb        # versión previa: benchmark conjunto de clasificadores con pesos de clase
+│   ├── clf_<modelo>.ipynb    # fase 1: estrategias de desbalance por modelo (9 notebooks)
+│   └── clf_comparacion.ipynb # fases 2 y 3: comparación, intervalos bootstrap y umbral; modelo final
 ├── src/                      # funciones reutilizables del notebook
+│   ├── Modelado.py                       # modelos, desbalance, tuning, métricas, GPU, gráficas y guardado/carga
 │   ├── ClassificationPreprocessing.py    # pipeline de preprocesamiento para clasificación
 │   ├── LinearRegressionPreprocessing.py  # pipeline de preprocesamiento para regresión
 │   ├── LinearRegressionDiagnostics.py    # supuestos de la regresión lineal (VIF, BP, JB, DW, Cook)

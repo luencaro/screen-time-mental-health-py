@@ -1,0 +1,25 @@
+# Override opcional para entrenar con GPU NVIDIA en el contenedor de Jupyter.
+# Requiere una GPU NVIDIA con su driver y el NVIDIA Container Toolkit configurado para Docker.
+#
+# Uso (desde la raíz del proyecto):
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build -d
+# o, en VS Code, "Reopen in Container" eligiendo la configuración "(GPU)" de .devcontainer/gpu/.
+#
+# Sin este archivo todo funciona igual en CPU: src/Modelado.py detecta la GPU y, si no
+# la encuentra, entrena en CPU automáticamente.
+services:
+  jupyter:
+    # Imagen distinta a la CPU para que construir una no pise la otra
+    image: screen-time-jupyter:gpu
+    build:
+      args:
+        # Hace que conda instale las variantes CUDA de xgboost, catboost y lightgbm
+        # (ver docker/Dockerfile). Debe ser <= la versión de CUDA que soporta el driver.
+        CONDA_OVERRIDE_CUDA: "12.9"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

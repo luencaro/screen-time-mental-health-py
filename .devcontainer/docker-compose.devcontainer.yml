@@ -1,0 +1,10 @@
+# Override que solo usan los devcontainers (.devcontainer/devcontainer.json y gpu/devcontainer.json).
+#
+# Si el servicio tiene "build:", la extensión Dev Containers genera un Dockerfile-with-features
+# en /tmp (fuera del contexto del build), y Docker Compose v5 (que construye con bake) se niega
+# a leerlo: "additional privileges requested: pass --allow=fs.read=...".
+# Por eso la imagen se construye antes con initializeCommand (build normal, dentro del contexto)
+# y aquí se quita "build:" para que la extensión use la imagen ya construida (screen-time-jupyter:cpu/gpu).
+services:
+  jupyter:
+    build: !reset null
