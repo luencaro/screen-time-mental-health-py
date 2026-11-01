@@ -273,7 +273,7 @@ def configurar_dispositivo(pipeline, gpu: bool = True):
     elif isinstance(modelo, CatBoostClassifier):
         # CatBoost no permite cambiar parámetros de un modelo ya entrenado. Tampoco hace falta:
         # task_type solo afecta al entrenamiento y un modelo entrenado en GPU predice igual en CPU.
-        # Al reentrenar (p. ej. clone() en la fase 2) el clon no está entrenado y sí se configura.
+        # Al reentrenar (p. ej. clone() en la fase 3) el clon no está entrenado y sí se configura.
         if modelo.is_fitted():
             return pipeline
         if gpu and GPU_DISPOSITIVOS["catboost"]:
@@ -868,16 +868,14 @@ def cargar_ganador_fase1(clave: str, ruta: Path = RUTA_FASE1) -> tuple[object, d
 # Fase 2: comparación de los ganadores
 # ---------------------------------------------------------------------------
 
-def evaluar_cv_modelos(pipelines: dict, X_train, y_train, cv) -> pd.DataFrame:
-    """CV (mismos folds) de cada Pipeline, indexado por clave, con la diferencia de
-    PR-AUC frente al benchmark (CLAVE_BENCHMARK). Cada Pipeline se clona y se
-    reentrena en cada fold, en GPU si el modelo la soporta."""
-    filas = {}
-    for clave, pipeline in pipelines.items():
-        modelo = configurar_dispositivo(clone(pipeline), gpu=True)
-        resultados = cross_validate(modelo, X_train, y_train, cv=cv, scoring=SCORERS, n_jobs=n_jobs_modelo(clave))
-        filas[clave] = _fila_cv(resultados)
-        print(f"✓ {NOMBRES_FASE2[clave]}")
+def cargar_cv_fase1(ganadores: dict, cv_benchmark: dict, ruta: Path = RUTA_FASE1) -> pd.DataFrame:
+    """Tabla de CV de los ganadores sin reentrenar: toma la fila de la estrategia ganadora
+    de fase1/<clave>/resultados_cv.csv. Agrega el benchmark (cv_benchmark, con columnas
+    "<métrica> media" y "<métrica> DE") y la diferencia de PR-AUC frente a él."""
+    filas = {CLAVE_BENCHMARK: cv_benchmark}
+    for clave, ganador in ganadores.items():
+        resultados = pd.read_csv(Path(ruta) / clave / "resultados_cv.csv", index_col="Estrategia")
+        filas[clave] = resultados.loc[ganador["estrategia"]].drop("Tiempo (s)").to_dict()
     tabla = pd.DataFrame.from_dict(filas, orient="index")
     tabla.index.name = "Modelo"
     tabla["Δ PR-AUC vs benchmark"] = tabla["PR-AUC media"] - tabla.loc[CLAVE_BENCHMARK, "PR-AUC media"]
