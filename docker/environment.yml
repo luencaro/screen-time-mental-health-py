@@ -22,6 +22,9 @@ dependencies:
   - seaborn
   - pip
   - statsmodels
+  # Interpretabilidad (notebooks/interpretabilidad.ipynb)
+  - shap=0.47.2
+  - lime=0.2.0.1
   - nodejs
   - pip:
       - mystmd

@@ -5,7 +5,8 @@ Las usan:
   log1p y pérdida Poisson) y, en reg_lineal, reg_poisson y reg_binomial_negativa,
   las pruebas de hipótesis con statsmodels.
 - notebooks/reg_comparacion.ipynb (fase 2): comparación de los ganadores, test con
-  intervalos bootstrap, permutation importance y el experimento regresión + corte clínico.
+  intervalos bootstrap y el experimento regresión + corte clínico. La interpretación del
+  modelo final (incluida la permutation importance) está en notebooks/interpretabilidad.ipynb.
 
 Lo común con la clasificación (SEED, predictores, preprocesador, split, GPU) se importa de
 Modelado.py. Todo se guarda en data/processed/modelado/regresion/.
@@ -37,7 +38,6 @@ from scipy import sparse, stats
 from scipy.stats import loguniform, randint, uniform
 from sklearn.base import BaseEstimator, RegressorMixin, clone
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.inspection import permutation_importance
 from sklearn.linear_model import ElasticNet, Lasso, LinearRegression, PoissonRegressor, Ridge
 from sklearn.metrics import (
     accuracy_score,
@@ -748,33 +748,6 @@ def evaluar_test_reg(y_test, predicciones: dict, n_replicas: int = 1000, seed: i
     return tabla.sort_values("RMSE")
 
 
-def importancia_permutacion(pipeline, X, y, scoring: str = "neg_root_mean_squared_error",
-                            n_repeats: int = 30, seed: int = SEED) -> pd.DataFrame:
-    """Permutation importance: cuánto empeora la métrica al desordenar cada predictor.
-    Con scoring neg RMSE, la importancia es el aumento del RMSE en puntos BDI."""
-    resultado = permutation_importance(pipeline, X, y, scoring=scoring, n_repeats=n_repeats, random_state=seed, n_jobs=1)
-    tabla = pd.DataFrame(
-        {"Importancia media": resultado.importances_mean, "DE": resultado.importances_std},
-        index=pd.Index(X.columns, name="Variable"),
-    ).sort_values("Importancia media", ascending=False)
-    tabla["Ranking"] = np.arange(1, len(tabla) + 1)
-    return tabla
-
-
-def comparar_jerarquias(importancia_reg: pd.DataFrame, importancia_clf: pd.DataFrame) -> tuple[pd.DataFrame, float]:
-    """Ranking de variables del regresor y del clasificador lado a lado, con la correlación
-    de Spearman entre ambos rankings."""
-    tabla = pd.DataFrame({
-        "Ranking regresión": importancia_reg["Ranking"],
-        "Ranking clasificación": importancia_clf["Ranking"],
-        "Importancia regresión (Δ RMSE)": importancia_reg["Importancia media"],
-        "Importancia clasificación (Δ PR-AUC)": importancia_clf["Importancia media"],
-    }).sort_values("Ranking regresión")
-    tabla["Mismo puesto"] = tabla["Ranking regresión"] == tabla["Ranking clasificación"]
-    rho = stats.spearmanr(tabla["Ranking regresión"], tabla["Ranking clasificación"]).statistic
-    return tabla, float(rho)
-
-
 def metricas_riesgo(y_binario, puntuacion, umbral: float) -> dict:
     """Clasificación con un umbral sobre una puntuación de riesgo (BDI predicho o probabilidad):
     PR-AUC y ROC-AUC (no dependen del umbral) y métricas de clase con el umbral dado."""
@@ -1287,23 +1260,6 @@ def graficar_residuos_vs_predicho(y, prediccion, nombre: str):
     ax.set_xlabel("BDI predicho")
     ax.set_ylabel("Residuo (real − predicho)")
     ax.legend(loc="upper left")
-    sns.despine()
-    fig.tight_layout()
-    return fig
-
-
-def graficar_importancias(importancias: dict, unidades: dict):
-    """Permutation importance (media ± DE) en paneles lado a lado.
-    importancias = {título del panel: tabla de importancia_permutacion()}; unidades = {título: etiqueta del eje}."""
-    fig, axes = plt.subplots(1, len(importancias), figsize=(7 * len(importancias), 4.8), squeeze=False)
-    for ax, (titulo, tabla) in zip(axes.flat, importancias.items()):
-        orden = tabla.sort_values("Importancia media")
-        ax.barh(orden.index, orden["Importancia media"], xerr=orden["DE"], color=NEUTRO, capsize=3)
-        ax.axvline(0, color=TEXTO, linewidth=1)
-        ax.set_title(titulo, fontweight="bold")
-        ax.set_xlabel(unidades[titulo])
-        ax.grid(axis="x")
-        ax.grid(axis="y", visible=False)
     sns.despine()
     fig.tight_layout()
     return fig

@@ -13,6 +13,36 @@ project:
     - file: book/base_estadistica.md
     - file: book/methodology.md
     - file: notebooks/EDA.ipynb
+    - file: book/modelado.md
+    - title: Clasificación
+      children:
+        - file: notebooks/Modelado.ipynb
+        - file: notebooks/clf_logistica.ipynb
+        - file: notebooks/clf_ridge.ipynb
+        - file: notebooks/clf_lasso.ipynb
+        - file: notebooks/clf_knn.ipynb
+        - file: notebooks/clf_svc.ipynb
+        - file: notebooks/clf_random_forest.ipynb
+        - file: notebooks/clf_xgboost.ipynb
+        - file: notebooks/clf_lightgbm.ipynb
+        - file: notebooks/clf_catboost.ipynb
+        - file: notebooks/clf_comparacion.ipynb
+    - title: Regresión
+      children:
+        - file: notebooks/reg_lineal.ipynb
+        - file: notebooks/reg_ridge.ipynb
+        - file: notebooks/reg_lasso.ipynb
+        - file: notebooks/reg_elasticnet.ipynb
+        - file: notebooks/reg_poisson.ipynb
+        - file: notebooks/reg_binomial_negativa.ipynb
+        - file: notebooks/reg_knn.ipynb
+        - file: notebooks/reg_svr.ipynb
+        - file: notebooks/reg_random_forest.ipynb
+        - file: notebooks/reg_xgboost.ipynb
+        - file: notebooks/reg_lightgbm.ipynb
+        - file: notebooks/reg_catboost.ipynb
+        - file: notebooks/reg_comparacion.ipynb
+    - file: notebooks/interpretabilidad.ipynb
 site:
   template: book-theme
   options:
