@@ -4,13 +4,14 @@ Ejecutar desde la raíz del proyecto:  python app.py  →  http://127.0.0.1:8050
 """
 
 import importlib
+import os
 
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, clientside_callback, dcc, html
 
 from components.secciones import BLOQUES, POR_SLUG, SECCIONES, secciones_de, slug_desde_ruta
-from components.ui import aviso_sin_datos, encabezado_seccion
-from data.load_data import COMANDO_DESCARGA, DatosNoDisponibles
+from components.ui import aviso_sin_datos, encabezado_seccion, icono
+from data.load_data import URL_DATASET, DatosNoDisponibles
 
 # Una pestaña por sección; cada módulo expone layout() y, si aplica, register_callbacks(app)
 PESTANAS = {s["slug"]: importlib.import_module(f"tabs.{s['slug']}") for s in SECCIONES}
@@ -60,7 +61,12 @@ cabecera = html.Header(
         [
             html.Div(
                 html.A(
-                    html.Img(src=app.get_asset_url("logo_uninorte.png"), alt="Universidad del Norte"),
+                    [
+                        html.Img(src=app.get_asset_url("logo_uninorte.png"), alt="Universidad del Norte",
+                                 className="logo-claro"),
+                        html.Img(src=app.get_asset_url("logo_uninorte_oscuro.png"),
+                                 alt="Universidad del Norte", className="logo-oscuro"),
+                    ],
                     href="/",
                 ),
                 className="logo-placa",
@@ -68,7 +74,11 @@ cabecera = html.Header(
             html.Ul([_menu_bloque(b) for b in BLOQUES], className="menu-superior nav"),
             dbc.RadioItems(
                 id="selector-tema",
-                options=[{"label": "Claro", "value": "claro"}, {"label": "Oscuro", "value": "oscuro"}],
+                options=[
+                    {"label": html.Span([icono("sol", 14), "Claro"], className="con-icono"), "value": "claro"},
+                    {"label": html.Span([icono("luna", 14), "Oscuro"], className="con-icono"),
+                     "value": "oscuro"},
+                ],
                 value="claro",
                 inline=True,
                 class_name="segmentado selector-tema",
@@ -104,7 +114,7 @@ def renderizar(ruta):
     try:
         contenido = PESTANAS[slug].layout()
     except DatosNoDisponibles as error:
-        contenido = html.Div([encabezado_seccion(slug), aviso_sin_datos(str(error), COMANDO_DESCARGA)])
+        contenido = html.Div([encabezado_seccion(slug), aviso_sin_datos(str(error), URL_DATASET)])
     bloque = POR_SLUG[slug]["bloque"]
     clases = ["activo" if b == bloque else "" for b in BLOQUES]
     activos = [s["slug"] == slug for s in SECCIONES]
@@ -135,4 +145,5 @@ for _modulo in PESTANAS.values():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="127.0.0.1", port=8050)
+    # DASH_DEBUG=1 recarga el dashboard al guardar cambios (solo para desarrollo)
+    app.run(debug=os.environ.get("DASH_DEBUG") == "1", host="0.0.0.0", port=8050)

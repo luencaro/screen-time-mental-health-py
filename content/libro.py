@@ -82,6 +82,20 @@ def subsecciones(archivo: str, titulo: str) -> tuple[str, list[tuple[str, str]]]
             [(t, convertir_citas("\n".join(c).strip())) for t, c in partes])
 
 
+def solo_formulas(texto: str, nombres: list[str] | None = None) -> str:
+    """Conserva únicamente los encabezados y los bloques de fórmulas $$…$$.
+
+    Si se dan ``nombres``, cada fórmula va precedida de su nombre en negrita.
+    """
+    nombres = iter(nombres or [])
+    partes = []
+    for parte in re.findall(r"^#{1,6}\s+[^\n]*$|^\$\$\n.*?\n\$\$$", texto, re.MULTILINE | re.DOTALL):
+        if parte.startswith("$$") and (nombre := next(nombres, None)):
+            partes.append(f"**{nombre}**")
+        partes.append(parte)
+    return "\n\n".join(partes)
+
+
 def parrafos(texto: str) -> list[str]:
     """Divide un bloque Markdown en párrafos (separados por líneas en blanco)."""
     return [p.strip() for p in re.split(r"\n\s*\n", texto) if p.strip()]

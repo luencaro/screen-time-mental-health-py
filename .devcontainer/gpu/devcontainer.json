@@ -1,0 +1,28 @@
+{
+  // Igual que .devcontainer/devcontainer.json, pero con el override de GPU.
+  // Requiere GPU NVIDIA con driver y NVIDIA Container Toolkit configurado para Docker.
+  "name": "screen-time-mental-health (GPU)",
+  // Construye la imagen antes de abrir el contenedor (ver ../docker-compose.devcontainer.yml).
+  // Corre en la máquina local (bash en Linux/macOS, cmd en Windows) desde la raíz del proyecto.
+  "initializeCommand": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml build jupyter",
+  "dockerComposeFile": ["../../docker-compose.yml", "../../docker-compose.gpu.yml", "../docker-compose.devcontainer.yml"],
+  "service": "jupyter",
+  // Solo Jupyter; el dashboard se levanta aparte con "docker compose up dashboard"
+  "runServices": ["jupyter"],
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/conda/envs/screen-time-env/bin/python"
+      }
+    }
+  },
+
+  // Evita que VS Code apague el contenedor al cerrar la ventana
+  "shutdownAction": "stopCompose"
+}

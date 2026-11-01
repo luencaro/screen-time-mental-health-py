@@ -7,11 +7,24 @@ dependencies:
   - pandas
   - numpy
   - scipy
-  - scikit-learn
+  # Versiones fijadas: los modelos .joblib solo se cargan de forma fiable
+  # con las mismas versiones con que se guardaron (notebooks/Modelado.ipynb y clf_*.ipynb)
+  - scikit-learn=1.9.1
+  - imbalanced-learn=0.14.2
+  # GPU (opcional): conda-forge publica variantes CPU y CUDA de estas mismas versiones.
+  # Con docker-compose.gpu.yml, el Dockerfile define CONDA_OVERRIDE_CUDA y conda instala
+  # las variantes CUDA automáticamente; sin él, instala las CPU. No hay que cambiar estas líneas.
+  - xgboost=3.4.2
+  - lightgbm=4.7.0
+  - catboost=1.2.9
+  - joblib=1.6.0
   - matplotlib
   - seaborn
   - pip
-    - statsmodels
+  - statsmodels
+  # Interpretabilidad (notebooks/interpretabilidad.ipynb)
+  - shap=0.47.2
+  - lime=0.2.0.1
   - nodejs
   - pip:
       - mystmd

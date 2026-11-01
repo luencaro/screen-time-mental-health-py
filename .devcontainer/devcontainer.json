@@ -1,7 +1,12 @@
 {
   "name": "screen-time-mental-health",
-  "dockerComposeFile": "../docker-compose.yml",
+  // Construye la imagen antes de abrir el contenedor (ver docker-compose.devcontainer.yml).
+  // Corre en la máquina local (bash en Linux/macOS, cmd en Windows) desde la raíz del proyecto.
+  "initializeCommand": "docker compose -f docker-compose.yml build jupyter",
+  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.devcontainer.yml"],
   "service": "jupyter",
+  // Solo Jupyter; el dashboard se levanta aparte con "docker compose up dashboard"
+  "runServices": ["jupyter"],
   "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {

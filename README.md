@@ -3,41 +3,87 @@ Dataset: [Screen Time vs Mental Health (ML-ready)](https://www.kaggle.com/datase
 
 ## Requisitos
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/Mac) o Docker Engine + Docker Compose (Linux)
-- (Opcional) [Kaggle CLI](https://www.kaggle.com/docs/api) para descargar el dataset por comando
+- **Docker Desktop** ([descarga](https://www.docker.com/products/docker-desktop/)). En Windows, durante la instalación deja marcada la opción **"Use WSL 2"**; si lo pide, reinicia el equipo.
+- Abrir Docker Desktop y esperar a que diga **"Engine running"** antes de seguir.
 
-Todo lo demás (Python, conda, librerías) vive dentro del contenedor Docker
+No hace falta instalar Python, conda ni ninguna librería: todo corre dentro de los contenedores.
 
-## Inicializar el proyecto (cualquier SO, cualquier editor)
+## Cómo ejecutar el proyecto (Windows)
 
-1. **Clonar el repo**
-   ```bash
+Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son los mismos en macOS/Linux.
+
+1. **Obtener el proyecto**
+
+   Con Git:
+   ```powershell
    git clone <url-del-repo>
    cd screen-time-mental-health-py
    ```
+   Sin Git: en GitHub, botón **Code → Download ZIP**, descomprimir y abrir PowerShell dentro de la carpeta descomprimida (en el Explorador: clic derecho en la carpeta → **"Abrir en Terminal"**).
 
-2. **Descargar el dataset** (no viene versionado en el repo)
-   ```bash
-   kaggle datasets download -d kylefengkfeng209/screen-time-vs-mental-health-ml-ready -p data/raw --unzip
+2. **Descargar el dataset manualmente** (no viene incluido en el repo)
+   1. Entrar a [Screen Time vs Mental Health (ML-ready)](https://www.kaggle.com/datasets/kylefengkfeng209/screen-time-vs-mental-health-ml-ready) e iniciar sesión en Kaggle.
+   2. Clic en **Download** → **Download dataset as zip**.
+   3. Descomprimir el `.zip` y copiar el archivo `screen_time_mental_health.csv` **directamente** dentro de la carpeta `data\raw\` del proyecto.
+
+   Debe quedar exactamente así:
    ```
-   O descárgalo manualmente desde Kaggle y descomprímelo en `data/raw/`.
+   screen-time-mental-health-py\data\raw\screen_time_mental_health.csv
+   ```
 
-3. **Levantar el contenedor**
-   ```bash
+3. **Levantar el proyecto**
+   ```powershell
    docker compose up --build -d
    ```
-   La primera vez tarda unos minutos (construye la imagen).
+   La primera vez tarda varios minutos (descarga e instala las dependencias).
 
-4. **Verificar que esté arriba**
-   ```bash
-   docker compose ps
+4. **Abrir el dashboard**
+   1. Verificar que los dos contenedores estén encendidos:
+      ```powershell
+      docker compose ps
+      ```
+      Deben aparecer `screen-time-dashboard` y `screen-time-jupyter` con estado **Up** (o **running**).
+   2. Abrir un navegador (Chrome, Edge o Firefox) y entrar a:
+
+      **<http://localhost:8050>**
+
+ 
+5. **(Opcional) Abrir JupyterLab** para ver `notebooks/EDA.ipynb`:
+   ```powershell
+   docker compose logs jupyter
    ```
+   Copiar el enlace que empieza por `http://127.0.0.1:8888/lab?token=...` y pegarlo en el navegador.
 
-5. **Apagar cuando termines**
-   ```bash
+   Los modelos de clasificación no vienen en el repo: para generarlos hay que ejecutar `notebooks/Modelado.ipynb` (quedan en `data/processed/modelado/`).
+
+   **Modelado por fases** (después de `Modelado.ipynb`, que crea el split):
+   1. Fase 1: ejecutar los 9 notebooks `notebooks/clf_<modelo>.ipynb`, en cualquier orden. Cada uno compara tres estrategias de desbalance (nativo, pesos de clase y SMOTENC, que trata `sex` como categórica) y guarda el ganador en `data/processed/modelado/fase1/`.
+   2. Fases 2 y 3: ejecutar `notebooks/clf_comparacion.ipynb`. Compara los ganadores, elige el modelo y su umbral, y guarda el modelo final en `data/processed/modelado/final/`.
+
+   **(Opcional) Entrenar con GPU NVIDIA.** Requiere una GPU NVIDIA con su driver y el [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) configurado para Docker. Se levanta con el override de GPU:
+   ```powershell
+   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build -d
+   ```
+   En VS Code: **Dev Containers: Reopen in Container** y elegir la configuración **"(GPU)"** (`.devcontainer/gpu/`).
+   - **Qué usa GPU:** XGBoost, CatBoost y LightGBM. Con el override, el build instala automáticamente sus variantes CUDA de conda-forge.
+   - **Qué usa CPU:** los modelos de scikit-learn (logísticas, Random Forest, KNN y SVC).
+   - **Sin GPU:** todo funciona igual en CPU, sin cambiar nada.
+
+6. **Apagar cuando termines**
+   ```powershell
    docker compose down
    ```
-   (Los archivos no se pierden — solo se detiene el contenedor.)
+   Los archivos no se pierden; solo se detienen los contenedores.
+
+### Problemas frecuentes
+
+| Síntoma | Solución |
+|---|---|
+| `docker` no se reconoce como comando | Docker Desktop no está instalado o no está abierto. Abrirlo, esperar "Engine running" y abrir una PowerShell nueva. |
+| `error during connect` / `cannot find the file specified` | Docker Desktop está instalado pero el motor no ha arrancado. Esperar a que diga "Engine running". |
+| El dashboard muestra "Dataset no disponible" | El CSV no está en `data\raw\screen_time_mental_health.csv` (revisar el nombre y que no esté en una subcarpeta). Corregir y recargar la página. |
+| `port is already allocated` (8050 u 8888) | Otro programa usa ese puerto. Cerrarlo, o ejecutar `docker compose down` si quedó otra copia del proyecto encendida. |
+| La página no carga justo después de levantar | Esperar unos segundos; ver el estado con `docker compose logs dashboard`. |
 
 ## Estructura del proyecto
 
@@ -45,10 +91,11 @@ Todo lo demás (Python, conda, librerías) vive dentro del contenedor Docker
 screen-time-mental-health-py/
 ├── .devcontainer/            # configuración de Dev Containers para VS Code
 ├── .github/workflows/        # despliegue del Jupyter Book (deploy-book.yml)
-├── docker/                   # Dockerfile + environment.yml (dependencias conda)
+├── docker/                   # Dockerfile (Jupyter) + Dockerfile.dashboard + environment.yml
 ├── docker-compose.yml
+├── docker-compose.gpu.yml    # override opcional: reserva la GPU NVIDIA para el servicio jupyter
 ├── myst.yml                  # configuración y tabla de contenidos del Jupyter Book (MyST)
-├── requirements.txt          # dependencias del dashboard vía pip (fuera de Docker)
+├── requirements.txt          # dependencias del dashboard (las instala Dockerfile.dashboard)
 │
 ├── data/
 │   ├── raw/                  # dataset original (no versionado)
@@ -56,8 +103,12 @@ screen-time-mental-health-py/
 │   └── load_data.py          # carga, validación de columnas y tipos, y caché del CSV
 │
 ├── notebooks/
-│   └── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
+│   ├── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
+│   ├── Modelado.ipynb        # versión previa: benchmark conjunto de clasificadores con pesos de clase
+│   ├── clf_<modelo>.ipynb    # fase 1: estrategias de desbalance por modelo (9 notebooks)
+│   └── clf_comparacion.ipynb # fases 2 y 3: comparación, intervalos bootstrap y umbral; modelo final
 ├── src/                      # funciones reutilizables del notebook
+│   ├── Modelado.py                       # modelos, desbalance, tuning, métricas, GPU, gráficas y guardado/carga
 │   ├── ClassificationPreprocessing.py    # pipeline de preprocesamiento para clasificación
 │   ├── LinearRegressionPreprocessing.py  # pipeline de preprocesamiento para regresión
 │   ├── LinearRegressionDiagnostics.py    # supuestos de la regresión lineal (VIF, BP, JB, DW, Cook)
@@ -84,40 +135,34 @@ screen-time-mental-health-py/
 ├── components/
 │   ├── ui.py                 # card, KPI, badge, interpretación, tabla, encabezado, gráfico
 │   ├── secciones.py          # registro de secciones del menú (bloque, número, descripción)
+│   ├── enlaces.py            # enlaces públicos: repositorio, Jupyter Book y dataset
 │   ├── formato.py            # formato numérico en español (coma decimal, punto de miles)
 │   └── plotly_theme.py       # paleta de datos y plantillas Plotly claro/oscuro
 ├── tabs/                     # una sección del dashboard por archivo, cada una con layout()
 │   ├── inicio.py, marco_teorico.py, objetivos.py, metodologia.py          # Proyecto
 │   ├── calidad_datos.py, variable_objetivo.py, analisis_sexo.py,          # EDA
 │   │   analisis_numerico.py, correlaciones.py, outliers.py
-│   └── hallazgos.py, limitaciones.py                                      # Cierre
+│   └── acerca.py                                                          # Acerca de
 └── assets/                   # archivos estáticos que Dash carga automáticamente
     ├── style.css             # variables de diseño (colores, tipografía, espaciados; claro y oscuro)
     ├── componentes.css       # estilos de los componentes (usan solo las variables de style.css)
     ├── menu_hover.js         # abre los menús desplegables al pasar el cursor
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
     ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
+    ├── iconos/               # iconos SVG de IBM Carbon (GitHub, LinkedIn, libro, datos, tema…)
     └── logo_uninorte.png
-```
-
-## Dashboard (Dash)
-
-Requiere Python 3.11 y el dataset en `data/raw/` (ver paso 2).
-
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py                      # abre http://127.0.0.1:8050
 ```
 
 ## Comandos útiles
 
 | Acción | Comando |
 |---|---|
-| Levantar el entorno | `docker compose up --build -d` |
-| Entrar a la terminal del contenedor | `docker compose exec jupyter bash` |
+| Levantar Jupyter y el dashboard | `docker compose up --build -d` |
+| Ver el estado de los contenedores | `docker compose ps` |
+| Ver logs del dashboard | `docker compose logs dashboard` |
 | Ver logs / token de Jupyter | `docker compose logs jupyter` |
+| Entrar a la terminal de Jupyter | `docker compose exec jupyter bash` |
+| Reiniciar el dashboard tras cambiar código | `docker compose restart dashboard` |
 | Apagar el entorno | `docker compose down` |
 | Compilar el Jupyter Book | `cd book && jupyter book build` (dentro del contenedor) |
-| Instalar un paquete nuevo | Agrégalo a `docker/environment.yml` → `docker compose up --build -d` (o "Rebuild Container" en VS Code) |
+| Instalar un paquete nuevo | Notebook: `docker/environment.yml`; dashboard: `requirements.txt` → `docker compose up --build -d` |

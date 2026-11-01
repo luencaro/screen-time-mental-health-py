@@ -5,8 +5,9 @@ envoltorio de gráficos. Todo el estilo vive en assets/*.css con variables.
 """
 
 import dash_bootstrap_components as dbc
-from dash import dcc, html
+from dash import dcc, get_asset_url, html
 
+from components.enlaces import NOTEBOOK_EDA
 from components.secciones import POR_SLUG
 
 CONFIG_GRAFICO = {"displayModeBar": False, "responsive": True}
@@ -23,6 +24,18 @@ ANIMACION_GRAFICO = {
 def var(nombre: str) -> html.Code:
     """Nombre de variable del dataset en IBM Plex Mono."""
     return html.Code(nombre, className="variable")
+
+
+def icono(nombre: str, tamano: int = 16) -> html.Span:
+    """Icono de IBM Carbon (assets/iconos/<nombre>.svg) que toma el color del texto.
+
+    Es decorativo: acompaña siempre a un texto visible, por eso va con aria-hidden.
+    """
+    return html.Span(
+        className="icono",
+        style={"--icono": f"url({get_asset_url(f'iconos/{nombre}.svg')})", "--icono-tamano": f"{tamano}px"},
+        **{"aria-hidden": "true"},
+    )
 
 
 def rico(texto: str) -> list:
@@ -82,8 +95,16 @@ def interpretacion(*hijos, titulo: str = "Interpretación", className: str = "")
 
 
 def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
-    """Breadcrumb (bloque / sección) + H1 de sección + badges a la derecha."""
+    """Breadcrumb (bloque / sección) + H1 de sección + badges a la derecha.
+
+    En las secciones del EDA se añade un enlace al notebook en el Jupyter Book.
+    """
     seccion = POR_SLUG[slug]
+    extras = []
+    if seccion["bloque"] == "EDA":
+        extras.append(html.A([icono("libro", 14), "Ver en el Jupyter Book", icono("externo", 12)],
+                             href=NOTEBOOK_EDA, target="_blank",
+                             rel="noopener noreferrer", className="enlace-libro"))
     return html.Div(
         [
             html.Nav(
@@ -98,7 +119,7 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
             html.Div(
                 [
                     html.H1(seccion["nombre"], className="titulo-seccion"),
-                    html.Div([badge(b) for b in (badges or [])], className="badges"),
+                    html.Div([badge(b) for b in (badges or [])] + extras, className="badges"),
                 ],
                 className="encabezado-fila",
             ),
@@ -170,14 +191,15 @@ def markdown(texto: str, className: str = "", formulas: bool = True) -> dcc.Mark
                         mathjax=formulas)
 
 
-def aviso_sin_datos(motivo: str, comando: str) -> html.Div:
+def aviso_sin_datos(motivo: str, url: str) -> html.Div:
     """Mensaje claro cuando el CSV no está disponible."""
     return card(
         html.P(motivo),
-        html.P("Descarga el dataset desde la raíz del proyecto con Kaggle CLI:"),
-        html.Pre(html.Code(comando), className="bloque-codigo"),
-        html.P("O descárgalo manualmente desde Kaggle y descomprímelo en data/raw/. "
-               "Después recarga la página."),
+        html.P(["Descarga el dataset manualmente desde ",
+                html.A("Kaggle", href=url, target="_blank"),
+                " (botón Download), descomprime el .zip y copia "
+                "screen_time_mental_health.csv directamente en la carpeta data/raw/ "
+                "del proyecto. Después recarga la página."]),
         titulo="Dataset no disponible",
         className="aviso",
     )
