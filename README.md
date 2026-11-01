@@ -54,6 +54,8 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    ```
    Copiar el enlace que empieza por `http://127.0.0.1:8888/lab?token=...` y pegarlo en el navegador.
 
+   Los modelos de clasificación no vienen en el repo: para generarlos hay que ejecutar `notebooks/Modelado.ipynb` (quedan en `data/processed/modelado/`).
+
 6. **Apagar cuando termines**
    ```powershell
    docker compose down
@@ -87,8 +89,10 @@ screen-time-mental-health-py/
 │   └── load_data.py          # carga, validación de columnas y tipos, y caché del CSV
 │
 ├── notebooks/
-│   └── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
+│   ├── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
+│   └── Modelado.ipynb        # tuning y benchmarking de clasificadores; guarda los modelos
 ├── src/                      # funciones reutilizables del notebook
+│   ├── Modelado.py                       # modelos, tuning, métricas, gráficas y guardado/carga de modelos
 │   ├── ClassificationPreprocessing.py    # pipeline de preprocesamiento para clasificación
 │   ├── LinearRegressionPreprocessing.py  # pipeline de preprocesamiento para regresión
 │   ├── LinearRegressionDiagnostics.py    # supuestos de la regresión lineal (VIF, BP, JB, DW, Cook)
