@@ -19,6 +19,7 @@ import seaborn as sns
 import shap
 from catboost import CatBoostClassifier, Pool
 from lime.lime_tabular import LimeTabularExplainer
+from matplotlib.colors import LinearSegmentedColormap, to_rgb
 from scipy.special import logit
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model import ElasticNet
@@ -28,7 +29,7 @@ if str(RAIZ) not in sys.path:
     sys.path.append(str(RAIZ))   # para importar data/load_data.py (etiquetas legibles)
 
 from data.load_data import ETIQUETAS
-from EstiloGraficos import DEPRIMIDO, NEUTRO, NO_DEPRIMIDO, TEXTO
+from EstiloGraficos import CHICAS, CHICOS, CUADRICULA, DEPRIMIDO, NEUTRO, NO_DEPRIMIDO, TEXTO, TEXTO_SECUNDARIO
 from Modelado import (
     PREDICTORES, PREDICTORES_CATEGORICOS, PREDICTORES_NUMERICOS, RUTA_SALIDA, SEED, cargar_modelo_final, cargar_split,
 )
@@ -51,6 +52,44 @@ UNIDADES = {
 }
 
 CLASES = ["No deprimido", "Deprimido"]
+
+
+# ---------------------------------------------------------------------------
+# Paleta del proyecto en SHAP y LIME
+# ---------------------------------------------------------------------------
+# SHAP y LIME no usan los rcParams de aplicar_estilo(): traen sus propios colores (rojo/azul de
+# SHAP, verde/rojo de LIME). Aquí se les aplica la paleta del dashboard: lo que aumenta el riesgo
+# o el BDI en el color de "deprimido" y lo que lo reduce en el de "no deprimido".
+
+def _aclarar(color: str, cantidad: float = 0.45) -> tuple:
+    """Mezcla un color con blanco (para los textos secundarios de los gráficos de SHAP)."""
+    return tuple(c + (1 - c) * cantidad for c in to_rgb(color))
+
+
+# Valor de la variable en los beeswarm (bajo → alto) y sexo en los dependence plots
+CMAP_VALOR = LinearSegmentedColormap.from_list("valor_variable", [NO_DEPRIMIDO, DEPRIMIDO])
+# Degradado y no ListedColormap: shap.plots.scatter divide el colormap en N - 1 tramos para una
+# variable binaria, lo que falla con 2 colores. Con 256 tonos, 0 (chico) y 1 (chica) quedan en los extremos.
+CMAP_SEXO = LinearSegmentedColormap.from_list("sexo", [CHICOS, CHICAS])
+
+
+def aplicar_estilo_shap() -> None:
+    """Configura los colores globales de los gráficos de SHAP (barras, waterfall) con la paleta
+    del proyecto y traduce las etiquetas de su barra de color."""
+    try:
+        from shap.plots._labels import labels
+        from shap.plots._style import set_style
+    except ImportError:   # API experimental de shap: si cambia, se conservan sus colores por defecto
+        return
+    set_style(
+        primary_color_positive=DEPRIMIDO, primary_color_negative=NO_DEPRIMIDO,
+        secondary_color_positive=_aclarar(DEPRIMIDO), secondary_color_negative=_aclarar(NO_DEPRIMIDO),
+        hlines_color=CUADRICULA, vlines_color=CUADRICULA, tick_labels_color=TEXTO_SECUNDARIO, text_color="white",
+    )
+    labels.update({"FEATURE_VALUE": "Valor de la variable", "FEATURE_VALUE_LOW": "Bajo", "FEATURE_VALUE_HIGH": "Alto"})
+
+
+aplicar_estilo_shap()
 
 
 # ---------------------------------------------------------------------------
@@ -175,6 +214,7 @@ def graficar_coeficientes(tabla: pd.DataFrame, intercepto: float):
         ax.text(fila["Coeficiente (por DE)"], posicion, f"  {texto}  ", va="center",
                 ha="left" if fila["Coeficiente (por DE)"] >= 0 else "right", fontsize=9, color=TEXTO)
     ax.axvline(0, color=TEXTO, linewidth=1)
+    ax.margins(x=0.18)   # espacio para las etiquetas de las barras negativas y positivas
     ax.set_title(f"ElasticNet: coeficientes (intercepto = {intercepto:.2f} puntos BDI)", fontweight="bold")
     ax.set_xlabel("Cambio en el BDI esperado por cada DE del predictor (sexo: chicas frente a chicos)")
     ax.grid(axis="x")
@@ -274,8 +314,16 @@ def importancia_shap(explicacion: shap.Explanation) -> pd.Series:
 
 
 def graficar_shap_barras(explicacion: shap.Explanation, titulo: str, unidad: str):
-    """Media de |SHAP| por variable (gráfico de barras de shap)."""
-    shap.plots.bar(explicacion, max_display=len(explicacion.feature_names), show=False)
+    """Media de |SHAP| por variable (gráfico de barras de shap, en el color neutro: no tiene signo)."""
+    plt.figure()
+    try:
+        from shap.plots._style import style_context
+        contexto = style_context(primary_color_positive=NEUTRO)
+    except ImportError:
+        from contextlib import nullcontext
+        contexto = nullcontext()
+    with contexto:
+        shap.plots.bar(explicacion, max_display=len(explicacion.feature_names), show=False)
     fig = plt.gcf()
     fig.axes[0].set_title(titulo, fontweight="bold")
     fig.axes[0].set_xlabel(f"Media de |SHAP| ({unidad})")
@@ -285,7 +333,9 @@ def graficar_shap_barras(explicacion: shap.Explanation, titulo: str, unidad: str
 
 def graficar_shap_beeswarm(explicacion: shap.Explanation, titulo: str, unidad: str):
     """Beeswarm: un punto por adolescente, coloreado por el valor original de la variable."""
-    shap.plots.beeswarm(explicacion, max_display=len(explicacion.feature_names), show=False)
+    plt.figure()
+    shap.plots.beeswarm(explicacion, max_display=len(explicacion.feature_names), color=CMAP_VALOR,
+                        axis_color=TEXTO_SECUNDARIO, color_bar_label="Valor de la variable", show=False)
     fig = plt.gcf()
     fig.axes[0].set_title(titulo, fontweight="bold")
     fig.axes[0].set_xlabel(f"Valor SHAP ({unidad})")
@@ -297,9 +347,12 @@ def graficar_dependencias(explicacion: shap.Explanation, variables: list[str], t
     """Dependence plots (valor original vs. SHAP) de las variables dadas, coloreados por sexo."""
     fig, axes = plt.subplots(1, len(variables), figsize=(6 * len(variables), 4.8))
     for ax, variable in zip(np.atleast_1d(axes), variables):
-        color = explicacion[:, NOMBRE_SEXO] if variable != NOMBRE_SEXO else None
-        shap.plots.scatter(explicacion[:, variable], color=color, ax=ax, show=False)
+        # El sexo no se colorea por sí mismo: va en el color neutro
+        color = explicacion[:, NOMBRE_SEXO] if variable != NOMBRE_SEXO else NEUTRO
+        shap.plots.scatter(explicacion[:, variable], color=color, cmap=CMAP_SEXO, hist=False,
+                           axis_color=TEXTO_SECUNDARIO, alpha=0.7, ax=ax, show=False)
         ax.set_ylabel(f"SHAP ({unidad})")
+        ax.axhline(0, color=TEXTO, linewidth=0.8)
     fig.suptitle(titulo, fontsize=13, fontweight="bold")
     fig.tight_layout()
     return fig
@@ -421,16 +474,27 @@ def pesos_lime(explicacion) -> pd.Series:
     """Peso de cada variable en la explicación LIME (para clasificación, de la clase "Deprimido")."""
     mapa = explicacion.as_map()
     clave = 1 if 1 in mapa else next(iter(mapa))
-    nombres = explicacion.domain_mapper.feature_names
+    # Los índices de as_map() son las columnas de PREDICTORES. No se usan los nombres del
+    # domain_mapper porque LIME renombra la categórica ("Sexo (chica)=Chica").
+    nombres = [NOMBRES[columna] for columna in PREDICTORES]
     return pd.Series({nombres[indice]: peso for indice, peso in mapa[clave]}, name="Peso LIME")
 
 
-def graficar_lime(explicacion, titulo: str):
-    """Gráfico de barras de LIME (reglas locales y su peso) para un adolescente."""
+def graficar_lime(explicacion, titulo: str, unidad: str):
+    """Reglas locales de LIME y su peso para un adolescente, con la paleta del proyecto (el gráfico
+    propio de LIME tiene los colores fijos)."""
     mapa = explicacion.as_map()
-    fig = explicacion.as_pyplot_figure(label=1 if 1 in mapa else next(iter(mapa)))
-    fig.set_size_inches(10, 4.5)
-    fig.axes[0].set_title(titulo, fontweight="bold")
+    reglas = explicacion.as_list(label=1 if 1 in mapa else next(iter(mapa)))
+    reglas = [(regla.replace(f"{NOMBRE_SEXO}=", f"{ETIQUETAS['sex']} = "), peso) for regla, peso in reglas][::-1]
+    fig, ax = plt.subplots(figsize=(10, 4.5))
+    ax.barh([regla for regla, _ in reglas], [peso for _, peso in reglas],
+            color=[DEPRIMIDO if peso > 0 else NO_DEPRIMIDO for _, peso in reglas])
+    ax.axvline(0, color=TEXTO, linewidth=1)
+    ax.set_title(titulo, fontweight="bold")
+    ax.set_xlabel(f"Peso local de LIME ({unidad})")
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+    sns.despine()
     fig.tight_layout()
     return fig
 
