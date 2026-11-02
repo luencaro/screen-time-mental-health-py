@@ -35,7 +35,7 @@ def layout():
     especificos = libro.items_numerados(libro.seccion("intro.md", "Objetivos específicos"))
 
     return html.Div([
-        encabezado_seccion("objetivos", [f"{len(especificos)} objetivos específicos", "Fase EDA"]),
+        encabezado_seccion("objetivos", [f"{len(especificos)} objetivos específicos", "EDA y modelado"]),
         fila_kpis([
             kpi("Dominios del sueño", str(len(VARIABLES_SUENO)), "Analizados por separado"),
             kpi("Objetivos específicos", str(len(especificos)), "Definidos en el proyecto"),

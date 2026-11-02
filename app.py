@@ -1,4 +1,4 @@
-"""Dashboard del EDA: tiempo de pantalla, sueño y síntomas depresivos.
+"""Dashboard del EDA y del modelado: tiempo de pantalla, sueño y síntomas depresivos.
 
 Ejecutar desde la raíz del proyecto:  python app.py  →  http://127.0.0.1:8050
 """
@@ -10,8 +10,9 @@ import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, clientside_callback, dcc, html
 
 from components.secciones import BLOQUES, POR_SLUG, SECCIONES, secciones_de, slug_desde_ruta
-from components.ui import aviso_sin_datos, encabezado_seccion, icono
+from components.ui import aviso_sin_datos, aviso_sin_resultados, encabezado_seccion, icono
 from data.load_data import URL_DATASET, DatosNoDisponibles
+from data.load_modelado import ResultadosNoDisponibles
 
 # Una pestaña por sección; cada módulo expone layout() y, si aplica, register_callbacks(app)
 PESTANAS = {s["slug"]: importlib.import_module(f"tabs.{s['slug']}") for s in SECCIONES}
@@ -20,7 +21,7 @@ app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True,
-    title="EDA · Pantallas, sueño y depresión",
+    title="EDA y modelado · Pantallas, sueño y depresión",
     update_title=None,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
@@ -115,6 +116,8 @@ def renderizar(ruta):
         contenido = PESTANAS[slug].layout()
     except DatosNoDisponibles as error:
         contenido = html.Div([encabezado_seccion(slug), aviso_sin_datos(str(error), URL_DATASET)])
+    except ResultadosNoDisponibles as error:
+        contenido = html.Div([encabezado_seccion(slug), aviso_sin_resultados(str(error))])
     bloque = POR_SLUG[slug]["bloque"]
     clases = ["activo" if b == bloque else "" for b in BLOQUES]
     activos = [s["slug"] == slug for s in SECCIONES]

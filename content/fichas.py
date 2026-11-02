@@ -115,6 +115,6 @@ OBJETIVOS_FASE = {
     1: {"fase": "eda", "secciones": ["variable_objetivo", "analisis_numerico", "calidad_datos"]},
     2: {"fase": "eda", "secciones": ["correlaciones"]},
     3: {"fase": "eda", "secciones": ["analisis_sexo"]},
-    4: {"fase": "modelado", "secciones": []},
-    5: {"fase": "modelado", "secciones": []},
+    4: {"fase": "modelado", "secciones": ["benchmarking", "modelos_finales", "genero", "prediccion"]},
+    5: {"fase": "modelado", "secciones": ["modelos_finales", "genero", "clustering"]},
 }

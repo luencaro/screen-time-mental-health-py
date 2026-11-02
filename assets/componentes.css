@@ -622,3 +622,62 @@ code, .variable, .mono {
 .tarjeta.grafico-flexible { display: flex; flex-direction: column; }
 .tarjeta.grafico-flexible > .dash-graph { display: flex; flex-direction: column; }
 .tarjeta.grafico-flexible > .dash-graph > .js-plotly-plot { flex: 1 1 auto; }
+
+/* ── Pestaña de predicción ─────────────────────── */
+.control-prediccion { margin-bottom: var(--espaciado-md); }
+.control-prediccion .nota { margin-top: var(--espaciado-md); }
+
+.boton-primario,
+.boton-primario:focus {
+  width: 100%;
+  background: var(--color-primario);
+  border: none;
+  border-radius: var(--radio-control);
+  color: var(--color-superficie);
+  font-weight: var(--peso-semibold);
+  padding: var(--espaciado-sm) var(--espaciado-md);
+  transition: var(--transicion-tema), opacity .15s ease;
+}
+.boton-primario:hover,
+.boton-primario:active,
+.boton-primario:focus-visible { background: var(--color-primario); color: var(--color-superficie); opacity: .85; }
+
+.resultado-prediccion { display: flex; align-items: center; gap: var(--espaciado-md); flex-wrap: wrap; }
+.resultado-prediccion .kpi-valor { margin: 0; }
+
+
+/* Etiqueta de un slider con su valor actual a la derecha */
+.etiqueta-control { display: flex; justify-content: space-between; align-items: baseline; gap: var(--espaciado-sm); }
+.valor-control {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-pequeno);
+  font-weight: var(--peso-semibold);
+  color: var(--color-texto);
+  white-space: nowrap;
+}
+
+/* ── Benchmarking: filtro de modelos ───────────── */
+.selector-modelos { gap: 2px; }
+.selector-modelos .form-check-inline { margin-right: 0; }
+.etiqueta-con-accion { display: flex; align-items: baseline; gap: var(--espaciado-sm); }
+.enlace-boton {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--color-primario);
+  cursor: pointer;
+}
+.enlace-boton:hover, .enlace-boton:focus-visible { text-decoration: underline; }
+
+/* Filtro fijo bajo el menú superior (assets/altura_cabecera.js mide su alto) */
+.filtro-fijo {
+  position: sticky;
+  top: calc(var(--alto-cabecera, 64px) + var(--espaciado-sm));
+  z-index: 1020;
+}
+.filtro-fijo > .tarjeta { box-shadow: var(--sombra-menu); padding: 12px var(--espaciado-md); }
+.filtro-fijo .controles { gap: 12px var(--espaciado-md); }
+.filtro-fijo .control-etiqueta { margin-bottom: 2px; }
+/* En móvil el filtro ocuparía media pantalla: vuelve a su sitio */
+@media (max-width: 768px) { .filtro-fijo { position: static; } }

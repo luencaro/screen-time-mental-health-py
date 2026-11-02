@@ -48,6 +48,8 @@ NEUTRO = COLORES["linea_corte"]             # una sola serie sin categoría (piz
 # Sexo y estado depresivo nunca comparten color
 PALETA_SEXO = {"Boy": CHICOS, "Girl": CHICAS}
 PALETA_ESTADO = {0: NO_DEPRIMIDO, 1: DEPRIMIDO}
+# Perfiles del clustering (cluster 0, 1, 2, ...): fuente única en plotly_theme.py
+PALETA_CLUSTERS = COLORES["clusters"]
 
 # Divergente para correlaciones (negativa → 0 → positiva), igual que el heatmap del dashboard
 CMAP_DIVERGENTE = LinearSegmentedColormap.from_list("pizarra_divergente", [NO_DEPRIMIDO, SUPERFICIE, DEPRIMIDO])
