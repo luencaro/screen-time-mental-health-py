@@ -5,3 +5,6 @@ scipy==1.17.1
 plotly==7.1.0
 dash==4.4.1
 dash-bootstrap-components==2.0.4
+# Pestaña de predicción (modelo catboost.cbm). Debe coincidir con la versión de docker/environment.yml
+# usada al exportar (notebooks/exportar_dashboard.ipynb)
+catboost==1.2.9

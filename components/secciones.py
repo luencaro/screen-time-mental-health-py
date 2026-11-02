@@ -3,7 +3,7 @@
 Lo usan el menú superior (app.py) y el encabezado de cada pestaña (breadcrumb).
 """
 
-BLOQUES = ["Proyecto", "EDA", "Acerca de"]
+BLOQUES = ["Proyecto", "EDA", "Modelado", "Acerca de"]
 
 SECCIONES = [
     # Proyecto
@@ -28,6 +28,17 @@ SECCIONES = [
      "descripcion": "Spearman entre pantalla, sueño y BDI-II"},
     {"slug": "outliers", "bloque": "EDA", "nombre": "Outliers",
      "descripcion": "Valores atípicos por IQR y su relevancia clínica"},
+    # Modelado
+    {"slug": "benchmarking", "bloque": "Modelado", "nombre": "Benchmarking",
+     "descripcion": "Ganadores de cada algoritmo frente al benchmark en CV y test"},
+    {"slug": "modelos_finales", "bloque": "Modelado", "nombre": "Modelos finales",
+     "descripcion": "CatBoost y ElasticNet: métricas, umbral e importancia de variables"},
+    {"slug": "genero", "bloque": "Modelado", "nombre": "Modelos por género",
+     "descripcion": "Chicos vs. chicas: variables que pesan y efecto del umbral"},
+    {"slug": "clustering", "bloque": "Modelado", "nombre": "Clustering",
+     "descripcion": "Perfiles de sueño y pantalla con K-Means y su validación"},
+    {"slug": "prediccion", "bloque": "Modelado", "nombre": "Predicción",
+     "descripcion": "Probabilidad de depresión y BDI-II estimado para un perfil"},
     # Acerca de
     {"slug": "acerca", "bloque": "Acerca de", "nombre": "Equipo y recursos",
      "descripcion": "Integrantes, repositorio, Jupyter Book y dataset"},

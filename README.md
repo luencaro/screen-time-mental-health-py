@@ -75,6 +75,19 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    ```
    Los archivos no se pierden; solo se detienen los contenedores.
 
+### Ver el bloque de Modelado en el dashboard
+
+Los resultados del modelado no vienen en el repo. Para ver las pestañas de **Modelado** (benchmarking, modelos finales, género, clustering y predicción):
+
+1. En JupyterLab, ejecutar los notebooks de modelado (`Modelado.ipynb`, `clf_*.ipynb`, `clf_comparacion.ipynb`, `reg_*.ipynb`, `reg_comparacion.ipynb`, `interpretabilidad.ipynb`, `genero.ipynb`) y `clustering.ipynb`.
+2. Ejecutar `notebooks/exportar_dashboard.ipynb`: escribe en `data/processed/dashboard/` los CSV/JSON que lee el dashboard y los modelos portables de la pestaña de predicción, y verifica que reproducen los pipelines originales.
+3. Reconstruir y levantar el dashboard (instala `catboost`, que usa la pestaña de predicción):
+   ```powershell
+   docker compose up --build -d
+   ```
+
+Mientras falten los resultados, las pestañas de Modelado muestran un aviso con estos pasos.
+
 ### Problemas frecuentes
 
 | Síntoma | Solución |
@@ -100,19 +113,23 @@ screen-time-mental-health-py/
 ├── data/
 │   ├── raw/                  # dataset original (no versionado)
 │   ├── processed/            # datos limpios/transformados (no versionado)
-│   └── load_data.py          # carga, validación de columnas y tipos, y caché del CSV
+│   ├── load_data.py          # carga, validación de columnas y tipos, y caché del CSV
+│   ├── load_modelado.py      # carga y caché de los resultados exportados (data/processed/dashboard/)
+│   └── prediccion.py         # predicción con los modelos portables (catboost.cbm + JSON, sin scikit-learn)
 │
 ├── notebooks/
 │   ├── EDA.ipynb             # análisis exploratorio, pruebas inferenciales y modelos benchmark
 │   ├── Modelado.ipynb        # versión previa: benchmark conjunto de clasificadores con pesos de clase
 │   ├── clf_<modelo>.ipynb    # fase 1: estrategias de desbalance por modelo (9 notebooks)
-│   └── clf_comparacion.ipynb # fases 2 y 3: comparación, intervalos bootstrap y umbral; modelo final
+│   ├── clf_comparacion.ipynb # fases 2 y 3: comparación, intervalos bootstrap y umbral; modelo final
+│   └── exportar_dashboard.ipynb # exporta los resultados del modelado para el dashboard
 ├── src/                      # funciones reutilizables del notebook
 │   ├── Modelado.py                       # modelos, desbalance, tuning, métricas, GPU, gráficas y guardado/carga
 │   ├── ClassificationPreprocessing.py    # pipeline de preprocesamiento para clasificación
 │   ├── LinearRegressionPreprocessing.py  # pipeline de preprocesamiento para regresión
 │   ├── LinearRegressionDiagnostics.py    # supuestos de la regresión lineal (VIF, BP, JB, DW, Cook)
 │   ├── LogisticRegressionDiagnostics.py  # supuestos de la regresión logística (Box-Tidwell, Cook)
+│   ├── ExportarDashboard.py              # exportación de resultados y modelos portables para el dashboard
 │   └── EstiloGraficos.py                 # paleta y estilo matplotlib/seaborn del dashboard
 │
 ├── book/                     # Jupyter Book (documentación del proyecto)
@@ -128,7 +145,8 @@ screen-time-mental-health-py/
 ├── app.py                    # dashboard Dash: header, menú, selector de tema y routing
 ├── analysis/
 │   ├── stats.py              # cálculos estadísticos (descriptivos, χ², Mann-Whitney, Spearman, IQR)
-│   └── figures.py            # figuras Plotly; reciben el tema ("claro"/"oscuro")
+│   ├── figures.py            # figuras Plotly; reciben el tema ("claro"/"oscuro")
+│   └── figuras_modelado.py   # figuras Plotly del bloque de Modelado
 ├── content/
 │   ├── libro.py              # lee secciones de book/*.md y convierte las citas {cite}
 │   └── fichas.py             # resúmenes de los estudios y fase de cada objetivo
@@ -142,6 +160,8 @@ screen-time-mental-health-py/
 │   ├── inicio.py, marco_teorico.py, objetivos.py, metodologia.py          # Proyecto
 │   ├── calidad_datos.py, variable_objetivo.py, analisis_sexo.py,          # EDA
 │   │   analisis_numerico.py, correlaciones.py, outliers.py
+│   ├── benchmarking.py, modelos_finales.py, genero.py, clustering.py,     # Modelado
+│   │   prediccion.py
 │   └── acerca.py                                                          # Acerca de
 └── assets/                   # archivos estáticos que Dash carga automáticamente
     ├── style.css             # variables de diseño (colores, tipografía, espaciados; claro y oscuro)
@@ -149,6 +169,7 @@ screen-time-mental-health-py/
     ├── menu_hover.js         # abre los menús desplegables al pasar el cursor
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
     ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
+    ├── altura_cabecera.js    # mide el menú superior para los filtros fijos bajo él
     ├── iconos/               # iconos SVG de IBM Carbon (GitHub, LinkedIn, libro, datos, tema…)
     └── logo_uninorte.png
 ```

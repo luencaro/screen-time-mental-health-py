@@ -9,6 +9,7 @@ from dash import dcc, get_asset_url, html
 
 from components.enlaces import NOTEBOOK_EDA
 from components.secciones import POR_SLUG
+from data.load_modelado import PASOS_EXPORTACION
 
 CONFIG_GRAFICO = {"displayModeBar": False, "responsive": True}
 
@@ -201,5 +202,15 @@ def aviso_sin_datos(motivo: str, url: str) -> html.Div:
                 "screen_time_mental_health.csv directamente en la carpeta data/raw/ "
                 "del proyecto. Después recarga la página."]),
         titulo="Dataset no disponible",
+        className="aviso",
+    )
+
+
+def aviso_sin_resultados(motivo: str) -> html.Div:
+    """Mensaje claro cuando faltan los resultados exportados del modelado."""
+    return card(
+        html.P(motivo),
+        html.Ol([html.Li(paso) for paso in PASOS_EXPORTACION]),
+        titulo="Resultados del modelado no disponibles",
         className="aviso",
     )

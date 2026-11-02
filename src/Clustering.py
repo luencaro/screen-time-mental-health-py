@@ -37,7 +37,7 @@ if str(RAIZ) not in sys.path:
     sys.path.append(str(RAIZ))   # para importar data/load_data.py
 
 from data.load_data import CORTE_BDI, ETIQUETAS, ETIQUETAS_ESTADO, ETIQUETAS_SEXO, cargar_datos
-from EstiloGraficos import DEPRIMIDO, LINEA_CORTE, NEUTRO, PALETA_SEXO, TEXTO, TEXTO_SECUNDARIO
+from EstiloGraficos import DEPRIMIDO, LINEA_CORTE, NEUTRO, PALETA_CLUSTERS, PALETA_SEXO, TEXTO, TEXTO_SECUNDARIO
 from Modelado import SEED
 
 try:   # opcional: si no está instalado, las comparaciones por pares usan Mann-Whitney + Holm
@@ -60,10 +60,11 @@ RANGO_K = range(2, 9)
 N_INIT = 50
 N_BOOTSTRAP = 50
 
-# Paleta categórica de los clusters: lavanda, ocre, oliva, gris pizarra y terracota suave.
-# Los gráficos (book) usan el modo claro; el oscuro queda definido para el dashboard.
-PALETA_CLUSTERS = ["#B3A6DE", "#E3C77F", "#AFC59A", "#9AA3B8", "#C9A08E"]
-PALETA_CLUSTERS_OSCURO = ["#A496D2", "#D4B86F", "#9FB68B", "#8A93A8", "#BA917F"]
+# Tras ajustar K-Means, los clusters se renumeran por la media de esta variable (0 = menor valor),
+# para que cada perfil conserve su número y su color si se vuelve a ejecutar.
+VARIABLE_ORDEN = "sleep_quality_index"
+
+# La paleta de los clusters (PALETA_CLUSTERS) viene de components/plotly_theme.py vía EstiloGraficos.
 # Borde de los centroides: pizarra (LINEA_CORTE; en modo oscuro, #A9B6D8)
 BORDE_CENTROIDE = LINEA_CORTE
 
@@ -83,8 +84,14 @@ def nombre_variable(variable: str) -> str:
 
 
 def color_cluster(cluster: int) -> str:
-    """Color de un cluster en la paleta categórica."""
-    return PALETA_CLUSTERS[cluster % len(PALETA_CLUSTERS)]
+    """Color de un cluster en la paleta categórica. Sin ciclar: dos perfiles nunca comparten color."""
+    if not 0 <= cluster < len(PALETA_CLUSTERS):
+        raise ValueError(
+            f"No hay color para el cluster {cluster}: PALETA_CLUSTERS tiene {len(PALETA_CLUSTERS)} colores "
+            f"(clusters 0 a {len(PALETA_CLUSTERS) - 1}). Agrega colores a COLORES['claro']['clusters'] y "
+            "COLORES['oscuro']['clusters'] en components/plotly_theme.py o elige un k menor."
+        )
+    return PALETA_CLUSTERS[cluster]
 
 
 def completar_nombres(nombres: dict, k: int) -> dict:
@@ -173,9 +180,30 @@ def graficar_seleccion_k(tabla: pd.DataFrame, k_elegido: int | None = None):
     return fig
 
 
+def reetiquetar(pipeline: Pipeline, X: pd.DataFrame) -> dict:
+    """Renumera los clusters del K-Means ya ajustado por la media de VARIABLE_ORDEN (0 = menor valor).
+
+    Modifica el modelo dentro del pipeline (centroides y labels_), así que predict() y el
+    kmeans.joblib guardado usan ya la numeración nueva. Devuelve {cluster original: cluster nuevo},
+    que también queda en kmeans.mapeo_reetiquetado_ (y en metadatos.json al guardar).
+    """
+    kmeans = pipeline.named_steps["kmeans"]
+    medias = X[VARIABLE_ORDEN].groupby(kmeans.labels_).mean()
+    orden = medias.sort_values(kind="stable").index.to_numpy()   # orden[nuevo] = original
+    nuevo_de_original = np.argsort(orden)
+    kmeans.cluster_centers_ = kmeans.cluster_centers_[orden]
+    kmeans.labels_ = nuevo_de_original[kmeans.labels_].astype(kmeans.labels_.dtype)
+    kmeans.mapeo_reetiquetado_ = {int(original): int(nuevo) for nuevo, original in enumerate(orden)}
+    return kmeans.mapeo_reetiquetado_
+
+
 def ajustar_final(X: pd.DataFrame, k: int, seed: int = SEED) -> tuple[Pipeline, np.ndarray]:
-    """Pipeline final con el k elegido, ajustado con todos los datos, y la asignación de cada adolescente."""
+    """Pipeline final con el k elegido, ajustado con todos los datos y con los clusters renumerados
+    por VARIABLE_ORDEN (reetiquetar), y la asignación de cada adolescente."""
+    if k > len(PALETA_CLUSTERS):
+        color_cluster(k - 1)   # lanza el error con la explicación
     pipeline = crear_pipeline_kmeans(k, seed).fit(X)
+    reetiquetar(pipeline, X)
     return pipeline, pipeline.named_steps["kmeans"].labels_.copy()
 
 
@@ -441,6 +469,9 @@ def guardar_resultados(pipeline: Pipeline, tabla_k: pd.DataFrame, df: pd.DataFra
         "fecha": datetime.now().isoformat(timespec="seconds"),
         "k_elegido": k,
         "nombres_clusters": dict(zip(perfiles["cluster"].astype(str), perfiles["nombre"])),
+        "orden_clusters": f"clusters numerados por la media de {VARIABLE_ORDEN} (0 = menor valor)",
+        "mapeo_reetiquetado": {str(original): nuevo
+                               for original, nuevo in getattr(kmeans, "mapeo_reetiquetado_", {}).items()},
         "seed": SEED,
         "variables": VARIABLES_CLUSTER,
         "preprocesamiento": "StandardScaler (ajustado con el dataset completo)",
