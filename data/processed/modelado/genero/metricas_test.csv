@@ -1,0 +1,45 @@
+grupo,tarea,enfoque,metrica,valor,ic_inf,ic_sup
+chicos,clasificacion,especifico,PR-AUC,0.38634717079285646,0.24970250927638993,0.5290414404717336
+chicos,clasificacion,especifico,Línea base,0.08588957055214724,,
+chicos,clasificacion,especifico,PR-AUC relativa,4.498184917088257,,
+chicos,clasificacion,especifico,ROC-AUC,0.8362629167998296,0.7690669815292407,0.8997556538437296
+chicos,clasificacion,especifico,Umbral,0.07800008698870065,,
+chicos,clasificacion,especifico,Recall,0.8571428571428571,,
+chicos,clasificacion,especifico,Precision,0.18652849740932642,,
+chicos,clasificacion,especifico,F1,0.30638297872340425,,
+chicos,clasificacion,conjunto,PR-AUC,0.40190628962975916,0.26334550574948407,0.5480499154584869
+chicos,clasificacion,conjunto,Línea base,0.08588957055214724,,
+chicos,clasificacion,conjunto,PR-AUC relativa,4.679337514975053,,
+chicos,clasificacion,conjunto,ROC-AUC,0.8315223180994993,0.766057396701079,0.8938465398529584
+chicos,clasificacion,conjunto,Umbral,0.15341998210126612,,
+chicos,clasificacion,conjunto,Recall,0.5238095238095238,,
+chicos,clasificacion,conjunto,Precision,0.4,,
+chicos,clasificacion,conjunto,F1,0.4536082474226804,,
+chicos,regresion,especifico,RMSE,5.20361517464603,4.582767950390901,5.854761140640625
+chicos,regresion,especifico,MAE,3.682537371313928,,
+chicos,regresion,especifico,R²,0.17348190474924086,0.09280572082670395,0.23482904834070048
+chicos,regresion,conjunto,RMSE,5.213543605662208,4.615655469970034,5.862007412784369
+chicos,regresion,conjunto,MAE,3.696363101897783,,
+chicos,regresion,conjunto,R²,0.17032492402924904,0.06322010679127753,0.24572878706274953
+chicas,clasificacion,especifico,PR-AUC,0.4466750422134445,0.37471759532948384,0.549815441726908
+chicas,clasificacion,especifico,Línea base,0.24312896405919662,,
+chicas,clasificacion,especifico,PR-AUC relativa,1.8371938692779064,,
+chicas,clasificacion,especifico,ROC-AUC,0.7271071168326452,0.6768967510392885,0.7793211357379403
+chicas,clasificacion,especifico,Umbral,0.19605942361678605,,
+chicas,clasificacion,especifico,Recall,0.7913043478260869,,
+chicas,clasificacion,especifico,Precision,0.35135135135135137,,
+chicas,clasificacion,especifico,F1,0.48663101604278075,,
+chicas,clasificacion,conjunto,PR-AUC,0.4448309096287496,0.37114566275740024,0.5453178931446004
+chicas,clasificacion,conjunto,Línea base,0.24312896405919662,,
+chicas,clasificacion,conjunto,PR-AUC relativa,1.8296088717773789,,
+chicas,clasificacion,conjunto,ROC-AUC,0.7250910857420452,0.6763603873026288,0.7773886882185921
+chicas,clasificacion,conjunto,Umbral,0.15341998210126612,,
+chicas,clasificacion,conjunto,Recall,0.8869565217391304,,
+chicas,clasificacion,conjunto,Precision,0.3081570996978852,,
+chicas,clasificacion,conjunto,F1,0.45739910313901344,,
+chicas,regresion,especifico,RMSE,7.7679657139172456,6.9890647407008935,8.550267845785303
+chicas,regresion,especifico,MAE,5.799927215524349,,
+chicas,regresion,especifico,R²,0.15096731998844481,0.08454031439618977,0.21818529376071003
+chicas,regresion,conjunto,RMSE,7.769322936589413,6.983682658948933,8.55466210855897
+chicas,regresion,conjunto,MAE,5.790828792017031,,
+chicas,regresion,conjunto,R²,0.15067060728072346,0.08702078899440928,0.21652626189300045

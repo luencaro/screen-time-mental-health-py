@@ -1,0 +1,40 @@
+modelo,nombre,variante,metrica,media,desviacion,es_referencia,es_final,variante_nombre
+catboost,CatBoost,nativo,RMSE,6.881492950629854,0.48032938019596605,False,False,Nativo
+catboost,CatBoost,nativo,MAE,4.883757916732868,0.1863612043182322,False,False,Nativo
+catboost,CatBoost,nativo,R²,0.2051927544430015,0.017065679874058368,False,False,Nativo
+xgboost,XGBoost,nativo,RMSE,6.887611621101934,0.48842298200412204,False,False,Nativo
+xgboost,XGBoost,nativo,MAE,4.903931785983234,0.18192233462012194,False,False,Nativo
+xgboost,XGBoost,nativo,R²,0.20395521316999762,0.015201708678833794,False,False,Nativo
+random_forest,Random Forest,nativo,RMSE,6.894288571367932,0.49784932797362785,False,False,Nativo
+random_forest,Random Forest,nativo,MAE,4.914280917639557,0.18945215721256206,False,False,Nativo
+random_forest,Random Forest,nativo,R²,0.20258917035456533,0.014226930312125217,False,False,Nativo
+elasticnet,ElasticNet,nativo,RMSE,6.8997221475886095,0.4869624708759975,False,True,Nativo
+elasticnet,ElasticNet,nativo,MAE,4.906973974693661,0.18814705981554508,False,True,Nativo
+elasticnet,ElasticNet,nativo,R²,0.20112292742739202,0.016126983102723657,False,True,Nativo
+lasso,Lasso,nativo,RMSE,6.899769657887437,0.48578074667035215,False,False,Nativo
+lasso,Lasso,nativo,MAE,4.90620380310662,0.18754290234576754,False,False,Nativo
+lasso,Lasso,nativo,R²,0.2010888501314355,0.01620254530526817,False,False,Nativo
+ridge,Ridge,nativo,RMSE,6.900013231119495,0.48624574209767785,False,False,Nativo
+ridge,Ridge,nativo,MAE,4.906851064963663,0.18782253284540001,False,False,Nativo
+ridge,Ridge,nativo,R²,0.20104158063040373,0.016165658461394766,False,False,Nativo
+benchmark,Lineal benchmark (EDA),nativo,RMSE,6.900388709336594,0.48500866553805094,True,False,Nativo
+benchmark,Lineal benchmark (EDA),nativo,MAE,4.906377945821079,0.18722518845330488,True,False,Nativo
+benchmark,Lineal benchmark (EDA),nativo,R²,0.20093015457834648,0.01624649565998378,True,False,Nativo
+lineal,Lineal (OLS),nativo,RMSE,6.900388709336594,0.48500866553805094,False,False,Nativo
+lineal,Lineal (OLS),nativo,MAE,4.906377945821079,0.18722518845330488,False,False,Nativo
+lineal,Lineal (OLS),nativo,R²,0.20093015457834648,0.01624649565998378,False,False,Nativo
+lightgbm,LightGBM,nativo,RMSE,6.901965760801614,0.4823791392272608,False,False,Nativo
+lightgbm,LightGBM,nativo,MAE,4.909144726725294,0.1817926697986338,False,False,Nativo
+lightgbm,LightGBM,nativo,R²,0.20047573037188146,0.01714877979399276,False,False,Nativo
+knn,KNN,nativo,RMSE,6.957762285876487,0.5355308325061066,False,False,Nativo
+knn,KNN,nativo,MAE,4.872918846282295,0.1955669841226074,False,False,Nativo
+knn,KNN,nativo,R²,0.18841706576424716,0.01641624957886385,False,False,Nativo
+poisson,GLM Poisson,nativo,RMSE,7.00266322612241,0.4541365433543273,False,False,Nativo
+poisson,GLM Poisson,nativo,MAE,4.969209900685479,0.1884620769382251,False,False,Nativo
+poisson,GLM Poisson,nativo,R²,0.17624202404815129,0.023981506767705597,False,False,Nativo
+svr,SVR (RBF),nativo,RMSE,7.064873873511824,0.5385868499998017,False,False,Nativo
+svr,SVR (RBF),nativo,MAE,4.72739180406821,0.20449438918846097,False,False,Nativo
+svr,SVR (RBF),nativo,R²,0.16260111006750894,0.03199543762615536,False,False,Nativo
+binomial_negativa,GLM binomial negativa,nativo,RMSE,7.163640378977108,0.408728020667201,False,False,Nativo
+binomial_negativa,GLM binomial negativa,nativo,MAE,5.003586148428724,0.19581991390974748,False,False,Nativo
+binomial_negativa,GLM binomial negativa,nativo,R²,0.13573577185904848,0.054710296233667965,False,False,Nativo

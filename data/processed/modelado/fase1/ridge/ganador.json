@@ -1,0 +1,15 @@
+{
+  "fecha_entrenamiento": "2026-11-01T20:07:12",
+  "modelo": "ridge",
+  "nombre": "Logística Ridge (L2)",
+  "estrategia": "pesos",
+  "hiperparametros": {
+    "C": 0.0745934328572655
+  },
+  "pr_auc_media": 0.3936570093312149,
+  "pr_auc_de": 0.04391547522047672,
+  "explicacion": "Se elige 'pesos': tiene la mayor PR-AUC media de CV (0.3937 ± 0.0439).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "ridge_pesos.joblib",
+  "seed": 42
+}

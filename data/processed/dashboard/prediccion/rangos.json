@@ -1,0 +1,123 @@
+{
+  "orden": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index"
+  ],
+  "variables": {
+    "sleep_quality_index": {
+      "etiqueta": "Índice de calidad del sueño",
+      "unidad": "puntos del índice",
+      "descripcion": "Un valor más alto indica peor calidad del sueño.",
+      "minimo": 1.0,
+      "maximo": 6.0,
+      "p1": 1.0,
+      "p99": 5.0,
+      "mediana": 1.75,
+      "paso": 0.25,
+      "valores": [
+        1.0,
+        1.25,
+        1.5,
+        1.75,
+        2.0,
+        2.25,
+        2.5,
+        2.75,
+        3.0,
+        3.25,
+        3.5,
+        3.75,
+        4.0,
+        4.25,
+        4.5,
+        4.75,
+        5.0
+      ]
+    },
+    "avg_sleep_hours": {
+      "etiqueta": "Horas de sueño promedio",
+      "unidad": "horas",
+      "descripcion": "Horas de sueño promedio por noche.",
+      "minimo": 1.36,
+      "maximo": 12.21,
+      "p1": 3.7394,
+      "p99": 10.015299999999996,
+      "mediana": 7.86,
+      "paso": 0.05,
+      "valores": null
+    },
+    "midsleep_weekend_hours": {
+      "etiqueta": "Punto medio del sueño (fin de semana)",
+      "unidad": "horas",
+      "descripcion": "Hora del punto medio del sueño en fin de semana.",
+      "minimo": 1.67,
+      "maximo": 10.5,
+      "p1": 2.7794,
+      "p99": 9.25,
+      "mediana": 5.42,
+      "paso": 0.05,
+      "valores": null
+    },
+    "social_jetlag_hours": {
+      "etiqueta": "Jet lag social",
+      "unidad": "horas",
+      "descripcion": "Diferencia de horario de sueño entre semana y fin de semana.",
+      "minimo": -3.03,
+      "maximo": 6.96,
+      "p1": 0.04,
+      "p99": 5.38,
+      "mediana": 2.29,
+      "paso": 0.05,
+      "valores": null
+    },
+    "screen_time_index": {
+      "etiqueta": "Índice de tiempo de pantalla",
+      "unidad": "puntos del índice",
+      "descripcion": "Un valor más alto indica más tiempo de pantalla.",
+      "minimo": 1.0,
+      "maximo": 6.0,
+      "p1": 1.333,
+      "p99": 5.667,
+      "mediana": 3.0,
+      "paso": 0.333,
+      "valores": [
+        1.333,
+        1.667,
+        2.0,
+        2.333,
+        2.667,
+        3.0,
+        3.333,
+        3.667,
+        4.0,
+        4.333,
+        4.667,
+        5.0,
+        5.333,
+        5.667
+      ]
+    }
+  },
+  "sexo": {
+    "opciones": [
+      {
+        "valor": "Boy",
+        "etiqueta": "Chico"
+      },
+      {
+        "valor": "Girl",
+        "etiqueta": "Chica"
+      }
+    ],
+    "inicial": "Boy",
+    "etiqueta": "Sexo",
+    "grupos": {
+      "Boy": "Chicos",
+      "Girl": "Chicas"
+    }
+  },
+  "fuente": "train de split_indices.csv"
+}

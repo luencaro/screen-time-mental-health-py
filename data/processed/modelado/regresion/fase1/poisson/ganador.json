@@ -1,0 +1,19 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:28:32",
+  "modelo": "poisson",
+  "nombre": "GLM Poisson",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "alpha": 0.4570563099801455
+  },
+  "rmse_media": 7.00266322612241,
+  "rmse_de": 0.4541365433543273,
+  "mae_media": 4.969209900685479,
+  "r2_media": 0.17624202404815129,
+  "explicacion": "Se elige 'Nativo': tiene el menor RMSE medio de CV (7.0027 ± 0.4541) y ninguna opción más simple queda a menos de una desviación estándar (0.4541).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "poisson_nativo.joblib",
+  "seed": 42
+}

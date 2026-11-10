@@ -1,0 +1,21 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:25:58",
+  "modelo": "knn",
+  "nombre": "KNN",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "n_neighbors": 102,
+    "p": 1,
+    "weights": "distance"
+  },
+  "rmse_media": 6.957762285876487,
+  "rmse_de": 0.5355308325061066,
+  "mae_media": 4.872918846282295,
+  "r2_media": 0.18841706576424716,
+  "explicacion": "El menor RMSE medio de CV es el de 'log1p + smearing' (6.9359 ± 0.5117), pero 'Nativo' es más simple y su RMSE (6.9578) está a solo 0.0218 puntos, menos que la desviación estándar de CV de la ganadora (0.5117). Por la regla de empate se elige 'Nativo'.",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "knn_nativo.joblib",
+  "seed": 42
+}

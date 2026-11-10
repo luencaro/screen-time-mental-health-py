@@ -1,0 +1,44 @@
+{
+  "modelo": "elasticnet",
+  "nombre": "ElasticNet",
+  "variante": "nativo",
+  "variante_nombre": "Nativo",
+  "hiperparametros": {
+    "alpha": 0.01444525102276306,
+    "l1_ratio": 0.3329833121584336
+  },
+  "explicacion_eleccion": "El menor RMSE medio de CV es el de 'CatBoost' (6.8815 ± 0.4803), pero 'ElasticNet' es más simple y su RMSE (6.8997) está a solo 0.0182 puntos, menos que la desviación estándar de CV de la ganadora (0.4803). Por la regla de empate se elige 'ElasticNet'.",
+  "recorte": [
+    0,
+    63
+  ],
+  "metricas_test": {
+    "RMSE": 6.59513241677994,
+    "MAE": 4.7261783528607815,
+    "R²": 0.23228406974868654
+  },
+  "intervalos_test": {
+    "RMSE": [
+      6.0750508393566856,
+      7.138690421296517
+    ],
+    "R²": [
+      0.174063865913719,
+      0.2847843344762575
+    ]
+  },
+  "rmse_cv_media": 6.8997221475886095,
+  "rmse_cv_de": 0.4869624708759975,
+  "intercepto": 5.808247801386236,
+  "coeficientes": {
+    "sleep_quality_index": 2.1988313416851684,
+    "avg_sleep_hours": -0.9052509966039052,
+    "midsleep_weekend_hours": 0.40764874518055927,
+    "social_jetlag_hours": -0.0,
+    "screen_time_index": 0.444234838535432,
+    "sex_Girl": 3.039060000140542
+  },
+  "corte_bdi": 14,
+  "n_folds": 5,
+  "fecha_modelo": "2026-11-01T21:38:35"
+}

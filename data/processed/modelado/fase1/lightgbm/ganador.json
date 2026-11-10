@@ -1,0 +1,21 @@
+{
+  "fecha_entrenamiento": "2026-11-01T20:17:17",
+  "modelo": "lightgbm",
+  "nombre": "LightGBM",
+  "estrategia": "nativo",
+  "hiperparametros": {
+    "colsample_bytree": 0.9442922333025374,
+    "learning_rate": 0.010210451114512976,
+    "max_depth": 7,
+    "min_child_samples": 36,
+    "n_estimators": 236,
+    "num_leaves": 8,
+    "subsample": 0.8769744131561081
+  },
+  "pr_auc_media": 0.3964895099950039,
+  "pr_auc_de": 0.052089518464145335,
+  "explicacion": "Se elige 'nativo': tiene la mayor PR-AUC media de CV (0.3965 ± 0.0521).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "lightgbm_nativo.joblib",
+  "seed": 42
+}

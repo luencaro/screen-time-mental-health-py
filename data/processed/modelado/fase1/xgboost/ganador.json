@@ -1,0 +1,20 @@
+{
+  "fecha_entrenamiento": "2026-11-01T20:18:17",
+  "modelo": "xgboost",
+  "nombre": "XGBoost",
+  "estrategia": "smotenc",
+  "hiperparametros": {
+    "colsample_bytree": 0.7433862914177091,
+    "learning_rate": 0.014149761574941432,
+    "max_depth": 2,
+    "min_child_weight": 8,
+    "n_estimators": 367,
+    "subsample": 0.7323592099410596
+  },
+  "pr_auc_media": 0.3933868049191286,
+  "pr_auc_de": 0.04968282537680544,
+  "explicacion": "Se elige 'smotenc': tiene la mayor PR-AUC media de CV (0.3934 ± 0.0497).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "xgboost_smotenc.joblib",
+  "seed": 42
+}

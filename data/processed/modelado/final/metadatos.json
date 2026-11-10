@@ -1,0 +1,52 @@
+{
+  "fecha": "2026-11-01T20:37:05",
+  "modelo": "catboost",
+  "nombre": "CatBoost",
+  "estrategia_balanceo": "nativo",
+  "hiperparametros": {
+    "depth": 4,
+    "iterations": 232,
+    "l2_leaf_reg": 1.5720251525742128,
+    "learning_rate": 0.02538617845650057
+  },
+  "explicacion_eleccion": "Se elige 'catboost': tiene la mayor PR-AUC media de CV (0.4057 ± 0.0530).",
+  "umbral": 0.15341998210126612,
+  "criterio_umbral": "máxima precision con recall >= 0.70 (probabilidades out-of-fold del train)",
+  "umbral_f1": 0.19956578034357605,
+  "modelo_referencia": "logística benchmark (class_weight='balanced', sin tuning)",
+  "seed": 42,
+  "predictores": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index",
+    "sex"
+  ],
+  "target": "depressed",
+  "dispositivo_por_modelo": {
+    "logistica": "CPU",
+    "ridge": "CPU",
+    "lasso": "CPU",
+    "knn": "CPU",
+    "svc": "CPU",
+    "random_forest": "CPU",
+    "xgboost": "CPU",
+    "lightgbm": "CPU",
+    "catboost": "CPU"
+  },
+  "gpu_detectada": {
+    "xgboost": null,
+    "catboost": null,
+    "lightgbm": null
+  },
+  "versiones": {
+    "python": "3.11.18",
+    "scikit-learn": "1.9.1",
+    "imbalanced-learn": "0.14.2",
+    "xgboost": "3.4.2",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.9",
+    "joblib": "1.6.0"
+  }
+}

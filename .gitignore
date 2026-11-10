@@ -1,6 +1,4 @@
 # Datos (no versionar, se descargan aparte)
-data/raw/*
-data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 

@@ -1,0 +1,22 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:30:43",
+  "modelo": "random_forest",
+  "nombre": "Random Forest",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "max_depth": null,
+    "max_features": 0.5,
+    "min_samples_leaf": 50,
+    "n_estimators": 291
+  },
+  "rmse_media": 6.894288571367932,
+  "rmse_de": 0.49784932797362785,
+  "mae_media": 4.914280917639557,
+  "r2_media": 0.20258917035456533,
+  "explicacion": "El menor RMSE medio de CV es el de 'Pérdida Poisson' (6.8920 ± 0.4978), pero 'Nativo' es más simple y su RMSE (6.8943) está a solo 0.0023 puntos, menos que la desviación estándar de CV de la ganadora (0.4978). Por la regla de empate se elige 'Nativo'.",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "random_forest_nativo.joblib",
+  "seed": 42
+}

@@ -1,0 +1,111 @@
+{
+  "fecha": "2026-11-02T01:43:12",
+  "archivos": [
+    {
+      "archivo": "clasificacion_benchmark_cv.csv",
+      "bytes": 5348
+    },
+    {
+      "archivo": "clasificacion_benchmark_test.csv",
+      "bytes": 4582
+    },
+    {
+      "archivo": "clasificacion_curvas.csv",
+      "bytes": 569322
+    },
+    {
+      "archivo": "clasificacion_final.json",
+      "bytes": 1346
+    },
+    {
+      "archivo": "clasificacion_matriz_confusion.csv",
+      "bytes": 47
+    },
+    {
+      "archivo": "clasificacion_umbral.csv",
+      "bytes": 296689
+    },
+    {
+      "archivo": "regresion_benchmark_cv.csv",
+      "bytes": 3547
+    },
+    {
+      "archivo": "regresion_benchmark_test.csv",
+      "bytes": 3982
+    },
+    {
+      "archivo": "regresion_final.json",
+      "bytes": 1277
+    },
+    {
+      "archivo": "regresion_predicciones_test.csv",
+      "bytes": 46289
+    },
+    {
+      "archivo": "regresion_vs_clasificacion.csv",
+      "bytes": 947
+    },
+    {
+      "archivo": "importancias.csv",
+      "bytes": 3282
+    },
+    {
+      "archivo": "genero_metricas_test.csv",
+      "bytes": 3192
+    },
+    {
+      "archivo": "genero_importancias.csv",
+      "bytes": 2993
+    },
+    {
+      "archivo": "genero_resumen.json",
+      "bytes": 2899
+    },
+    {
+      "archivo": "clustering_seleccion_k.csv",
+      "bytes": 889
+    },
+    {
+      "archivo": "clustering_perfiles.csv",
+      "bytes": 1167
+    },
+    {
+      "archivo": "clustering_puntos.csv",
+      "bytes": 221087
+    },
+    {
+      "archivo": "clustering_centroides.csv",
+      "bytes": 532
+    },
+    {
+      "archivo": "clustering_meta.json",
+      "bytes": 1350
+    },
+    {
+      "archivo": "prediccion/catboost.cbm",
+      "bytes": 81880
+    },
+    {
+      "archivo": "prediccion/catboost_preprocesamiento.json",
+      "bytes": 2019
+    },
+    {
+      "archivo": "prediccion/elasticnet.json",
+      "bytes": 2327
+    },
+    {
+      "archivo": "prediccion/rangos.json",
+      "bytes": 2635
+    }
+  ],
+  "versiones": {
+    "python": "3.11.18",
+    "numpy": "2.4.6",
+    "pandas": "3.1.0",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.9.1",
+    "catboost": "1.2.9",
+    "joblib": "1.6.0"
+  },
+  "nota": "La versión de catboost de requirements.txt (dashboard) debe coincidir con la de esta exportación."
+}

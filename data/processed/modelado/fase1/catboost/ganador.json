@@ -1,0 +1,18 @@
+{
+  "fecha_entrenamiento": "2026-11-01T20:16:19",
+  "modelo": "catboost",
+  "nombre": "CatBoost",
+  "estrategia": "nativo",
+  "hiperparametros": {
+    "depth": 4,
+    "iterations": 232,
+    "l2_leaf_reg": 1.5720251525742128,
+    "learning_rate": 0.02538617845650057
+  },
+  "pr_auc_media": 0.4056510366090538,
+  "pr_auc_de": 0.05299880122785759,
+  "explicacion": "Se elige 'nativo': tiene la mayor PR-AUC media de CV (0.4057 ± 0.0530).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "catboost_nativo.joblib",
+  "seed": 42
+}

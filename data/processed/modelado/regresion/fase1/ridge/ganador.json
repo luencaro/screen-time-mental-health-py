@@ -1,0 +1,19 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:31:09",
+  "modelo": "ridge",
+  "nombre": "Ridge",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "alpha": 24.658329458549105
+  },
+  "rmse_media": 6.900013231119495,
+  "rmse_de": 0.48624574209767785,
+  "mae_media": 4.906851064963663,
+  "r2_media": 0.20104158063040373,
+  "explicacion": "Se elige 'Nativo': tiene el menor RMSE medio de CV (6.9000 ± 0.4862) y ninguna opción más simple queda a menos de una desviación estándar (0.4862).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "ridge_nativo.joblib",
+  "seed": 42
+}

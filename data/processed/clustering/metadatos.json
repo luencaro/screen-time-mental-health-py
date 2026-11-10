@@ -1,0 +1,50 @@
+{
+  "fecha": "2026-11-02T01:41:41",
+  "k_elegido": 3,
+  "nombres_clusters": {
+    "0": "Sueño largo y regular",
+    "1": "Horario tardío y jet lag social",
+    "2": "Sueño corto y de mala calidad"
+  },
+  "orden_clusters": "clusters numerados por la media de sleep_quality_index (0 = menor valor)",
+  "mapeo_reetiquetado": {
+    "0": 0,
+    "2": 1,
+    "1": 2
+  },
+  "seed": 42,
+  "variables": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index"
+  ],
+  "preprocesamiento": "StandardScaler (ajustado con el dataset completo)",
+  "parametros_kmeans": {
+    "algorithm": "lloyd",
+    "copy_x": true,
+    "init": "k-means++",
+    "max_iter": 300,
+    "n_clusters": 3,
+    "n_init": 50,
+    "random_state": 42,
+    "tol": 0.0001,
+    "verbose": 0
+  },
+  "rango_k_evaluado": [
+    2,
+    8
+  ],
+  "n_bootstrap_estabilidad": 50,
+  "n_observaciones": 4810,
+  "versiones": {
+    "python": "3.11.18",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.4.6",
+    "pandas": "3.1.0",
+    "scipy": "1.17.1",
+    "statsmodels": "0.15.0",
+    "joblib": "1.6.0"
+  }
+}

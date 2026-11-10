@@ -1,0 +1,21 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:32:49",
+  "modelo": "svr",
+  "nombre": "SVR (RBF)",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "C": 65.84106160121607,
+    "epsilon": 2.6008312687264885,
+    "gamma": 0.062187047277690755
+  },
+  "rmse_media": 7.064873873511824,
+  "rmse_de": 0.5385868499998017,
+  "mae_media": 4.72739180406821,
+  "r2_media": 0.16260111006750894,
+  "explicacion": "El menor RMSE medio de CV es el de 'sqrt + smearing' (6.8862 ± 0.4936), pero 'Nativo' es más simple y su RMSE (7.0649) está a solo 0.1786 puntos, menos que la desviación estándar de CV de la ganadora (0.4936). Por la regla de empate se elige 'Nativo'.",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "svr_nativo.joblib",
+  "seed": 42
+}

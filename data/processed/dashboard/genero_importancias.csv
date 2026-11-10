@@ -1,0 +1,31 @@
+grupo,modelo,metodo,variable,etiqueta,valor
+chicos,elasticnet,coeficiente,sleep_quality_index,Índice de calidad del sueño,1.5059170415325283
+chicos,elasticnet,coeficiente,avg_sleep_hours,Horas de sueño promedio,-0.7229269949599729
+chicos,elasticnet,coeficiente,screen_time_index,Índice de tiempo de pantalla,0.4196976204132224
+chicos,elasticnet,coeficiente,midsleep_weekend_hours,Punto medio del sueño (fin de semana),0.22433840516157802
+chicos,elasticnet,coeficiente,social_jetlag_hours,Jet lag social,0.0
+chicos,catboost,prediction_values_change,sleep_quality_index,Índice de calidad del sueño,41.65216963127339
+chicos,catboost,prediction_values_change,avg_sleep_hours,Horas de sueño promedio,21.84506054092353
+chicos,catboost,prediction_values_change,midsleep_weekend_hours,Punto medio del sueño (fin de semana),15.187410579415651
+chicos,catboost,prediction_values_change,screen_time_index,Índice de tiempo de pantalla,13.017626280723125
+chicos,catboost,prediction_values_change,social_jetlag_hours,Jet lag social,8.297732967664315
+chicos,catboost,shap_global,sleep_quality_index,Índice de calidad del sueño,0.3212882464498915
+chicos,catboost,shap_global,avg_sleep_hours,Horas de sueño promedio,0.22305195619786286
+chicos,catboost,shap_global,midsleep_weekend_hours,Punto medio del sueño (fin de semana),0.1415442192950767
+chicos,catboost,shap_global,screen_time_index,Índice de tiempo de pantalla,0.14046383918138827
+chicos,catboost,shap_global,social_jetlag_hours,Jet lag social,0.03916440894902994
+chicas,elasticnet,coeficiente,sleep_quality_index,Índice de calidad del sueño,2.4846562382430193
+chicas,elasticnet,coeficiente,avg_sleep_hours,Horas de sueño promedio,-1.0073950470942692
+chicas,elasticnet,coeficiente,midsleep_weekend_hours,Punto medio del sueño (fin de semana),0.5538940747659725
+chicas,elasticnet,coeficiente,screen_time_index,Índice de tiempo de pantalla,0.34947570367602476
+chicas,elasticnet,coeficiente,social_jetlag_hours,Jet lag social,0.0
+chicas,catboost,prediction_values_change,sleep_quality_index,Índice de calidad del sueño,52.26870544219665
+chicas,catboost,prediction_values_change,avg_sleep_hours,Horas de sueño promedio,20.202274566839787
+chicas,catboost,prediction_values_change,midsleep_weekend_hours,Punto medio del sueño (fin de semana),11.85342253155057
+chicas,catboost,prediction_values_change,social_jetlag_hours,Jet lag social,8.97270178913515
+chicas,catboost,prediction_values_change,screen_time_index,Índice de tiempo de pantalla,6.702895670277859
+chicas,catboost,shap_global,sleep_quality_index,Índice de calidad del sueño,0.41256245732598706
+chicas,catboost,shap_global,avg_sleep_hours,Horas de sueño promedio,0.177784283244776
+chicas,catboost,shap_global,midsleep_weekend_hours,Punto medio del sueño (fin de semana),0.09359153896295952
+chicas,catboost,shap_global,social_jetlag_hours,Jet lag social,0.04825569305153947
+chicas,catboost,shap_global,screen_time_index,Índice de tiempo de pantalla,0.037937366784541814

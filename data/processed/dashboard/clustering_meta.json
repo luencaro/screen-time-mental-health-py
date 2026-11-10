@@ -1,0 +1,52 @@
+{
+  "k": 3,
+  "varianza_explicada": [
+    0.45176473181493804,
+    0.2321947294958177
+  ],
+  "cargas": {
+    "sleep_quality_index": [
+      0.2058486329699519,
+      0.7114133767523463
+    ],
+    "avg_sleep_hours": [
+      -0.4412278088308057,
+      -0.4370925171978175
+    ],
+    "midsleep_weekend_hours": [
+      0.6222194787120251,
+      -0.2298698474353404
+    ],
+    "social_jetlag_hours": [
+      0.5216510492532507,
+      -0.4741667573970995
+    ],
+    "screen_time_index": [
+      0.32197432217971395,
+      0.15864072051990136
+    ]
+  },
+  "nombres": {
+    "0": "Sueño largo y regular",
+    "1": "Horario tardío y jet lag social",
+    "2": "Sueño corto y de mala calidad"
+  },
+  "variables": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index"
+  ],
+  "etiquetas": {
+    "sleep_quality_index": "Índice de calidad del sueño",
+    "avg_sleep_hours": "Horas de sueño promedio",
+    "midsleep_weekend_hours": "Punto medio del sueño (fin de semana)",
+    "social_jetlag_hours": "Jet lag social",
+    "screen_time_index": "Índice de tiempo de pantalla"
+  },
+  "orden_clusters": "clusters numerados por la media de sleep_quality_index (0 = menor valor)",
+  "n_observaciones": 4810,
+  "n_bootstrap_estabilidad": 50,
+  "fecha_clustering": "2026-11-02T01:41:41"
+}

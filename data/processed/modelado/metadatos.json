@@ -1,0 +1,62 @@
+{
+  "fecha_entrenamiento": "2026-11-01T15:50:02",
+  "seed": 42,
+  "predictores": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index",
+    "sex"
+  ],
+  "target": "depressed",
+  "umbral": 0.5,
+  "modelo_referencia": "logistica_benchmark",
+  "mejor_modelo_pr_auc_cv": "catboost",
+  "mejores_hiperparametros": {
+    "logistica_benchmark": {},
+    "logistica_ridge": {
+      "C": 0.9846738873614566
+    },
+    "logistica_lasso": {
+      "C": 0.0745934328572655
+    },
+    "random_forest": {
+      "max_depth": 5,
+      "max_features": 0.5,
+      "min_samples_leaf": 10,
+      "n_estimators": 585
+    },
+    "xgboost": {
+      "colsample_bytree": 0.7297380084021096,
+      "learning_rate": 0.014415844570943491,
+      "max_depth": 2,
+      "min_child_weight": 7,
+      "n_estimators": 289,
+      "subsample": 0.6440207698110707
+    },
+    "lightgbm": {
+      "colsample_bytree": 0.9442922333025374,
+      "learning_rate": 0.010210451114512976,
+      "max_depth": 7,
+      "min_child_samples": 36,
+      "n_estimators": 236,
+      "num_leaves": 8,
+      "subsample": 0.8769744131561081
+    },
+    "catboost": {
+      "depth": 3,
+      "iterations": 543,
+      "l2_leaf_reg": 4.5539336635801275,
+      "learning_rate": 0.02409000658323288
+    }
+  },
+  "versiones": {
+    "python": "3.11.16",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.2",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.9",
+    "joblib": "1.6.0"
+  }
+}

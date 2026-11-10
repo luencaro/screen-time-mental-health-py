@@ -1,0 +1,37 @@
+modelo,metodo,variable,valor,desviacion
+elasticnet,coeficiente,Sexo (chica),3.039060000140542,
+elasticnet,coeficiente,Índice de calidad del sueño,2.1988313416851684,
+elasticnet,coeficiente,Horas de sueño promedio,-0.9052509966039052,
+elasticnet,coeficiente,Índice de tiempo de pantalla,0.444234838535432,
+elasticnet,coeficiente,Punto medio del sueño (fin de semana),0.40764874518055927,
+elasticnet,coeficiente,Jet lag social,-0.0,
+catboost,prediction_values_change,Índice de calidad del sueño,30.605602499601083,
+catboost,prediction_values_change,Sexo (chica),26.967758396978386,
+catboost,prediction_values_change,Horas de sueño promedio,14.257497722488951,
+catboost,prediction_values_change,Punto medio del sueño (fin de semana),10.83800441795428,
+catboost,prediction_values_change,Jet lag social,9.573264724308572,
+catboost,prediction_values_change,Índice de tiempo de pantalla,7.757872238668726,
+catboost,loss_function_change,Índice de calidad del sueño,0.03947258394239639,
+catboost,loss_function_change,Sexo (chica),0.0151417913786836,
+catboost,loss_function_change,Horas de sueño promedio,0.003512862580824283,
+catboost,loss_function_change,Punto medio del sueño (fin de semana),0.002017657597528366,
+catboost,loss_function_change,Jet lag social,0.002397631623053509,
+catboost,loss_function_change,Índice de tiempo de pantalla,0.0006707911339350336,
+catboost,shap_global,Sexo (chica),0.5445626856472677,
+catboost,shap_global,Índice de calidad del sueño,0.4103894414869205,
+catboost,shap_global,Horas de sueño promedio,0.19148186343465098,
+catboost,shap_global,Punto medio del sueño (fin de semana),0.10486841524953529,
+catboost,shap_global,Índice de tiempo de pantalla,0.08812373689472364,
+catboost,shap_global,Jet lag social,0.0524928332566979,
+elasticnet,shap_global,Índice de calidad del sueño,1.6754212900325183,
+elasticnet,shap_global,Sexo (chica),1.5225627418583527,
+elasticnet,shap_global,Horas de sueño promedio,0.7083054521136367,
+elasticnet,shap_global,Índice de tiempo de pantalla,0.3737247988646763,
+elasticnet,shap_global,Punto medio del sueño (fin de semana),0.34508800658902544,
+elasticnet,shap_global,Jet lag social,0.0,
+elasticnet,permutacion,Índice de calidad del sueño,0.7434957378752237,0.08690607670597064
+elasticnet,permutacion,Sexo (chica),0.3760977743773786,0.0573760974659296
+elasticnet,permutacion,Horas de sueño promedio,0.09108509428992585,0.027047282284732396
+elasticnet,permutacion,Índice de tiempo de pantalla,0.03812895922428504,0.013724894260747885
+elasticnet,permutacion,Punto medio del sueño (fin de semana),0.019973771922259242,0.013459517682880302
+elasticnet,permutacion,Jet lag social,0.0,0.0

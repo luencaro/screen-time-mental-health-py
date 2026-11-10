@@ -1,0 +1,17 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:27:52",
+  "modelo": "lineal",
+  "nombre": "Lineal (OLS)",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {},
+  "rmse_media": 6.900388709336594,
+  "rmse_de": 0.48500866553805094,
+  "mae_media": 4.906377945821079,
+  "r2_media": 0.20093015457834648,
+  "explicacion": "Se elige 'Nativo': tiene el menor RMSE medio de CV (6.9004 ± 0.4850) y ninguna opción más simple queda a menos de una desviación estándar (0.4850).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "lineal_nativo.joblib",
+  "seed": 42
+}

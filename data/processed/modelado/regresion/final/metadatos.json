@@ -1,0 +1,60 @@
+{
+  "fecha": "2026-11-01T21:38:35",
+  "modelo": "elasticnet",
+  "nombre": "ElasticNet",
+  "variante_target": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "recorte_predicciones": [
+    0,
+    63
+  ],
+  "hiperparametros": {
+    "alpha": 0.01444525102276306,
+    "l1_ratio": 0.3329833121584336
+  },
+  "rmse_cv_media": 6.8997221475886095,
+  "rmse_cv_de": 0.4869624708759975,
+  "explicacion_eleccion": "El menor RMSE medio de CV es el de 'CatBoost' (6.8815 ± 0.4803), pero 'ElasticNet' es más simple y su RMSE (6.8997) está a solo 0.0182 puntos, menos que la desviación estándar de CV de la ganadora (0.4803). Por la regla de empate se elige 'ElasticNet'.",
+  "modelo_referencia": "regresión lineal benchmark (LinearRegression, target nativo, sin tuning, 6 predictores)",
+  "seed": 42,
+  "predictores": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index",
+    "sex"
+  ],
+  "target": "bdi_total",
+  "dispositivo_entrenamiento": "CPU",
+  "dispositivo_por_modelo": {
+    "lineal": "CPU",
+    "ridge": "CPU",
+    "lasso": "CPU",
+    "elasticnet": "CPU",
+    "poisson": "CPU",
+    "binomial_negativa": "CPU",
+    "knn": "CPU",
+    "svr": "CPU",
+    "random_forest": "CPU",
+    "xgboost": "CPU",
+    "lightgbm": "CPU",
+    "catboost": "CPU"
+  },
+  "gpu_detectada": {
+    "xgboost": null,
+    "catboost": null,
+    "lightgbm": null
+  },
+  "versiones": {
+    "python": "3.11.18",
+    "scikit-learn": "1.9.1",
+    "imbalanced-learn": "0.14.2",
+    "xgboost": "3.4.2",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.9",
+    "joblib": "1.6.0",
+    "statsmodels": "0.15.0"
+  }
+}

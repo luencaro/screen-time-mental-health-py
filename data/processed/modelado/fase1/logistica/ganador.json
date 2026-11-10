@@ -1,0 +1,13 @@
+{
+  "fecha_entrenamiento": "2026-11-01T20:07:36",
+  "modelo": "logistica",
+  "nombre": "Logística",
+  "estrategia": "pesos",
+  "hiperparametros": {},
+  "pr_auc_media": 0.3929748551081086,
+  "pr_auc_de": 0.043125604139939176,
+  "explicacion": "Se elige 'pesos': tiene la mayor PR-AUC media de CV (0.3930 ± 0.0431).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "logistica_pesos.joblib",
+  "seed": 42
+}

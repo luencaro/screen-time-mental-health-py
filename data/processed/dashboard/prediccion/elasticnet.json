@@ -1,0 +1,88 @@
+{
+  "entradas": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index",
+    "sex"
+  ],
+  "columnas_salida": [
+    "numericas__sleep_quality_index",
+    "numericas__avg_sleep_hours",
+    "numericas__midsleep_weekend_hours",
+    "numericas__social_jetlag_hours",
+    "numericas__screen_time_index",
+    "categoricas__sex_Girl"
+  ],
+  "transformaciones": [
+    {
+      "columna_salida": "numericas__sleep_quality_index",
+      "tipo": "estandarizar",
+      "variable": "sleep_quality_index",
+      "media": 1.8963097713097714,
+      "escala": 0.8517672405700185
+    },
+    {
+      "columna_salida": "numericas__avg_sleep_hours",
+      "tipo": "estandarizar",
+      "variable": "avg_sleep_hours",
+      "media": 7.688794178794178,
+      "escala": 1.2636450679860747
+    },
+    {
+      "columna_salida": "numericas__midsleep_weekend_hours",
+      "tipo": "estandarizar",
+      "variable": "midsleep_weekend_hours",
+      "media": 5.560966735966735,
+      "escala": 1.4014304583013866
+    },
+    {
+      "columna_salida": "numericas__social_jetlag_hours",
+      "tipo": "estandarizar",
+      "variable": "social_jetlag_hours",
+      "media": 2.387523388773389,
+      "escala": 1.1333096319656812
+    },
+    {
+      "columna_salida": "numericas__screen_time_index",
+      "tipo": "estandarizar",
+      "variable": "screen_time_index",
+      "media": 3.2220777027027028,
+      "escala": 1.0235440749826774
+    },
+    {
+      "columna_salida": "categoricas__sex_Girl",
+      "tipo": "indicadora",
+      "variable": "sex",
+      "categoria": "Girl"
+    }
+  ],
+  "codificaciones": {
+    "sex": {
+      "categorias": [
+        "Boy",
+        "Girl"
+      ],
+      "eliminada": "Boy",
+      "desconocida": "todas las indicadoras en 0"
+    }
+  },
+  "coeficientes": {
+    "numericas__sleep_quality_index": 2.1988313416851684,
+    "numericas__avg_sleep_hours": -0.9052509966039052,
+    "numericas__midsleep_weekend_hours": 0.40764874518055927,
+    "numericas__social_jetlag_hours": -0.0,
+    "numericas__screen_time_index": 0.444234838535432,
+    "categoricas__sex_Girl": 3.039060000140542
+  },
+  "intercepto": 5.808247801386236,
+  "recorte": [
+    0.0,
+    63.0
+  ],
+  "hiperparametros": {
+    "alpha": 0.01444525102276306,
+    "l1_ratio": 0.3329833121584336
+  }
+}

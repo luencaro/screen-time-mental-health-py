@@ -1,0 +1,19 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:26:28",
+  "modelo": "lasso",
+  "nombre": "Lasso",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "alpha": 0.0074593432857265485
+  },
+  "rmse_media": 6.899769657887437,
+  "rmse_de": 0.48578074667035215,
+  "mae_media": 4.90620380310662,
+  "r2_media": 0.2010888501314355,
+  "explicacion": "Se elige 'Nativo': tiene el menor RMSE medio de CV (6.8998 ± 0.4858) y ninguna opción más simple queda a menos de una desviación estándar (0.4858).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "lasso_nativo.joblib",
+  "seed": 42
+}

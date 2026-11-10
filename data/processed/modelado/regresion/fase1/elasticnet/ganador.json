@@ -1,0 +1,20 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:25:26",
+  "modelo": "elasticnet",
+  "nombre": "ElasticNet",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "alpha": 0.01444525102276306,
+    "l1_ratio": 0.3329833121584336
+  },
+  "rmse_media": 6.8997221475886095,
+  "rmse_de": 0.4869624708759975,
+  "mae_media": 4.906973974693661,
+  "r2_media": 0.20112292742739202,
+  "explicacion": "Se elige 'Nativo': tiene el menor RMSE medio de CV (6.8997 ± 0.4870) y ninguna opción más simple queda a menos de una desviación estándar (0.4870).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "elasticnet_nativo.joblib",
+  "seed": 42
+}

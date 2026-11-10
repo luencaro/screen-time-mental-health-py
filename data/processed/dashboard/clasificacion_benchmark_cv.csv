@@ -1,0 +1,61 @@
+modelo,nombre,estrategia,metrica,media,desviacion,es_referencia,es_final,fuente_cv
+catboost,CatBoost,nativo,PR-AUC,0.4056510366090538,0.05299880122785759,False,True,fase1
+catboost,CatBoost,nativo,ROC-AUC,0.7507657603578317,0.03049983699590828,False,True,fase1
+catboost,CatBoost,nativo,Precision,0.589859943977591,0.11849585761542338,False,True,fase1
+catboost,CatBoost,nativo,Recall,0.13174603174603175,0.014720029357929688,False,True,fase1
+catboost,CatBoost,nativo,F1,0.21411153553095472,0.021768793412038807,False,True,fase1
+catboost,CatBoost,nativo,Accuracy,0.8417391451201593,0.00646721588640816,False,True,fase1
+benchmark,Logística benchmark,pesos,PR-AUC,0.399,0.011,True,False,eda
+benchmark,Logística benchmark,pesos,ROC-AUC,0.766,0.007,True,False,eda
+benchmark,Logística benchmark,pesos,Precision,0.32,0.013,True,False,eda
+benchmark,Logística benchmark,pesos,Recall,0.666,0.035,True,False,eda
+benchmark,Logística benchmark,pesos,F1,0.432,0.019,True,False,eda
+benchmark,Logística benchmark,pesos,Accuracy,0.714,0.009,True,False,eda
+random_forest,Random Forest,nativo,PR-AUC,0.3979228030815678,0.05591355722792253,False,False,fase1
+random_forest,Random Forest,nativo,ROC-AUC,0.7465840119264961,0.032834950721626996,False,False,fase1
+random_forest,Random Forest,nativo,Precision,0.5993800069662139,0.07997438760288544,False,False,fase1
+random_forest,Random Forest,nativo,Recall,0.1126984126984127,0.005939138709164986,False,False,fase1
+random_forest,Random Forest,nativo,F1,0.1890287668192716,0.007548020318065156,False,False,fase1
+random_forest,Random Forest,nativo,Accuracy,0.8417377940654923,0.003900464258789595,False,False,fase1
+lightgbm,LightGBM,nativo,PR-AUC,0.3964895099950039,0.052089518464145335,False,False,fase1
+lightgbm,LightGBM,nativo,ROC-AUC,0.7482806711613353,0.031765714940342034,False,False,fase1
+lightgbm,LightGBM,nativo,Precision,0.6297473424408409,0.12638567693608155,False,False,fase1
+lightgbm,LightGBM,nativo,Recall,0.0746031746031746,0.010765603147817885,False,False,fase1
+lightgbm,LightGBM,nativo,F1,0.1329063820522896,0.018466544048886833,False,False,fase1
+lightgbm,LightGBM,nativo,Accuracy,0.8406974819718643,0.004432492739093887,False,False,fase1
+lasso,Logística Lasso (L1),pesos,PR-AUC,0.39412731467679407,0.04397897317242973,False,False,fase1
+lasso,Logística Lasso (L1),pesos,ROC-AUC,0.7560229005163948,0.030925464687008335,False,False,fase1
+lasso,Logística Lasso (L1),pesos,Precision,0.31158784975648823,0.029621481877775184,False,False,fase1
+lasso,Logística Lasso (L1),pesos,Recall,0.6587301587301587,0.05240499688641006,False,False,fase1
+lasso,Logística Lasso (L1),pesos,F1,0.4230079657813879,0.037943529552691625,False,False,fase1
+lasso,Logística Lasso (L1),pesos,Accuracy,0.7053126847145053,0.02256572306861296,False,False,fase1
+ridge,Logística Ridge (L2),pesos,PR-AUC,0.3936570093312149,0.04391547522047672,False,False,fase1
+ridge,Logística Ridge (L2),pesos,ROC-AUC,0.7560548694876331,0.030868241178993682,False,False,fase1
+ridge,Logística Ridge (L2),pesos,Precision,0.3121540910363903,0.03149393892321008,False,False,fase1
+ridge,Logística Ridge (L2),pesos,Recall,0.6476190476190476,0.048301981126041095,False,False,fase1
+ridge,Logística Ridge (L2),pesos,F1,0.4211116450960519,0.038458109159958224,False,False,fase1
+ridge,Logística Ridge (L2),pesos,Accuracy,0.707654062452502,0.02521683260392272,False,False,fase1
+xgboost,XGBoost,smotenc,PR-AUC,0.3933868049191286,0.04968282537680544,False,False,fase1
+xgboost,XGBoost,smotenc,ROC-AUC,0.7473700825474102,0.028012953914227954,False,False,fase1
+xgboost,XGBoost,smotenc,Precision,0.3328094103771141,0.03789610909371131,False,False,fase1
+xgboost,XGBoost,smotenc,Recall,0.5634920634920635,0.04517539514526256,False,False,fase1
+xgboost,XGBoost,smotenc,F1,0.41830618300236244,0.04218971044246987,False,False,fase1
+xgboost,XGBoost,smotenc,Accuracy,0.7424768209683685,0.0242342212216486,False,False,fase1
+logistica,Logística,pesos,PR-AUC,0.3929748551081086,0.043125604139939176,False,False,fase1
+logistica,Logística,pesos,ROC-AUC,0.7557684520378801,0.03029133989871413,False,False,fase1
+logistica,Logística,pesos,Precision,0.3094046758006096,0.03176222210071554,False,False,fase1
+logistica,Logística,pesos,Recall,0.6523809523809524,0.05250106478901977,False,False,fase1
+logistica,Logística,pesos,F1,0.4195941381566966,0.0396106217527186,False,False,fase1
+logistica,Logística,pesos,Accuracy,0.7037562697380643,0.025557408132028902,False,False,fase1
+svc,SVC (RBF),pesos,PR-AUC,0.39272447735406707,0.047558353167761296,False,False,fase1
+svc,SVC (RBF),pesos,ROC-AUC,0.754232540380184,0.03380421469529883,False,False,fase1
+svc,SVC (RBF),pesos,Precision,0.5603339215103922,0.05222519629336158,False,False,fase1
+svc,SVC (RBF),pesos,Recall,0.13650793650793652,0.02900899505158264,False,False,fase1
+svc,SVC (RBF),pesos,F1,0.21707060433120717,0.03892825537416131,False,False,fase1
+svc,SVC (RBF),pesos,Accuracy,0.8404380794757907,0.003646571162715484,False,False,fase1
+knn,KNN,nativo,PR-AUC,0.3907059180695202,0.044653232799413564,False,False,fase1
+knn,KNN,nativo,ROC-AUC,0.7508116630473498,0.03050903845556691,False,False,fase1
+knn,KNN,nativo,Precision,0.0,0.0,False,False,fase1
+knn,KNN,nativo,Recall,0.0,0.0,False,False,fase1
+knn,KNN,nativo,F1,0.0,0.0,False,False,fase1
+knn,KNN,nativo,Accuracy,0.8362785199196121,0.00010424592828959529,False,False,fase1

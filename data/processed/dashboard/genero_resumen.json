@@ -1,0 +1,108 @@
+{
+  "umbral_conjunto": 0.15341998210126612,
+  "grupos": {
+    "chicos": {
+      "nombre": "Chicos",
+      "sexo": "Boy",
+      "tamanos": {
+        "train": {
+          "filas": 1957,
+          "deprimidos": 168,
+          "prevalencia": 0.086
+        },
+        "test": {
+          "filas": 489,
+          "deprimidos": 42,
+          "prevalencia": 0.086
+        }
+      },
+      "umbral_propio": 0.07800008698870065,
+      "umbral_conjunto": {
+        "recall": 0.5238095238095238,
+        "precision": 0.4,
+        "f1": 0.4536082474226804
+      },
+      "umbral_propio_metricas": {
+        "recall": 0.8571428571428571,
+        "precision": 0.18652849740932642,
+        "f1": 0.30638297872340425
+      },
+      "roc_auc": {
+        "especifico": {
+          "valor": 0.8362629167998296,
+          "ic_inf": 0.7690669815292407,
+          "ic_sup": 0.8997556538437296
+        },
+        "conjunto": {
+          "valor": 0.8315223180994993,
+          "ic_inf": 0.766057396701079,
+          "ic_sup": 0.8938465398529584
+        }
+      },
+      "rmse": {
+        "especifico": {
+          "valor": 5.20361517464603,
+          "ic_inf": 4.582767950390901,
+          "ic_sup": 5.854761140640625
+        },
+        "conjunto": {
+          "valor": 5.213543605662208,
+          "ic_inf": 4.615655469970034,
+          "ic_sup": 5.862007412784369
+        }
+      }
+    },
+    "chicas": {
+      "nombre": "Chicas",
+      "sexo": "Girl",
+      "tamanos": {
+        "train": {
+          "filas": 1891,
+          "deprimidos": 462,
+          "prevalencia": 0.244
+        },
+        "test": {
+          "filas": 473,
+          "deprimidos": 115,
+          "prevalencia": 0.243
+        }
+      },
+      "umbral_propio": 0.19605942361678605,
+      "umbral_conjunto": {
+        "recall": 0.8869565217391304,
+        "precision": 0.3081570996978852,
+        "f1": 0.45739910313901344
+      },
+      "umbral_propio_metricas": {
+        "recall": 0.7913043478260869,
+        "precision": 0.35135135135135137,
+        "f1": 0.48663101604278075
+      },
+      "roc_auc": {
+        "especifico": {
+          "valor": 0.7271071168326452,
+          "ic_inf": 0.6768967510392885,
+          "ic_sup": 0.7793211357379403
+        },
+        "conjunto": {
+          "valor": 0.7250910857420452,
+          "ic_inf": 0.6763603873026288,
+          "ic_sup": 0.7773886882185921
+        }
+      },
+      "rmse": {
+        "especifico": {
+          "valor": 7.7679657139172456,
+          "ic_inf": 6.9890647407008935,
+          "ic_sup": 8.550267845785303
+        },
+        "conjunto": {
+          "valor": 7.769322936589413,
+          "ic_inf": 6.983682658948933,
+          "ic_sup": 8.55466210855897
+        }
+      }
+    }
+  },
+  "nota": "umbral_conjunto: modelo conjunto con el umbral conjunto; umbral_propio_metricas: modelo específico del grupo con su propio umbral (mismo criterio: máxima precision con recall >= 0.70)."
+}

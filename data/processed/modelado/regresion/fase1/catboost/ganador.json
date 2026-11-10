@@ -1,0 +1,22 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:24:38",
+  "modelo": "catboost",
+  "nombre": "CatBoost",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "depth": 3,
+    "iterations": 543,
+    "l2_leaf_reg": 4.5539336635801275,
+    "learning_rate": 0.02409000658323288
+  },
+  "rmse_media": 6.881492950629854,
+  "rmse_de": 0.48032938019596605,
+  "mae_media": 4.883757916732868,
+  "r2_media": 0.2051927544430015,
+  "explicacion": "El menor RMSE medio de CV es el de 'sqrt + smearing' (6.8796 ± 0.4906), pero 'Nativo' es más simple y su RMSE (6.8815) está a solo 0.0018 puntos, menos que la desviación estándar de CV de la ganadora (0.4906). Por la regla de empate se elige 'Nativo'.",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "catboost_nativo.joblib",
+  "seed": 42
+}

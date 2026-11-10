@@ -1,0 +1,25 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:27:10",
+  "modelo": "lightgbm",
+  "nombre": "LightGBM",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "colsample_bytree": 0.9214688307596458,
+    "learning_rate": 0.01748772208717285,
+    "max_depth": 3,
+    "min_child_samples": 71,
+    "n_estimators": 430,
+    "num_leaves": 29,
+    "subsample": 0.6488351818802693
+  },
+  "rmse_media": 6.901965760801614,
+  "rmse_de": 0.4823791392272608,
+  "mae_media": 4.909144726725294,
+  "r2_media": 0.20047573037188146,
+  "explicacion": "El menor RMSE medio de CV es el de 'log1p + smearing' (6.8835 ± 0.4986), pero 'Nativo' es más simple y su RMSE (6.9020) está a solo 0.0185 puntos, menos que la desviación estándar de CV de la ganadora (0.4986). Por la regla de empate se elige 'Nativo'.",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "lightgbm_nativo.joblib",
+  "seed": 42
+}

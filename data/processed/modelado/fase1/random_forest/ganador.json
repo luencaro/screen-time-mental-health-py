@@ -1,0 +1,18 @@
+{
+  "fecha_entrenamiento": "2026-11-01T20:22:41",
+  "modelo": "random_forest",
+  "nombre": "Random Forest",
+  "estrategia": "nativo",
+  "hiperparametros": {
+    "max_depth": 5,
+    "max_features": 0.5,
+    "min_samples_leaf": 5,
+    "n_estimators": 601
+  },
+  "pr_auc_media": 0.3979228030815678,
+  "pr_auc_de": 0.05591355722792253,
+  "explicacion": "Se elige 'nativo': tiene la mayor PR-AUC media de CV (0.3979 ± 0.0559).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "random_forest_nativo.joblib",
+  "seed": 42
+}

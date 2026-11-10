@@ -1,0 +1,7 @@
+modelo,caso,subject_id,real,prediccion,motivo
+catboost,Verdadero positivo,544,1,0.613,verdadero positivo: deprimido y probabilidad ≥ 0.153 (elegido al azar con SEED = 42)
+catboost,Falso negativo,4139,1,0.137,falso negativo: deprimido pero probabilidad < 0.153 (elegido al azar con SEED = 42)
+catboost,Falso positivo,3169,0,0.222,falso positivo: no deprimido pero probabilidad ≥ 0.153 (elegido al azar con SEED = 42)
+elasticnet,BDI bajo,473,2,11.73,BDI real ≤ 2 (elegido al azar con SEED = 42)
+elasticnet,BDI cercano a 14,4092,13,3.32,BDI real entre 13 y 15 (cerca del corte clínico) (elegido al azar con SEED = 42)
+elasticnet,BDI alto,3403,22,16.09,BDI real ≥ 22 (percentil 95 del test) (elegido al azar con SEED = 42)

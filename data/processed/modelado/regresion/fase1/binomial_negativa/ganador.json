@@ -1,0 +1,17 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:21:10",
+  "modelo": "binomial_negativa",
+  "nombre": "GLM binomial negativa",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {},
+  "rmse_media": 7.163640378977108,
+  "rmse_de": 0.408728020667201,
+  "mae_media": 5.003586148428724,
+  "r2_media": 0.13573577185904848,
+  "explicacion": "Se elige 'Nativo': tiene el menor RMSE medio de CV (7.1636 ± 0.4087) y ninguna opción más simple queda a menos de una desviación estándar (0.4087).",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "binomial_negativa_nativo.joblib",
+  "seed": 42
+}

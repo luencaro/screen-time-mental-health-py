@@ -1,0 +1,24 @@
+{
+  "fecha_entrenamiento": "2026-11-01T21:34:24",
+  "modelo": "xgboost",
+  "nombre": "XGBoost",
+  "variante": "nativo",
+  "transformacion": null,
+  "usa_smearing": false,
+  "hiperparametros": {
+    "colsample_bytree": 0.7433862914177091,
+    "learning_rate": 0.014149761574941432,
+    "max_depth": 2,
+    "min_child_weight": 8,
+    "n_estimators": 367,
+    "subsample": 0.7323592099410596
+  },
+  "rmse_media": 6.887611621101934,
+  "rmse_de": 0.48842298200412204,
+  "mae_media": 4.903931785983234,
+  "r2_media": 0.20395521316999762,
+  "explicacion": "El menor RMSE medio de CV es el de 'sqrt + smearing' (6.8796 ± 0.5001), pero 'Nativo' es más simple y su RMSE (6.8876) está a solo 0.0080 puntos, menos que la desviación estándar de CV de la ganadora (0.5001). Por la regla de empate se elige 'Nativo'.",
+  "dispositivo_entrenamiento": "CPU",
+  "archivo": "xgboost_nativo.joblib",
+  "seed": 42
+}

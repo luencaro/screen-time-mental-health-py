@@ -1,0 +1,43 @@
+{
+  "modelo": "catboost",
+  "nombre": "CatBoost",
+  "estrategia": "nativo",
+  "estrategia_nombre": "Nativo (sin balanceo)",
+  "hiperparametros": {
+    "depth": 4,
+    "iterations": 232,
+    "l2_leaf_reg": 1.5720251525742128,
+    "learning_rate": 0.02538617845650057
+  },
+  "explicacion_eleccion": "Se elige 'catboost': tiene la mayor PR-AUC media de CV (0.4057 ± 0.0530).",
+  "umbral": 0.15341998210126612,
+  "criterio_umbral": "máxima precision con recall >= 0.70 (probabilidades out-of-fold del train)",
+  "recall_minimo": 0.7,
+  "umbral_f1": 0.19956578034357605,
+  "umbral_defecto": 0.5,
+  "metricas_test_umbral": {
+    "PR-AUC": 0.4176605160441977,
+    "ROC-AUC": 0.7986311666732604,
+    "Precision": 0.32124352331606215,
+    "Recall": 0.7898089171974523,
+    "F1": 0.4567219152854512,
+    "Accuracy": 0.6933471933471933,
+    "Alertas (%)": 40.12474012474013
+  },
+  "metricas_test_05": {
+    "PR-AUC": 0.4176605160441977,
+    "ROC-AUC": 0.7986311666732604,
+    "Precision": 0.5526315789473685,
+    "Recall": 0.1337579617834395,
+    "F1": 0.2153846153846154,
+    "Accuracy": 0.840956340956341,
+    "Alertas (%)": 3.9501039501039505
+  },
+  "prevalencia_test": 0.1632016632016632,
+  "prevalencia_train": 0.16372141372141372,
+  "n_train": 3848,
+  "n_test": 962,
+  "positivos_test": 157,
+  "n_folds": 5,
+  "fecha_modelo": "2026-11-01T20:37:05"
+}

@@ -1,0 +1,115 @@
+{
+  "fecha": "2026-11-01T23:03:08",
+  "seed": 42,
+  "predictores": [
+    "sleep_quality_index",
+    "avg_sleep_hours",
+    "midsleep_weekend_hours",
+    "social_jetlag_hours",
+    "screen_time_index"
+  ],
+  "split": "data/processed/modelado/split_indices.csv filtrado por sexo",
+  "grupos": {
+    "chicos": {
+      "sexo": "Boy",
+      "tamanos": {
+        "train": {
+          "filas": 1957,
+          "deprimidos": 168,
+          "prevalencia": 0.086
+        },
+        "test": {
+          "filas": 489,
+          "deprimidos": 42,
+          "prevalencia": 0.086
+        }
+      },
+      "catboost": {
+        "archivo": "modelos/catboost_chicos.joblib",
+        "estrategia_balanceo": "nativo",
+        "hiperparametros": {
+          "depth": 3,
+          "iterations": 356,
+          "l2_leaf_reg": 8.219772826786357,
+          "learning_rate": 0.012502377950801122
+        },
+        "pr_auc_cv_media": 0.22063913776416927,
+        "pr_auc_cv_de": 0.06265823818572644,
+        "umbral": 0.07800008698870065,
+        "criterio_umbral": "máxima precision con recall >= 0.70 (probabilidades out-of-fold del train)",
+        "precision_oof": 0.1423487544483986,
+        "recall_oof": 0.7142857142857143
+      },
+      "elasticnet": {
+        "archivo": "modelos/elasticnet_chicos.joblib",
+        "variante_target": "nativo",
+        "recorte_predicciones": [
+          0,
+          63
+        ],
+        "hiperparametros": {
+          "alpha": 0.10129197956845731,
+          "l1_ratio": 0.6664580622368363
+        },
+        "rmse_cv_media": 5.565341091732685,
+        "rmse_cv_de": 0.17805054829803063
+      }
+    },
+    "chicas": {
+      "sexo": "Girl",
+      "tamanos": {
+        "train": {
+          "filas": 1891,
+          "deprimidos": 462,
+          "prevalencia": 0.244
+        },
+        "test": {
+          "filas": 473,
+          "deprimidos": 115,
+          "prevalencia": 0.243
+        }
+      },
+      "catboost": {
+        "archivo": "modelos/catboost_chicas.joblib",
+        "estrategia_balanceo": "nativo",
+        "hiperparametros": {
+          "depth": 3,
+          "iterations": 356,
+          "l2_leaf_reg": 8.219772826786357,
+          "learning_rate": 0.012502377950801122
+        },
+        "pr_auc_cv_media": 0.4545743385380119,
+        "pr_auc_cv_de": 0.069165404394019,
+        "umbral": 0.19605942361678605,
+        "criterio_umbral": "máxima precision con recall >= 0.70 (probabilidades out-of-fold del train)",
+        "precision_oof": 0.3431578947368421,
+        "recall_oof": 0.7056277056277056
+      },
+      "elasticnet": {
+        "archivo": "modelos/elasticnet_chicas.joblib",
+        "variante_target": "nativo",
+        "recorte_predicciones": [
+          0,
+          63
+        ],
+        "hiperparametros": {
+          "alpha": 0.10129197956845731,
+          "l1_ratio": 0.6664580622368363
+        },
+        "rmse_cv_media": 8.065483934871553,
+        "rmse_cv_de": 0.41833774082578773
+      }
+    }
+  },
+  "versiones": {
+    "python": "3.11.18",
+    "scikit-learn": "1.9.1",
+    "imbalanced-learn": "0.14.2",
+    "xgboost": "3.4.2",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.9",
+    "joblib": "1.6.0",
+    "statsmodels": "0.15.0",
+    "shap": "0.47.2"
+  }
+}
