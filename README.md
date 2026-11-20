@@ -47,6 +47,10 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
 
       **<http://localhost:8050>**
 
+   Desde la portada, selecciona **Explorar dashboard** para abrir el resumen del estudio. La cabecera da acceso a los análisis, el modelado y el selector de tema.
+
+   **Shapiro** responde preguntas sobre la navegación, los gráficos y la metodología. Usa una guía de respuestas en español que funciona en el navegador sin leer los datos ni los resultados. Puedes abrirlo desde la cabecera, incluso si falta el CSV.
+
  
 5. **(Opcional) Abrir JupyterLab** para ver `notebooks/EDA.ipynb`:
    ```powershell
@@ -142,7 +146,7 @@ screen-time-mental-health-py/
 ├── design/
 │   └── guia_estilo_4d.md     # guía de estilo "4d Pizarra cálida" del dashboard
 │
-├── app.py                    # dashboard Dash: header, menú, selector de tema y routing
+├── app.py                    # dashboard Dash, cabecera, selector de tema y rutas
 ├── analysis/
 │   ├── stats.py              # cálculos estadísticos (descriptivos, χ², Mann-Whitney, Spearman, IQR)
 │   ├── figures.py            # figuras Plotly; reciben el tema ("claro"/"oscuro")
@@ -152,11 +156,13 @@ screen-time-mental-health-py/
 │   └── fichas.py             # resúmenes de los estudios y fase de cada objetivo
 ├── components/
 │   ├── ui.py                 # card, KPI, badge, interpretación, tabla, encabezado, gráfico
-│   ├── secciones.py          # registro de secciones del menú (bloque, número, descripción)
+│   ├── secciones.py          # registro de secciones del menú
+│   ├── shapiro.py            # interfaz de la guía del dashboard
 │   ├── enlaces.py            # enlaces públicos: repositorio, Jupyter Book y dataset
 │   ├── formato.py            # formato numérico en español (coma decimal, punto de miles)
 │   └── plotly_theme.py       # paleta de datos y plantillas Plotly claro/oscuro
 ├── tabs/                     # una sección del dashboard por archivo, cada una con layout()
+│   ├── portada.py            # portada y accesos principales
 │   ├── inicio.py, marco_teorico.py, objetivos.py, metodologia.py          # Proyecto
 │   ├── calidad_datos.py, variable_objetivo.py, analisis_sexo.py,          # EDA
 │   │   analisis_numerico.py, correlaciones.py, outliers.py
@@ -165,8 +171,10 @@ screen-time-mental-health-py/
 │   └── acerca.py                                                          # Acerca de
 └── assets/                   # archivos estáticos que Dash carga automáticamente
     ├── style.css             # variables de diseño (colores, tipografía, espaciados; claro y oscuro)
-    ├── componentes.css       # estilos de los componentes (usan solo las variables de style.css)
-    ├── menu_hover.js         # abre los menús desplegables al pasar el cursor
+    ├── componentes.css       # estilos de los componentes compartidos
+    ├── portada.css           # portada e ilustración
+    ├── shapiro.css           # estilos de la conversación
+    ├── shapiro.js            # guía editorial y conversación local
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
     ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
     ├── altura_cabecera.js    # mide el menú superior para los filtros fijos bajo él

@@ -1,4 +1,4 @@
-# Paleta de gráficos · 4d Pizarra cálida
+# Paleta de gráficos en ambos temas.
 import plotly.graph_objects as go
 import plotly.io as pio
 
@@ -10,9 +10,9 @@ COLORES = {
         "deprimido": "#F0B08F",
         "linea_corte": "#4F5B7A",
         "linea_mediana": "#5F5A54",
-        "texto": "#2A2724",
-        "texto_secundario": "#5F5A54",
-        "cuadricula": "#E8E3DC",
+        "texto": "#202B3A",
+        "texto_secundario": "#576273",
+        "cuadricula": "#E1E3E6",
         "superficie": "#FFFFFF",
         # Perfiles del clustering: lavanda, arena y salvia (validados para daltonismo)
         "clusters": ["#A99BDB", "#DDBE6E", "#6E8B6B"],
@@ -33,10 +33,10 @@ COLORES = {
         "deprimido": "#E6A283",
         "linea_corte": "#A9B6D8",
         "linea_mediana": "#ACA59D",
-        "texto": "#EEEAE5",
-        "texto_secundario": "#ACA59D",
-        "cuadricula": "#36322F",
-        "superficie": "#242120",
+        "texto": "#F1F4FA",
+        "texto_secundario": "#B6C0CD",
+        "cuadricula": "#333E4C",
+        "superficie": "#1D2633",
         "clusters": ["#A194D3", "#D2B363", "#6A8867"],
         "modelos": {
             "final": "#C5D0EE",

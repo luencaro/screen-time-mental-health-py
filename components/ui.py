@@ -1,11 +1,11 @@
-"""Componentes de interfaz según la guía 4d Pizarra cálida.
+"""Componentes compartidos de la interfaz.
 
 Card, KPI, badge, bloque de interpretación, tabla, encabezado de sección y
 envoltorio de gráficos. Todo el estilo vive en assets/*.css con variables.
 """
 
 import dash_bootstrap_components as dbc
-from dash import dcc, get_asset_url, html
+from dash import dcc, get_asset_url, get_relative_path, html
 
 from components.enlaces import NOTEBOOK_EDA
 from components.secciones import POR_SLUG
@@ -37,6 +37,11 @@ def icono(nombre: str, tamano: int = 16) -> html.Span:
         style={"--icono": f"url({get_asset_url(f'iconos/{nombre}.svg')})", "--icono-tamano": f"{tamano}px"},
         **{"aria-hidden": "true"},
     )
+
+
+def enlace_interno(hijos, ruta: str, **props) -> dcc.Link:
+    """Enlace de Dash que conserva la sesión al cambiar de sección."""
+    return dcc.Link(hijos, href=get_relative_path(ruta), **props)
 
 
 def rico(texto: str) -> list:
@@ -112,18 +117,19 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
                 [
                     html.Span(seccion["bloque"]),
                     html.Span("/", className="breadcrumb-sep"),
-                    html.Span(seccion["nombre"], className="breadcrumb-actual"),
+                    html.Span(seccion["nombre"], className="breadcrumb-actual", **{"aria-current": "page"}),
                 ],
                 className="migas",
                 **{"aria-label": "Ruta de navegación"},
             ),
             html.Div(
                 [
-                    html.H1(seccion["nombre"], className="titulo-seccion"),
+                    html.H1(seccion["nombre"], id="titulo-vista", className="titulo-seccion"),
                     html.Div([badge(b) for b in (badges or [])] + extras, className="badges"),
                 ],
                 className="encabezado-fila",
             ),
+            html.P(seccion["descripcion"], className="descripcion-seccion"),
         ],
         className="encabezado-seccion",
     )
@@ -157,7 +163,7 @@ def tabla(filas: list[dict], columnas: list[dict], className: str = "") -> html.
     'tipo' ('texto', 'numero' o 'variable') y 'formato' (función valor → str).
     """
     cabecera = html.Thead(html.Tr([
-        html.Th(c["titulo"], className="num" if c.get("tipo") == "numero" else None)
+        html.Th(c["titulo"], scope="col", className="num" if c.get("tipo") == "numero" else None)
         for c in columnas
     ]))
     cuerpo = []
