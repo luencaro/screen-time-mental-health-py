@@ -1,6 +1,20 @@
 /* Guía de estilo · 4d Pizarra cálida
    Modo claro en :root. Modo oscuro: añade data-bs-theme="dark" al <html> (DBC / Bootstrap 5.3). */
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("fuentes/ibm-plex-sans-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fuentes/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* ── Colores de interfaz ───────────────────────── */

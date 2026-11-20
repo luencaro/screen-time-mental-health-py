@@ -5,7 +5,7 @@ envoltorio de gráficos. Todo el estilo vive en assets/*.css con variables.
 """
 
 import dash_bootstrap_components as dbc
-from dash import dcc, get_asset_url, html
+from dash import dcc, get_asset_url, get_relative_path, html
 
 from components.enlaces import NOTEBOOK_EDA
 from components.secciones import POR_SLUG
@@ -37,6 +37,11 @@ def icono(nombre: str, tamano: int = 16) -> html.Span:
         style={"--icono": f"url({get_asset_url(f'iconos/{nombre}.svg')})", "--icono-tamano": f"{tamano}px"},
         **{"aria-hidden": "true"},
     )
+
+
+def enlace_interno(hijos, ruta: str, **props) -> dcc.Link:
+    """Abre una ruta del dashboard a través de Dash."""
+    return dcc.Link(hijos, href=get_relative_path(ruta), **props)
 
 
 def rico(texto: str) -> list:
