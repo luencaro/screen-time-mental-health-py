@@ -12,7 +12,7 @@ from flask import jsonify, request
 
 from components.secciones import SECCIONES
 
-MODELO_PREDETERMINADO = "gemini-2.5-flash-lite"
+MODELO_PREDETERMINADO = "gemini-3.5-flash-lite"
 MAX_TURNOS = 7
 ENLACES = {"portada": "Volver a la portada", **{
     s["slug"]: f"Ir a {s['nombre']}" for s in SECCIONES
@@ -111,13 +111,14 @@ def _consultar(clave, modelo, mensajes):
     raise ValueError("Respuesta incompleta o bloqueada")
 
 
-def _aviso_http(respuesta):
+def _aviso_http(respuesta, modelo):
     """Clasifica el error de Google sin mostrar su cuerpo ni la clave."""
     estado = respuesta.status_code
     if estado == 429:
         return "Se alcanzó un límite de consultas de Gemini.", 429
     if estado == 404:
-        return "El modelo configurado no está disponible para este proyecto de Gemini (HTTP 404).", 502
+        return (f"El modelo {modelo} no está disponible en este proyecto de Gemini (HTTP 404). "
+                "Revisa SHAPIRO_GEMINI_MODEL en .env."), 502
     try:
         detalle = respuesta.json().get("error", {})
         razones = {item.get("reason") for item in detalle.get("details", []) if isinstance(item, dict)}
@@ -187,7 +188,7 @@ def registrar_shapiro(app):
         except requests.HTTPError as error:
             if error.response is None:
                 return jsonify(error="No se pudo obtener el estado de la solicitud a Gemini."), 502
-            aviso, codigo = _aviso_http(error.response)
+            aviso, codigo = _aviso_http(error.response, modelo)
             return jsonify(error=aviso), codigo
         except requests.RequestException:
             return jsonify(error="El servidor del dashboard no pudo comunicarse con Gemini."), 502

@@ -93,8 +93,10 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
 Con Gemini activo, se envían la pregunta, hasta tres intercambios recientes y la guía editorial.
 El endpoint funciona de forma independiente del CSV, los gráficos y los resultados.
 Si la API falla, Shapiro muestra una respuesta de la guía local.
-El modelo inicial es `gemini-2.5-flash-lite`. Si tu proyecto ofrece otro modelo Gemini
-del nivel gratuito, puedes indicar su identificador con `SHAPIRO_GEMINI_MODEL` en `.env`.
+El modelo predeterminado es `gemini-3.5-flash-lite`. Si recibes HTTP 404, revisa en
+Google AI Studio qué modelos ofrece el nivel gratuito de tu proyecto. Si `.env` indica
+un modelo anterior, actualiza o elimina la línea `SHAPIRO_GEMINI_MODEL` y ejecuta
+`docker compose up -d dashboard` para aplicar el cambio de configuración.
 
 ### Ver el bloque de Modelado en el dashboard
 
