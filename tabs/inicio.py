@@ -43,10 +43,16 @@ def layout():
     contexto = [card(markdown(texto), titulo="Contexto del proyecto")]
     if RUTA_VIDEO.is_file():
         video = get_asset_url(VIDEO_ASSET)
+        poster = next(
+            (get_asset_url(f"video/{nombre}") for nombre in
+             ("portada.png", "portada.jpg", "portada.jpeg", "portada.webp")
+             if RUTA_VIDEO.with_name(nombre).is_file()),
+            None,
+        )
         contexto.append(card(
             html.Video(
                 html.A("Abrir video explicativo", href=video),
-                src=video, controls=True, preload="metadata",
+                src=video, poster=poster, controls=True, preload="metadata",
                 className="video-inicio", **{"aria-label": "Video explicativo del dashboard"},
             ),
             titulo="Video explicativo del dashboard",
