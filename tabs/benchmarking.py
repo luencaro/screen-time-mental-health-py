@@ -1,7 +1,7 @@
 """Pestaña · Benchmarking: ganadores de cada algoritmo frente al benchmark (CV y test)."""
 
 import dash_bootstrap_components as dbc
-from dash import Input, Output, ctx, dcc, html
+from dash import Input, Output, ctx, html
 
 from analysis import figuras_modelado as figuras
 from components.formato import entero, num
@@ -196,15 +196,7 @@ def layout():
                                             f"Test · n = {entero(final['n_test'])}"]),
         # Filtro fijo bajo el menú superior: sigue a mano al bajar por las tablas y gráficos
         html.Div(controles, className="fila filtro-fijo"),
-        dcc.Loading(
-            html.Div(id="bm-contenido"),
-            id="carga-comparacion-capa",
-            delay_show=160,
-            show_initially=False,
-            target_components={"bm-contenido": "children"},
-            overlay_style={"visibility": "visible"},
-            custom_spinner=html.Div("Actualizando comparación…", role="status", className="carga-comparacion"),
-        ),
+        html.Div(id="bm-contenido"),
     ])
 
 

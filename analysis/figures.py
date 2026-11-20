@@ -59,9 +59,8 @@ def dona_estado(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
     """Dona de ``depressed`` con hueco del 70 % y prevalencia al centro."""
     dist = stats.distribucion_estado(df)
     colores = MAPA_ESTADO(tema)
-    etiquetas_corte = {0: f"BDI-II < {CORTE_BDI}", 1: f"BDI-II ≥ {CORTE_BDI}"}
     fig = go.Figure(go.Pie(
-        labels=dist["depressed"].map(etiquetas_corte), values=dist["n"], hole=0.7, sort=False, direction="clockwise",
+        labels=dist["etiqueta"], values=dist["n"], hole=0.7, sort=False, direction="clockwise",
         marker=dict(colors=[colores[e] for e in dist["depressed"]],
                     line=dict(color=COLORES[tema]["superficie"], width=3)),
         textinfo="none",
@@ -69,7 +68,7 @@ def dona_estado(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
     ))
     prevalencia = dist.loc[dist["depressed"] == 1, "proporcion"].iloc[0]
     fig.add_annotation(
-        text=f"<b>{pct(prevalencia)}</b><br><span style='font-size:12px'>{etiquetas_corte[1]}</span>",
+        text=f"<b>{pct(prevalencia)}</b><br><span style='font-size:12px'>deprimidos</span>",
         showarrow=False, font=dict(size=24, color=COLORES[tema]["texto"]),
     )
     return _base(fig, tema, margin=dict(l=8, r=8, t=40, b=8), showlegend=True)
@@ -219,7 +218,7 @@ def histograma_variable(df: pd.DataFrame, columna: str, separar: str | None = No
     if columna == "bdi_total":
         _linea_vertical(fig, CORTE_BDI - 0.5, f"Corte clínico · {CORTE_BDI}", c["linea_corte"],
                         "dash", tema, nivel=1)
-    # El eje horizontal cubre los intervalos y el vertical deja margen sobre la barra más alta.
+    # Rangos explícitos: Plotly.animate no recalcula el autorango al animar
     y_max = max(float(np.max(t.y)) for t in fig.data) * 1.12
     fig.update_xaxes(title=ETIQUETAS[columna], range=[bordes[0], bordes[-1]])
     fig.update_yaxes(title="% del grupo" if separar else "Adolescentes",

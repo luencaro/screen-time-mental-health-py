@@ -221,6 +221,7 @@ def barras_experimento(tabla: pd.DataFrame, tema: str = "claro") -> go.Figure:
     c = COLORES[tema]
     metricas = [("pr_auc", "PR-AUC"), ("roc_auc", "ROC-AUC"), ("recall", "Recall"), ("precision", "Precision"),
                 ("f1", "F1")]
+    # Sin patrones de relleno: la animación de entrada (assets/animacion_graficos.js) no los redibuja
     colores = {"clasificacion": c["linea_corte"], "regresion": _rgba(c["linea_corte"], 0.4)}
     fig = go.Figure()
     for _, fila in tabla.iterrows():

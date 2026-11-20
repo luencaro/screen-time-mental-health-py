@@ -1,4 +1,5 @@
-/* Tipografía local y variables compartidas por ambos temas. */
+/* Guía de estilo · 4d Pizarra cálida
+   Modo claro en :root. Modo oscuro: añade data-bs-theme="dark" al <html> (DBC / Bootstrap 5.3). */
 @font-face {
   font-family: "IBM Plex Sans";
   src: url("fuentes/ibm-plex-sans-latin-wght-normal.woff2") format("woff2");
@@ -17,16 +18,14 @@
 
 :root {
   /* ── Colores de interfaz ───────────────────────── */
-  --color-primario: #31547F;
-  --color-primario-fuerte: #234367;
-  --color-sobre-primario: #FFFFFF;
-  --color-primario-suave: #E9EFF7;
+  --color-primario: #4F5B7A;            /* pizarra: nav activo, enlaces, línea de corte */
+  --color-primario-suave: #ECEEF4;      /* fondo de nav activo, badges, bloque de interpretación */
   --color-secundario: #3F7A70;          /* acento cálido secundario (texto sobre blanco) */
-  --color-fondo: #F7F6F2;
+  --color-fondo: #F8F6F3;
   --color-superficie: #FFFFFF;          /* cards, header, tooltips */
-  --color-texto: #202B3A;
-  --color-texto-secundario: #576273;
-  --color-borde: #E1E3E6;
+  --color-texto: #2A2724;
+  --color-texto-secundario: #5F5A54;
+  --color-borde: #E8E3DC;
 
   /* ── Colores de gráficos ───────────────────────── */
   --color-chicos: #9FC9C0;
@@ -43,12 +42,12 @@
   /* ── Tipografía ────────────────────────────────── */
   --fuente-base: "IBM Plex Sans", system-ui, sans-serif;
   --fuente-mono: "IBM Plex Mono", ui-monospace, monospace;  /* nombres de variables */
-  --texto-titulo: clamp(29px, 4vw, 44px);
-  --texto-subtitulo: 18px;
-  --texto-cuerpo: 15px;
+  --texto-titulo: 28px;                 /* h1 de sección */
+  --texto-subtitulo: 15px;              /* título de card */
+  --texto-cuerpo: 14px;
   --texto-pequeno: 13px;                /* etiquetas KPI, breadcrumb */
   --texto-leyenda: 12px;                /* badges, overlines */
-  --texto-kpi: 34px;
+  --texto-kpi: 30px;
   --interlineado-cuerpo: 1.6;
   --peso-regular: 400;
   --peso-medio: 500;
@@ -60,31 +59,29 @@
   --espaciado-smd: 12px;                /* separación interna de listas y títulos de card */
   --espaciado-md: 24px;                 /* gutter del grid y padding de card */
   --espaciado-lg: 36px;                 /* padding vertical de la página */
-  --espaciado-xl: clamp(16px, 4vw, 56px); /* padding horizontal de la página */
+  --espaciado-xl: 48px;                 /* padding horizontal de la página */
 
   /* ── Radios y sombras ──────────────────────────── */
-  --radio-card: 14px;
-  --radio-control: 8px;                 /* botones de nav, segmentado */
-  --radio-menu: 12px;                   /* desplegables */
+  --radio-card: 8px;
+  --radio-control: 6px;                 /* botones de nav, segmentado */
+  --radio-menu: 10px;                   /* desplegables */
   --radio-badge: 999px;
   --borde-card: 1px solid var(--color-borde);
-  --sombra-card: 0 2px 4px rgba(32, 43, 58, 0.04);
-  --sombra-menu: 0 12px 32px rgba(32, 43, 58, 0.14);
+  --sombra-card: 0 1px 2px rgba(42, 39, 36, 0.04);
+  --sombra-menu: 0 12px 32px rgba(42, 39, 36, 0.12);
   --transicion-tema: background-color .25s ease, color .25s ease, border-color .25s ease;
 }
 
 [data-bs-theme="dark"] {
   /* ── Colores de interfaz ───────────────────────── */
-  --color-primario: #B4CEF0;
-  --color-primario-fuerte: #CADDF6;
-  --color-sobre-primario: #172537;
-  --color-primario-suave: #28394E;
+  --color-primario: #A9B6D8;
+  --color-primario-suave: #2C3040;
   --color-secundario: #8FBAB1;
-  --color-fondo: #141A23;
-  --color-superficie: #1D2633;
-  --color-texto: #F1F4FA;
-  --color-texto-secundario: #B6C0CD;
-  --color-borde: #333E4C;
+  --color-fondo: #1A1816;
+  --color-superficie: #242120;
+  --color-texto: #EEEAE5;
+  --color-texto-secundario: #ACA59D;
+  --color-borde: #36322F;
 
   /* ── Colores de gráficos ───────────────────────── */
   --color-chicos: #8FBAB1;
@@ -95,7 +92,7 @@
   --color-deprimido-texto: #F0B08F;
   --color-linea-corte: #A9B6D8;
   --color-linea-mediana: #ACA59D;
-  --color-grafico-cuadricula: #333E4C;
+  --color-grafico-cuadricula: #36322F;
 
   /* ── Sombras ───────────────────────────────────── */
   --sombra-card: 0 1px 2px rgba(0, 0, 0, 0.30);

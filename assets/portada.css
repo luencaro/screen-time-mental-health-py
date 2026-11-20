@@ -1,4 +1,5 @@
 :root {
+  --portada-fondo: #F7F6F2;
   --portada-papel: #FDFCF9;
   --portada-borde: #E5E4DF;
   --portada-halo-azul: #E1EAF4;
@@ -14,6 +15,7 @@
 }
 
 [data-bs-theme="dark"] {
+  --portada-fondo: #141A23;
   --portada-papel: #1C2532;
   --portada-borde: #374454;
   --portada-halo-azul: #26384E;
@@ -31,10 +33,31 @@
 body:has(.pagina--portada) {
   background: radial-gradient(ellipse at 100% 0%, var(--portada-halo-azul), transparent 49%),
               radial-gradient(ellipse at 0% 95%, var(--portada-halo-calido), transparent 43%),
-              var(--color-fondo);
+              var(--portada-fondo);
 }
 
-.pagina--portada { padding-top: clamp(24px, 3.2vw, 46px); padding-bottom: 24px; }
+.pagina--portada {
+  --color-primario: #31547F;
+  --color-primario-fuerte: #234367;
+  --color-primario-suave: #E9EFF7;
+  --color-texto: #202B3A;
+  --color-texto-secundario: #576273;
+  --color-borde: #E1E3E6;
+  --radio-card: 14px;
+  padding: clamp(24px, 3.2vw, 46px) clamp(16px, 4vw, 56px) 24px;
+  color: var(--color-texto);
+}
+
+[data-bs-theme="dark"] .pagina--portada {
+  --color-primario: #B4CEF0;
+  --color-primario-fuerte: #CADDF6;
+  --color-primario-suave: #28394E;
+  --color-sobre-primario: #172537;
+  --color-superficie: #1D2633;
+  --color-texto: #F1F4FA;
+  --color-texto-secundario: #B6C0CD;
+  --color-borde: #333E4C;
+}
 
 .portada-hero {
   display: grid;

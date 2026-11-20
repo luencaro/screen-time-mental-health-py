@@ -205,8 +205,8 @@ screen-time-mental-health-py/
     ├── shapiro.css           # estilos de la conversación
     ├── shapiro.js            # conversación y guía local de respaldo
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
-    ├── navegacion.js        # entrada de vistas y posición al retroceder o avanzar
-    ├── navegacion.css       # estados de carga y transiciones de la interfaz
+    ├── menu_hover.js         # abre los menús al pasar el cursor
+    ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
     ├── altura_cabecera.js    # mide el menú superior para los filtros fijos bajo él
     ├── iconos/               # iconos SVG de IBM Carbon (GitHub, LinkedIn, libro, datos, tema…)
     └── logo_uninorte.png

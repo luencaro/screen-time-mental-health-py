@@ -99,7 +99,7 @@
     },
     {
       tema: /\b(estudio|muestra|participantes|adolescentes|prevalencia|resumen|empezar|inicio)\b/,
-      texto: "Proyecto → Resumen del estudio presenta el contexto, los indicadores generales de la muestra y el índice de secciones del dashboard.",
+      texto: "Proyecto → Inicio presenta el contexto, los indicadores generales de la muestra y el índice de secciones del dashboard.",
       enlace: ["inicio", "Ir al resumen del estudio"],
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       tema: /\b(portada|pagina principal)\b/,
-      texto: "Puedes volver a la portada con el enlace «Pantallas y bienestar» de la cabecera.",
+      texto: "Puedes volver a la portada con el logotipo de la Universidad del Norte en la cabecera.",
       enlace: ["", "Volver a la portada"],
     },
     {
@@ -122,7 +122,7 @@
     },
     {
       tema: /\b(navega\w*|menu|secciones|dashboard|shapiro|que puedes hacer)\b/,
-      texto: "Abre Proyecto, EDA, Modelado o Acerca de desde el menú superior. El Resumen del estudio también incluye enlaces directos a las secciones.",
+      texto: "Abre Proyecto, EDA, Modelado o Acerca de desde el menú superior. Inicio también incluye enlaces directos a las secciones.",
       enlace: ["inicio", "Abrir el índice de secciones"],
     },
   ];

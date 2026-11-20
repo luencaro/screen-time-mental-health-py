@@ -22,7 +22,7 @@ FRAGMENTOS = {
 
 NOTAS = {
     "inicio": (
-        "Resumen del estudio presenta la población estudiada, el contexto de la investigación y la "
+        "Inicio presenta la población estudiada, el contexto de la investigación y la "
         "distribución de la clasificación por BDI-II. La etiqueta «deprimido» designa al grupo que "
         "alcanzó el punto de corte del cuestionario aplicado en el estudio."
     ),
