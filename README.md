@@ -85,6 +85,9 @@ Crea la carpeta `assets/video/` y guarda allí tu video como `dashboard.mp4`.
 Usa MP4 con video H.264 y audio AAC para que funcione en la mayoría de navegadores.
 Al recargar **Inicio**, el reproductor aparece debajo de **Contexto del proyecto**.
 
+Para mostrar una imagen antes de reproducir el video, guárdala en la misma carpeta
+como `portada.png`, `portada.jpg`, `portada.jpeg` o `portada.webp`.
+
 ### Activar Shapiro con Gemini
 
 1. Crea una clave en [Google AI Studio](https://aistudio.google.com/app/apikey) para un proyecto del nivel gratuito y confirma que Flash-Lite está disponible en ese proyecto. Mantén la facturación desactivada si quieres evitar cargos.
