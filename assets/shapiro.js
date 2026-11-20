@@ -14,6 +14,21 @@
       enlace: ["prediccion", "Ir a Predicción"],
     },
     {
+      tema: /\b(?:chi|ji)(?:[\s-]+(?:al[\s-]+)?cuadrad[oa]|[\s^]*2)\b|\bchi²|χ(?:²|\^?2)/,
+      texto: "El test chi-cuadrado de independencia (χ²) compara los conteos observados con los que esperaríamos si dos variables categóricas fueran independientes. Aquí cruza el sexo con la clasificación del BDI-II. El proyecto usa p < 0,05 como criterio de evidencia de asociación. Para entender su magnitud, mira la V de Cramér. Para ver qué grupo tiene mayor prevalencia, compara los porcentajes.",
+      enlace: ["analisis_sexo", "Ir a Análisis por sexo"],
+    },
+    {
+      tema: /\b(?:estado depresivo|prevalencia|depresion|sintomas depresivos|bdi[\s_-]*ii)\b.*\b(?:sexo|genero|chicas|chicos)\b|\b(?:analisis por sexo|diferencias? (?:entre|por) (?:chicos|chicas|sexo))\b/,
+      texto: "El gráfico Estado depresivo por sexo muestra, para chicas y chicos, el porcentaje con 14 puntos o más en el BDI-II y el porcentaje por debajo de ese corte. Cada porcentaje se calcula sobre el total de su propio grupo. Para comparar la prevalencia, mira el segmento que alcanzó el corte en cada grupo. La tabla de chi-cuadrado te ayuda a evaluar si hay evidencia estadística de una asociación.",
+      enlace: ["analisis_sexo", "Ir a Análisis por sexo"],
+    },
+    {
+      tema: /\bmann[\s-]+whitney\b/,
+      texto: "La prueba U de Mann–Whitney reúne y ordena los valores de ambos grupos para evaluar si los de uno tienden a ser más altos que los del otro. En Análisis por sexo se usa para variables numéricas. Junto con el valor p, el dashboard muestra el tamaño del efecto y las medianas de cada grupo.",
+      enlace: ["analisis_sexo", "Ir a Análisis por sexo"],
+    },
+    {
       tema: /\b(bdi(?:[\s_-]*ii)?|bdi_total|depressed|beck|variable objetivo|punto de corte|umbral de 14)\b/,
       texto: "BDI-II es el Inventario de Depresión de Beck, segunda edición. El puntaje resume la intensidad de los síntomas depresivos. En este estudio, un puntaje de 14 o más define la clase positiva para el análisis.",
       enlace: ["variable_objetivo", "Ir a Variable objetivo"],
@@ -27,11 +42,6 @@
       tema: /\b(outlier\w*|atipic\w*|iqr|rango intercuartil\w*)\b/,
       texto: "En EDA → Outliers, se señalan los valores que caen por debajo de Q1 − 1,5 × RIQ o por encima de Q3 + 1,5 × RIQ. Q1 y Q3 son los cuartiles y RIQ es su diferencia.",
       enlace: ["outliers", "Ir a Outliers"],
-    },
-    {
-      tema: /\b(mann[\s-]+whitney|chi[\s-]+cuadrado|analisis por sexo|prevalencia por sexo|diferencias? (?:entre|por) (?:chicos|chicas|sexo))\b/,
-      texto: "EDA → Análisis por sexo usa chi-cuadrado para evaluar la asociación entre sexo y la variable objetivo binaria. Mann–Whitney compara los rangos de las variables numéricas entre los grupos.",
-      enlace: ["analisis_sexo", "Ir a Análisis por sexo"],
     },
     {
       tema: /\b(modelos? por (?:sexo|genero)|genero|importancia por (?:sexo|grupo))\b/,

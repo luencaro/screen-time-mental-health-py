@@ -5,7 +5,7 @@ from dash import get_relative_path, html
 PREGUNTAS = (
     "¿Qué significa BDI-II?",
     "¿Cómo leo una correlación?",
-    "¿Dónde veo los modelos?",
+    "¿Qué es el test de chi-cuadrado?",
 )
 
 
