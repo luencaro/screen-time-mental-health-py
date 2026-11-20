@@ -90,11 +90,12 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
 4. Abre Shapiro desde la cabecera y prueba una pregunta seguida de una repregunta.
    Por ejemplo, «Explícame el benchmarking de modelos» y luego «¿Quién ganó y por qué?».
 
-Con Gemini activo, se envían la pregunta, hasta tres intercambios recientes, la sección visible
-y la guía editorial. Para las consultas de modelado se añaden resúmenes agregados del dashboard,
-como los criterios de selección, las métricas de evaluación, la importancia de variables
-y los resultados de clústeres y modelos por género. Shapiro trabaja con exportaciones
-agregadas y funciona independientemente del CSV de participantes.
+Con Gemini activo, se envían la pregunta, hasta cinco intercambios recientes y una guía de
+todas las secciones. La guía prioriza la sección visible e identifica los filtros activos en
+Variables numéricas y Benchmarking. Reúne documentación,
+resultados agregados exportados y estadísticas exploratorias que se calculan localmente
+con los mismos procedimientos del dashboard. Gemini recibe solo los resúmenes de esos datos.
+Cuando falta el CSV, Shapiro puede seguir usando la documentación y las exportaciones disponibles.
 Si la API falla, Shapiro muestra una respuesta de la guía local.
 El modelo predeterminado es `gemini-3.5-flash-lite`. Si recibes HTTP 404, revisa en
 Google AI Studio qué modelos ofrece el nivel gratuito de tu proyecto. Si `.env` indica
@@ -181,6 +182,9 @@ screen-time-mental-health-py/
 │   ├── secciones.py          # registro de secciones del menú
 │   ├── shapiro.py            # interfaz de la guía del dashboard
 │   ├── shapiro_gemini.py     # guía editorial y conexión a Gemini desde el servidor
+│   ├── shapiro_contexto.py   # contexto de todas las secciones del dashboard
+│   ├── shapiro_documentacion.py # documentación seleccionada del proyecto
+│   ├── shapiro_eda.py        # estadísticas exploratorias agregadas
 │   ├── shapiro_resultados.py # resultados agregados de benchmarking y selección final
 │   ├── shapiro_resumenes.py  # resúmenes de importancias, clustering y modelos por género
 │   ├── enlaces.py            # enlaces públicos: repositorio, Jupyter Book y dataset
