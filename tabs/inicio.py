@@ -1,9 +1,10 @@
 """Pestaña 01 · Inicio: contexto del estudio y datos generales de la muestra."""
 
 import re
+from pathlib import Path
 
 import dash_bootstrap_components as dbc
-from dash import Input, Output, html
+from dash import Input, Output, get_asset_url, html
 
 from analysis import figures, stats
 from components.formato import entero, pct
@@ -11,6 +12,9 @@ from components.secciones import BLOQUES, secciones_de
 from components.ui import card, encabezado_seccion, fila_kpis, grafico, kpi, markdown
 from content import libro
 from data.load_data import cargar_datos
+
+VIDEO_ASSET = "video/dashboard.mp4"
+RUTA_VIDEO = Path(__file__).resolve().parents[1] / "assets" / VIDEO_ASSET
 
 
 def _rango_edad(texto: str) -> str:
@@ -32,10 +36,21 @@ def _mapa_dashboard() -> html.Div:
 
 
 def layout():
-    """Estructura: KPIs → texto de introducción + dona y mapa del dashboard."""
+    """Muestra los indicadores, la introducción, el video y el mapa del dashboard."""
     texto = libro.seccion("intro.md", "Introducción")
     df = cargar_datos()
     r = stats.resumen_muestra(df)
+    contexto = [card(markdown(texto), titulo="Contexto del proyecto")]
+    if RUTA_VIDEO.is_file():
+        video = get_asset_url(VIDEO_ASSET)
+        contexto.append(card(
+            html.Video(
+                html.A("Abrir video explicativo", href=video),
+                src=video, controls=True, preload="metadata",
+                className="video-inicio", **{"aria-label": "Video explicativo del dashboard"},
+            ),
+            titulo="Video explicativo del dashboard",
+        ))
 
     return html.Div([
         encabezado_seccion("inicio", [f"n = {entero(r['n'])}", "Estocolmo · Suecia"]),
@@ -48,7 +63,7 @@ def layout():
                 f"{entero(r['n_deprimidos'])} adolescentes con BDI-II ≥ 14", "deprimido"),
         ]),
         dbc.Row([
-            dbc.Col(card(markdown(texto), titulo="Contexto del proyecto"), lg=8),
+            dbc.Col(contexto, lg=8),
             dbc.Col([
                 card(
                     html.P("Proporción de adolescentes según el corte clínico del BDI-II.",

@@ -31,6 +31,15 @@
   background-repeat: no-repeat;
 }
 
+.video-inicio {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: var(--radio-control);
+  background: #000;
+}
+
 @media (max-width: 475px) {
   .selector-tema .form-check-label { padding-inline: 8px; }
   .selector-tema .etiqueta-tema {
