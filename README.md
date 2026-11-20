@@ -88,10 +88,13 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    docker compose up -d --build dashboard
    ```
 4. Abre Shapiro desde la cabecera y prueba una pregunta seguida de una repregunta.
-   Por ejemplo, «¿Cómo se lee una correlación?» y luego «¿Y qué indica un valor negativo?».
+   Por ejemplo, «Explícame el benchmarking de modelos» y luego «¿Quién ganó y por qué?».
 
-Con Gemini activo, se envían la pregunta, hasta tres intercambios recientes y la guía editorial.
-El endpoint funciona de forma independiente del CSV, los gráficos y los resultados.
+Con Gemini activo, se envían la pregunta, hasta tres intercambios recientes, la sección visible
+y la guía editorial. Para las consultas de modelado se añaden resúmenes agregados del dashboard,
+como los criterios de selección, las métricas de evaluación, la importancia de variables
+y los resultados de clústeres y modelos por género. Shapiro trabaja con exportaciones
+agregadas y funciona independientemente del CSV de participantes.
 Si la API falla, Shapiro muestra una respuesta de la guía local.
 El modelo predeterminado es `gemini-3.5-flash-lite`. Si recibes HTTP 404, revisa en
 Google AI Studio qué modelos ofrece el nivel gratuito de tu proyecto. Si `.env` indica
@@ -178,6 +181,8 @@ screen-time-mental-health-py/
 │   ├── secciones.py          # registro de secciones del menú
 │   ├── shapiro.py            # interfaz de la guía del dashboard
 │   ├── shapiro_gemini.py     # guía editorial y conexión a Gemini desde el servidor
+│   ├── shapiro_resultados.py # resultados agregados de benchmarking y selección final
+│   ├── shapiro_resumenes.py  # resúmenes de importancias, clustering y modelos por género
 │   ├── enlaces.py            # enlaces públicos: repositorio, Jupyter Book y dataset
 │   ├── formato.py            # formato numérico en español (coma decimal, punto de miles)
 │   └── plotly_theme.py       # paleta de datos y plantillas Plotly claro/oscuro

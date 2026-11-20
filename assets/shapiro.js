@@ -29,6 +29,15 @@
       enlace: ["analisis_sexo", "Ir a Análisis por sexo"],
     },
     {
+      tema: /\b(benchmark\w*|validacion cruzada|cv|conjunto de prueba|compar\w*.*\bmodelos?(?! por (?:sexo|genero))|mejor(?:es)? (?:modelos?|algoritmos?)(?! por (?:sexo|genero))|(?:modelos?|algoritmos?) (?:ganador(?:es)?|.*\b(?:gano|ganaron|mejor(?:es)?))|mayor pr[\s-]*auc|menor rmse)\b/,
+      texto: [
+        "En Modelado → Benchmarking, elige una opción en Tarea y pulsa Mostrar todos. La tabla muestra la media ± desviación estándar entre los pliegues de validación. El rombo del gráfico marca el modelo final.",
+        "Clasificación · depressed predice la clase binaria. Busca la PR-AUC más alta y revisa las curvas ROC y Precision-Recall sobre el mismo conjunto de prueba. La regresión logística ponderada es el modelo de referencia. Su fila de validación cruzada viene del EDA, con otra partición. La prevalencia marca el nivel del azar en PR-AUC.",
+        "Regresión · bdi_total predice el puntaje BDI-II. Busca el RMSE más bajo, en puntos del BDI-II, y compáralo con la regresión lineal de referencia. En Modelado → Modelos finales puedes consultar las métricas de prueba del modelo final.",
+      ].join("\n\n"),
+      enlace: ["benchmarking", "Ir a Benchmarking"],
+    },
+    {
       tema: /\b(bdi(?:[\s_-]*ii)?|bdi_total|depressed|beck|variable objetivo|punto de corte|umbral de 14)\b/,
       texto: "BDI-II es el Inventario de Depresión de Beck, segunda edición. El puntaje resume la intensidad de los síntomas depresivos. En este estudio, un puntaje de 14 o más define la clase positiva para el análisis.",
       enlace: ["variable_objetivo", "Ir a Variable objetivo"],
@@ -62,11 +71,6 @@
       tema: /\b(cluster\w*|k[\s-]*means|silueta|agrupamiento)\b/,
       texto: "Modelado → Clustering usa K-Means para describir perfiles con hábitos de pantalla y sueño similares. La sección explica la elección del número de grupos y muestra cómo se caracterizan.",
       enlace: ["clustering", "Ir a Clustering"],
-    },
-    {
-      tema: /\b(benchmark\w*|validacion cruzada|cv|conjunto de prueba|compar\w*.*modelos?)\b/,
-      texto: "En Modelado → Benchmarking puedes comparar clasificación y regresión. La validación cruzada divide el conjunto de entrenamiento en varios pliegues y la evaluación final usa un conjunto de prueba reservado.",
-      enlace: ["benchmarking", "Ir a Benchmarking"],
     },
     {
       tema: /\b(modelado|modelos?|catboost|elastic[\s-]*net|roc|auc|rmse|regresion|clasificacion)\b/,
@@ -142,7 +146,14 @@
     const mensajes = [...historial, {role: "user", content: pregunta}];
     let aviso = "Gemini no está disponible en este momento.";
     try {
-      const respuesta = await fetch(dialogo.dataset.api, {
+      const url = new URL(dialogo.dataset.api, window.location.origin);
+      const ruta = window.location.pathname;
+      const raiz = dialogo.dataset.raiz;
+      if (ruta.startsWith(raiz)) {
+        const seccion = ruta.slice(raiz.length).replace(/\/+$/, "");
+        url.searchParams.set("seccion", seccion || "portada");
+      }
+      const respuesta = await fetch(url, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(mensajes),
