@@ -17,6 +17,7 @@ MAX_TURNOS = 7
 ENLACES = {"portada": "Volver a la portada", **{
     s["slug"]: f"Ir a {s['nombre']}" for s in SECCIONES
 }}
+SIN_SECCION = "sin_seccion"
 GUIA = "\n".join(
     f"- {s['slug']} | {s['bloque']} → {s['nombre']}. {s['descripcion']}."
     for s in SECCIONES
@@ -30,7 +31,7 @@ Para una consulta clínica personal usa alcance "personal". Para temas ajenos,
 solicitudes de registros, cifras o resultados usa alcance "fuera". Si corresponde,
 indica la sección pertinente usando su identificador exacto en "seccion".
 Para preguntas dentro del alcance usa "guia". Devuelve texto plano sin enlaces incrustados.
-Usa una cadena vacía en "seccion" si no hay una sección pertinente.
+Usa "{SIN_SECCION}" en "seccion" si no hay una sección pertinente.
 
 Guía:
 - portada | Entra con Explorar dashboard. El enlace Pantallas y bienestar en la cabecera vuelve
@@ -56,14 +57,13 @@ Guía:
 """
 
 FORMATO = {
-    "type": "object",
+    "type": "OBJECT",
     "properties": {
-        "alcance": {"type": "string", "enum": ["guia", "personal", "fuera"]},
-        "respuesta": {"type": "string"},
-        "seccion": {"type": "string", "enum": ["", *ENLACES]},
+        "alcance": {"type": "STRING", "enum": ["guia", "personal", "fuera"]},
+        "respuesta": {"type": "STRING"},
+        "seccion": {"type": "STRING", "enum": [SIN_SECCION, *ENLACES]},
     },
     "required": ["alcance", "respuesta", "seccion"],
-    "additionalProperties": False,
 }
 
 
@@ -98,7 +98,7 @@ def _consultar(clave, modelo, mensajes):
             "generationConfig": {
                 "maxOutputTokens": 1024,
                 "responseMimeType": "application/json",
-                "responseJsonSchema": FORMATO,
+                "responseSchema": FORMATO,
             },
         },
         timeout=(5, 25), allow_redirects=False,
@@ -109,6 +109,32 @@ def _consultar(clave, modelo, mensajes):
             partes = candidato["content"]["parts"]
             return json.loads("".join(parte.get("text", "") for parte in partes if not parte.get("thought")))
     raise ValueError("Respuesta incompleta o bloqueada")
+
+
+def _aviso_http(respuesta):
+    """Clasifica el error de Google sin mostrar su cuerpo ni la clave."""
+    estado = respuesta.status_code
+    if estado == 429:
+        return "Se alcanzó un límite de consultas de Gemini.", 429
+    if estado == 404:
+        return "El modelo configurado no está disponible para este proyecto de Gemini (HTTP 404).", 502
+    try:
+        detalle = respuesta.json().get("error", {})
+        razones = {item.get("reason") for item in detalle.get("details", []) if isinstance(item, dict)}
+        mensaje = detalle.get("message", "").lower()
+    except (ValueError, TypeError, AttributeError):
+        razones, mensaje = set(), ""
+    if estado == 401 or "API_KEY_INVALID" in razones or "api key not valid" in mensaje:
+        aviso = "Google rechazó la clave de Gemini."
+    elif estado == 403 or razones & {"API_KEY_SERVICE_BLOCKED", "SERVICE_DISABLED", "API_KEY_EXPIRED"}:
+        aviso = "La clave o el proyecto no tienen acceso a la API de Gemini."
+    elif "location" in mensaje or "country" in mensaje or "free tier" in mensaje:
+        aviso = "Google no ofrece este acceso a Gemini desde la ubicación o el proyecto configurado."
+    elif "responseschema" in mensaje or "response_schema" in mensaje or "generationconfig" in mensaje:
+        aviso = "Google rechazó el formato de respuesta solicitado por Shapiro."
+    else:
+        aviso = "Google rechazó la solicitud de Shapiro."
+    return f"{aviso} (HTTP {estado})", 502
 
 
 def registrar_shapiro(app):
@@ -148,7 +174,8 @@ def registrar_shapiro(app):
             salida = _consultar(clave, modelo, mensajes)
             alcance = salida["alcance"]
             seccion = salida["seccion"]
-            enlace = ["" if seccion == "portada" else seccion, ENLACES[seccion]] if seccion else None
+            enlace = (["" if seccion == "portada" else seccion, ENLACES[seccion]]
+                      if seccion in ENLACES else None)
             if alcance == "personal":
                 return jsonify(texto="Para una consulta de salud personal, busca orientación de un profesional de salud.")
             if alcance == "fuera":
@@ -158,10 +185,13 @@ def registrar_shapiro(app):
                 raise ValueError("Respuesta fuera del formato")
             return jsonify(texto=salida["respuesta"].strip()[:1400], enlace=enlace)
         except requests.HTTPError as error:
-            if error.response is not None and error.response.status_code == 429:
-                return jsonify(error="Se alcanzó un límite de consultas de Gemini"), 429
-            return jsonify(error="Gemini no está disponible en este momento"), 502
-        except (requests.RequestException, ValueError, KeyError, TypeError, AttributeError):
-            return jsonify(error="Gemini no está disponible en este momento"), 502
+            if error.response is None:
+                return jsonify(error="No se pudo obtener el estado de la solicitud a Gemini."), 502
+            aviso, codigo = _aviso_http(error.response)
+            return jsonify(error=aviso), codigo
+        except requests.RequestException:
+            return jsonify(error="El servidor del dashboard no pudo comunicarse con Gemini."), 502
+        except (ValueError, KeyError, TypeError, AttributeError):
+            return jsonify(error="Gemini devolvió una respuesta incompleta o inesperada."), 502
 
     return True
