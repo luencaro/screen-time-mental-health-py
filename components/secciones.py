@@ -1,4 +1,4 @@
-"""Registro de secciones del dashboard: bloque, nombre y descripción.
+"""Registro de secciones del dashboard: bloque, número, nombre y descripción.
 
 Lo usan el menú superior (app.py) y el encabezado de cada pestaña (breadcrumb).
 """
@@ -7,8 +7,8 @@ BLOQUES = ["Proyecto", "EDA", "Modelado", "Acerca de"]
 
 SECCIONES = [
     # Proyecto
-    {"slug": "inicio", "bloque": "Proyecto", "nombre": "Resumen del estudio",
-     "descripcion": "Contexto del proyecto y características de la muestra"},
+    {"slug": "inicio", "bloque": "Proyecto", "nombre": "Inicio",
+     "descripcion": "Contexto del estudio y datos generales de la muestra"},
     {"slug": "marco_teorico", "bloque": "Proyecto", "nombre": "Marco teórico",
      "descripcion": "Antecedentes y base estadística del estudio"},
     {"slug": "objetivos", "bloque": "Proyecto", "nombre": "Objetivos",
@@ -19,7 +19,7 @@ SECCIONES = [
     {"slug": "calidad_datos", "bloque": "EDA", "nombre": "Calidad de datos",
      "descripcion": "Dimensiones, nulos, duplicados y descriptivos"},
     {"slug": "variable_objetivo", "bloque": "EDA", "nombre": "Variable objetivo",
-     "descripcion": "Distribución del puntaje BDI-II y clasificación según el punto de corte"},
+     "descripcion": "Distribución de bdi_total y de depressed"},
     {"slug": "analisis_sexo", "bloque": "EDA", "nombre": "Análisis por sexo",
      "descripcion": "Diferencias entre chicas y chicos con pruebas"},
     {"slug": "analisis_numerico", "bloque": "EDA", "nombre": "Variables numéricas",
@@ -30,7 +30,7 @@ SECCIONES = [
      "descripcion": "Valores atípicos por IQR y su relevancia clínica"},
     # Modelado
     {"slug": "benchmarking", "bloque": "Modelado", "nombre": "Benchmarking",
-     "descripcion": "Comparación de modelos en validación cruzada y en el conjunto de prueba"},
+     "descripcion": "Ganadores de cada algoritmo frente al benchmark en CV y test"},
     {"slug": "modelos_finales", "bloque": "Modelado", "nombre": "Modelos finales",
      "descripcion": "CatBoost y ElasticNet: métricas, umbral e importancia de variables"},
     {"slug": "genero", "bloque": "Modelado", "nombre": "Modelos por género",
@@ -38,11 +38,14 @@ SECCIONES = [
     {"slug": "clustering", "bloque": "Modelado", "nombre": "Clustering",
      "descripcion": "Perfiles de sueño y pantalla con K-Means y su validación"},
     {"slug": "prediccion", "bloque": "Modelado", "nombre": "Predicción",
-     "descripcion": "Simulación de la clasificación y del puntaje BDI-II para un perfil"},
+     "descripcion": "Probabilidad de depresión y BDI-II estimado para un perfil"},
     # Acerca de
     {"slug": "acerca", "bloque": "Acerca de", "nombre": "Equipo y recursos",
      "descripcion": "Integrantes, repositorio, Jupyter Book y dataset"},
 ]
+
+for _i, _s in enumerate(SECCIONES, start=1):
+    _s["numero"] = f"{_i:02d}"
 
 POR_SLUG = {s["slug"]: s for s in SECCIONES}
 SECCION_INICIAL = "inicio"

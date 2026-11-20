@@ -1,4 +1,4 @@
-"""Componentes compartidos de la interfaz.
+"""Componentes de interfaz según la guía 4d Pizarra cálida.
 
 Card, KPI, badge, bloque de interpretación, tabla, encabezado de sección y
 envoltorio de gráficos. Todo el estilo vive en assets/*.css con variables.
@@ -12,6 +12,14 @@ from components.secciones import POR_SLUG
 from data.load_modelado import PASOS_EXPORTACION
 
 CONFIG_GRAFICO = {"displayModeBar": False, "responsive": True}
+
+# Transición suave entre figuras: dcc.Graph usa Plotly.animate cuando la nueva
+# figura tiene el mismo número de trazas. redraw=True aplica al final los
+# cambios que Plotly no anima (formas, anotaciones, cajas, donas).
+ANIMACION_GRAFICO = {
+    "frame": {"duration": 550, "redraw": True},
+    "transition": {"duration": 550, "easing": "cubic-in-out"},
+}
 
 
 def var(nombre: str) -> html.Code:
@@ -32,7 +40,7 @@ def icono(nombre: str, tamano: int = 16) -> html.Span:
 
 
 def enlace_interno(hijos, ruta: str, **props) -> dcc.Link:
-    """Enlace de Dash que conserva la sesión al cambiar de sección."""
+    """Abre una ruta del dashboard a través de Dash."""
     return dcc.Link(hijos, href=get_relative_path(ruta), **props)
 
 
@@ -109,19 +117,18 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
                 [
                     html.Span(seccion["bloque"]),
                     html.Span("/", className="breadcrumb-sep"),
-                    html.Span(seccion["nombre"], className="breadcrumb-actual", **{"aria-current": "page"}),
+                    html.Span(seccion["nombre"], className="breadcrumb-actual"),
                 ],
                 className="migas",
                 **{"aria-label": "Ruta de navegación"},
             ),
             html.Div(
                 [
-                    html.H1(seccion["nombre"], id="titulo-vista", className="titulo-seccion"),
+                    html.H1(seccion["nombre"], className="titulo-seccion"),
                     html.Div([badge(b) for b in (badges or [])] + extras, className="badges"),
                 ],
                 className="encabezado-fila",
             ),
-            html.P(seccion["descripcion"], className="descripcion-seccion"),
         ],
         className="encabezado-seccion",
     )
@@ -129,11 +136,12 @@ def encabezado_seccion(slug: str, badges: list[str] | None = None) -> html.Div:
 
 def grafico(id_: str | dict, altura: int = 360, figura=None, ancho_minimo: int | None = None,
             animar: bool = True, flexible: bool = False):
-    """dcc.Graph con espacio reservado y aviso para las esperas prolongadas.
+    """dcc.Graph con la barra de herramientas oculta y altura fija.
 
     Con ``ancho_minimo`` el gráfico se desplaza horizontalmente en pantallas
-    estrechas en lugar de comprimirse. ``animar`` activa un fundido visual
-    mediante CSS que respeta la preferencia de movimiento reducido.
+    estrechas en lugar de comprimirse. ``animar=False`` para gráficos cuyas
+    trazas Plotly no puede animar (cajas, donas, heatmaps): se actualizan con
+    un fundido corto (assets/animacion_graficos.js) en lugar de un salto.
     Con ``flexible=True`` el gráfico crece hasta llenar el alto de su card
     (usar con ``card(..., className="estirar grafico-flexible")``), para que la
     columna más corta de una fila no deje espacio vacío.
@@ -142,14 +150,9 @@ def grafico(id_: str | dict, altura: int = 360, figura=None, ancho_minimo: int |
     estilo = {"minHeight": f"{altura}px", "flex": "1 1 auto"} if flexible else {"height": f"{altura}px"}
     if ancho_minimo:
         estilo["minWidth"] = f"{ancho_minimo}px"
-    lienzo = dcc.Graph(id=id_, config=CONFIG_GRAFICO, style=estilo, animate=False,
-                       className="grafico-entrada" if animar else "", **props)
-    if ancho_minimo:
-        lienzo = html.Div(lienzo, className="grafico-desplazable")
-    return html.Div([
-        lienzo,
-        html.Span("Cargando gráfico…", className="grafico-aviso", role="status"),
-    ], className="grafico-marco", style={"minHeight": f"{altura}px"})
+    g = dcc.Graph(id=id_, config=CONFIG_GRAFICO, style=estilo, animate=animar,
+                  animation_options=ANIMACION_GRAFICO, **props)
+    return html.Div(g, className="grafico-desplazable") if ancho_minimo else g
 
 
 def tabla(filas: list[dict], columnas: list[dict], className: str = "") -> html.Div:
@@ -159,7 +162,7 @@ def tabla(filas: list[dict], columnas: list[dict], className: str = "") -> html.
     'tipo' ('texto', 'numero' o 'variable') y 'formato' (función valor → str).
     """
     cabecera = html.Thead(html.Tr([
-        html.Th(c["titulo"], scope="col", className="num" if c.get("tipo") == "numero" else None)
+        html.Th(c["titulo"], className="num" if c.get("tipo") == "numero" else None)
         for c in columnas
     ]))
     cuerpo = []

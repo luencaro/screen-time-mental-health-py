@@ -52,7 +52,7 @@ entenderlo. Usa "personal" para una consulta clínica personal y "fuera" para te
 o solicitudes de registros individuales. Indica la sección pertinente en "seccion" con su
 identificador exacto o "{SIN_SECCION}" si no hay una. Devuelve texto plano sin enlaces
 incrustados, con la extensión que amerite la pregunta. Para volver a la portada, indica
-el enlace Pantallas y bienestar de la cabecera. Los iconos de sol y luna cambian el tema.
+el logotipo de la Universidad del Norte en la cabecera. Los iconos de sol y luna cambian el tema.
 """
 
 
