@@ -139,8 +139,11 @@
         signal: AbortSignal.timeout(33000),
       });
       if (respuesta.status === 429) aviso = "Se alcanzó un límite de consultas.";
-      if (!respuesta.ok) throw new Error("Gemini no disponible");
       const ayuda = await respuesta.json();
+      if (!respuesta.ok) {
+        if (typeof ayuda.error === "string") aviso = ayuda.error;
+        throw new Error(aviso);
+      }
       historial = [...mensajes, {role: "assistant", content: ayuda.texto}].slice(-6);
       return ayuda;
     } catch {
