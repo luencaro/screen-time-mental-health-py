@@ -6,6 +6,7 @@ PREGUNTAS = (
     "¿Qué significa BDI-II?",
     "¿Cómo leo una correlación?",
     "¿Qué es el test de chi-cuadrado?",
+    "¿Qué modelos se eligieron y por qué?",
 )
 
 
@@ -17,7 +18,8 @@ def boton_shapiro():
 
 
 def dialogo_shapiro(gemini_activo: bool):
-    privacidad = ("Gemini procesa tus preguntas y el historial reciente. Evita incluir información personal."
+    privacidad = ("Gemini procesa tus preguntas, el historial reciente y el contexto del dashboard. "
+                  "Evita incluir información personal."
                   if gemini_activo else "Las preguntas se procesan en este navegador.")
     return html.Dialog([
         html.Header([
@@ -31,7 +33,7 @@ def dialogo_shapiro(gemini_activo: bool):
         ], className="shapiro-cabecera"),
         html.Div([
             html.Div(
-                html.P("Hola, soy Shapiro. Pregúntame cómo navegar el dashboard o cómo interpretar sus gráficos y métodos.",
+                html.P("Hola, soy Shapiro. Pregúntame cómo navegar el dashboard o interpretar sus gráficos y métodos.",
                        className="mensaje-shapiro mensaje-shapiro--guia"),
                 id="mensajes-shapiro", role="log", **{"aria-label": "Conversación con Shapiro"},
             ),
