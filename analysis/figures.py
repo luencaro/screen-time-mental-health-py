@@ -59,8 +59,9 @@ def dona_estado(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
     """Dona de ``depressed`` con hueco del 70 % y prevalencia al centro."""
     dist = stats.distribucion_estado(df)
     colores = MAPA_ESTADO(tema)
+    etiquetas_corte = {0: f"BDI-II < {CORTE_BDI}", 1: f"BDI-II ≥ {CORTE_BDI}"}
     fig = go.Figure(go.Pie(
-        labels=dist["etiqueta"], values=dist["n"], hole=0.7, sort=False, direction="clockwise",
+        labels=dist["depressed"].map(etiquetas_corte), values=dist["n"], hole=0.7, sort=False, direction="clockwise",
         marker=dict(colors=[colores[e] for e in dist["depressed"]],
                     line=dict(color=COLORES[tema]["superficie"], width=3)),
         textinfo="none",
@@ -68,7 +69,7 @@ def dona_estado(df: pd.DataFrame, tema: str = "claro") -> go.Figure:
     ))
     prevalencia = dist.loc[dist["depressed"] == 1, "proporcion"].iloc[0]
     fig.add_annotation(
-        text=f"<b>{pct(prevalencia)}</b><br><span style='font-size:12px'>deprimidos</span>",
+        text=f"<b>{pct(prevalencia)}</b><br><span style='font-size:12px'>{etiquetas_corte[1]}</span>",
         showarrow=False, font=dict(size=24, color=COLORES[tema]["texto"]),
     )
     return _base(fig, tema, margin=dict(l=8, r=8, t=40, b=8), showlegend=True)

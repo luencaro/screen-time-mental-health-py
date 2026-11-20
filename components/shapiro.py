@@ -1,0 +1,50 @@
+"""Interfaz de Shapiro. Las respuestas se resuelven en assets/shapiro.js."""
+
+from dash import get_relative_path, html
+
+PREGUNTAS = (
+    "¿Qué significa BDI-II?",
+    "¿Cómo leo una correlación?",
+    "¿Dónde veo los modelos?",
+)
+
+
+def boton_shapiro():
+    return html.Button([
+        html.Span(className="icono-chat", **{"aria-hidden": "true"}), "Shapiro",
+    ], type="button", id="abrir-shapiro", className="boton-shapiro", disable_n_clicks=True,
+        **{"aria-haspopup": "dialog", "aria-controls": "shapiro"})
+
+
+def dialogo_shapiro():
+    return html.Dialog([
+        html.Header([
+            html.Span(html.Span(className="icono-chat"), className="shapiro-marca", **{"aria-hidden": "true"}),
+            html.Div([
+                html.H2("Shapiro", id="titulo-shapiro"),
+                html.P("Guía del dashboard"),
+            ], className="shapiro-titulo"),
+            html.Button("×", type="button", id="cerrar-shapiro", className="shapiro-cerrar",
+                        disable_n_clicks=True, **{"aria-label": "Cerrar Shapiro"}),
+        ], className="shapiro-cabecera"),
+        html.Div([
+            html.Div(
+                html.P("Hola, soy Shapiro. Pregúntame cómo navegar el dashboard o cómo interpretar sus gráficos y métodos.",
+                       className="mensaje-shapiro mensaje-shapiro--guia"),
+                id="mensajes-shapiro", role="log", **{"aria-label": "Conversación con Shapiro"},
+            ),
+            html.Div([
+                html.Button(pregunta, type="button", className="shapiro-sugerencia", disable_n_clicks=True)
+                for pregunta in PREGUNTAS
+            ], id="sugerencias-shapiro"),
+        ], className="shapiro-conversacion", id="conversacion-shapiro"),
+        html.Form([
+            html.Label("Escribe tu pregunta para Shapiro", htmlFor="pregunta-shapiro", className="visualmente-oculto"),
+            html.Div([
+                html.Textarea(id="pregunta-shapiro", rows=1, placeholder="Escribe tu pregunta…", maxLength=280,
+                              autoComplete="off", required=True),
+                html.Button("Enviar", type="submit", className="shapiro-enviar", disable_n_clicks=True),
+            ], className="shapiro-campo"),
+            html.P("Las preguntas se procesan en este navegador.", className="shapiro-privacidad"),
+        ], id="formulario-shapiro"),
+    ], id="shapiro", className="shapiro", **{"aria-labelledby": "titulo-shapiro", "data-raiz": get_relative_path("/")})
