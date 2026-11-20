@@ -1,5 +1,7 @@
-// Guía local del dashboard. La base editorial y la conversación viven en el navegador.
+// Conversación de Shapiro y guía local de respaldo.
 (function () {
+  let historial = [];
+  let esperando = false;
   const guia = [
     {
       tema: /\b(umbral (?:de |del )?(?:modelo|clasificacion|probabilidad|tamizaje)|umbral.*catboost)\b/,
@@ -113,7 +115,7 @@
 
   const consultaPersonal = /\b(suicid\w*|autolesion\w*|matarme|quitarme la vida|tengo depresion|(?:tengo|tiene|padezco) (?:ansiedad|depresion)|(?:mi|mis) (?:sintomas|diagnostico|medicamentos)|diagnostica(?:me|rme)|que (?:medicamento|tratamiento) (?:tomo|necesito))\b/;
 
-  function responder(pregunta) {
+  function responderLocal(pregunta) {
     const texto = pregunta.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
     if (consultaPersonal.test(texto)) {
       return {texto: "Para una consulta de salud personal, busca orientación de un profesional de salud. Puedo ayudarte con la navegación y la metodología del dashboard."};
@@ -121,6 +123,30 @@
     return guia.find(({tema}) => tema.test(texto)) || {
       texto: "Puedo orientarte sobre las secciones, los gráficos y los métodos del dashboard. Prueba con «¿Qué significa BDI-II?» o «¿Dónde veo los modelos?». Las cifras y los resultados están en las secciones correspondientes.",
     };
+  }
+
+  async function responder(dialogo, pregunta) {
+    const texto = pregunta.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
+    if (!dialogo.dataset.api || consultaPersonal.test(texto)) return responderLocal(pregunta);
+
+    const mensajes = [...historial, {role: "user", content: pregunta}];
+    let aviso = "Gemini no está disponible en este momento.";
+    try {
+      const respuesta = await fetch(dialogo.dataset.api, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(mensajes),
+        signal: AbortSignal.timeout(33000),
+      });
+      if (respuesta.status === 429) aviso = "Se alcanzó un límite de consultas.";
+      if (!respuesta.ok) throw new Error("Gemini no disponible");
+      const ayuda = await respuesta.json();
+      historial = [...mensajes, {role: "assistant", content: ayuda.texto}].slice(-6);
+      return ayuda;
+    } catch {
+      const ayuda = responderLocal(pregunta);
+      return {...ayuda, texto: aviso + " Guía local.\n\n" + ayuda.texto};
+    }
   }
 
   function mensaje(autor, texto, clase) {
@@ -135,11 +161,28 @@
     return bloque;
   }
 
-  function enviar(dialogo, texto, desdeSugerencia = false) {
+  async function enviar(dialogo, texto, desdeSugerencia = false) {
     const pregunta = texto.trim();
-    if (!pregunta) return;
+    if (!pregunta || esperando) return;
 
-    const ayuda = responder(pregunta);
+    const mensajes = dialogo.querySelector("#mensajes-shapiro");
+    const sugerencias = dialogo.querySelector("#sugerencias-shapiro");
+    const conversacion = dialogo.querySelector("#conversacion-shapiro");
+    const campo = dialogo.querySelector("#pregunta-shapiro");
+    const boton = dialogo.querySelector(".shapiro-enviar");
+    const estado = dialogo.querySelector("#estado-shapiro");
+    mensajes.append(mensaje("Tú", pregunta, "usuario"));
+    campo.value = "";
+    if (desdeSugerencia) campo.focus({preventScroll: true});
+    sugerencias.hidden = true;
+    esperando = true;
+    boton.disabled = true;
+    estado.textContent = dialogo.dataset.api ? "Shapiro está respondiendo…" : "";
+    conversacion.scrollTop = conversacion.scrollHeight;
+    const ayuda = await responder(dialogo, pregunta);
+    esperando = false;
+    boton.disabled = false;
+    estado.textContent = "";
     const respuesta = mensaje("Shapiro", ayuda.texto, "guia");
     if (ayuda.enlace) {
       const [seccion, etiqueta] = ayuda.enlace;
@@ -163,18 +206,8 @@
       respuesta.append(enlace);
     }
 
-    dialogo.querySelector("#mensajes-shapiro").append(mensaje("Tú", pregunta, "usuario"), respuesta);
-    dialogo.querySelector("#sugerencias-shapiro").hidden = true;
-    const conversacion = dialogo.querySelector("#conversacion-shapiro");
+    mensajes.append(respuesta);
     conversacion.scrollTop = conversacion.scrollHeight;
-    const campo = dialogo.querySelector("#pregunta-shapiro");
-    campo.value = "";
-    if (desdeSugerencia) {
-      respuesta.tabIndex = -1;
-      respuesta.focus({preventScroll: true});
-    } else {
-      campo.focus({preventScroll: true});
-    }
   }
 
   document.addEventListener("click", (evento) => {

@@ -11,6 +11,7 @@ from dash import Dash, Input, Output, State, clientside_callback, dcc, html
 
 from components.secciones import BLOQUES, POR_SLUG, SECCIONES, secciones_de, slug_desde_ruta
 from components.shapiro import boton_shapiro, dialogo_shapiro
+from components.shapiro_gemini import registrar_shapiro
 from components.ui import aviso_sin_datos, aviso_sin_resultados, encabezado_seccion, enlace_interno, icono
 from data.load_data import URL_DATASET, DatosNoDisponibles
 from data.load_modelado import ResultadosNoDisponibles
@@ -28,6 +29,7 @@ app = Dash(
 )
 app.index_string = app.index_string.replace("<html>", '<html lang="es">', 1)
 server = app.server
+shapiro_gemini = registrar_shapiro(app)
 
 
 # ── Header ─────────────────────────────────────────────────────────────
@@ -106,7 +108,7 @@ app.layout = html.Div([
         ], className="pie-logo"),
         enlace_interno("Equipo y recursos", "/acerca"),
     ], className="pie-pagina"),
-    dialogo_shapiro(),
+    dialogo_shapiro(shapiro_gemini),
 ])
 
 
