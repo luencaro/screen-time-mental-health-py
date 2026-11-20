@@ -79,6 +79,12 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    ```
    Los archivos no se pierden; solo se detienen los contenedores.
 
+### Añadir el video explicativo a Inicio
+
+Crea la carpeta `assets/video/` y guarda allí tu video como `dashboard.mp4`.
+Usa MP4 con video H.264 y audio AAC para que funcione en la mayoría de navegadores.
+Al recargar **Inicio**, el reproductor aparece debajo de **Contexto del proyecto**.
+
 ### Activar Shapiro con Gemini
 
 1. Crea una clave en [Google AI Studio](https://aistudio.google.com/app/apikey) para un proyecto del nivel gratuito y confirma que Flash-Lite está disponible en ese proyecto. Mantén la facturación desactivada si quieres evitar cargos.
