@@ -2,6 +2,9 @@
 
 from dash import get_relative_path, html
 
+MAX_PREGUNTA = 600
+INTERCAMBIOS = 5
+
 PREGUNTAS = (
     "¿Qué significa BDI-II?",
     "¿Cómo leo una correlación?",
@@ -18,7 +21,7 @@ def boton_shapiro():
 
 
 def dialogo_shapiro(gemini_activo: bool):
-    privacidad = ("Gemini procesa tus preguntas, el historial reciente y el contexto del dashboard. "
+    privacidad = ("Gemini procesa tus preguntas, el historial reciente y resúmenes del dashboard. "
                   "Evita incluir información personal."
                   if gemini_activo else "Las preguntas se procesan en este navegador.")
     return html.Dialog([
@@ -46,7 +49,7 @@ def dialogo_shapiro(gemini_activo: bool):
         html.Form([
             html.Label("Escribe tu pregunta para Shapiro", htmlFor="pregunta-shapiro", className="visualmente-oculto"),
             html.Div([
-                html.Textarea(id="pregunta-shapiro", rows=1, placeholder="Escribe tu pregunta…", maxLength=280,
+                html.Textarea(id="pregunta-shapiro", rows=1, placeholder="Escribe tu pregunta…", maxLength=MAX_PREGUNTA,
                               autoComplete="off", required=True),
                 html.Button("Enviar", type="submit", className="shapiro-enviar", disable_n_clicks=True),
             ], className="shapiro-campo"),
@@ -55,4 +58,5 @@ def dialogo_shapiro(gemini_activo: bool):
     ], id="shapiro", className="shapiro", **{
         "aria-labelledby": "titulo-shapiro", "data-raiz": get_relative_path("/"),
         "data-api": get_relative_path("/api/shapiro") if gemini_activo else "",
+        "data-intercambios": INTERCAMBIOS,
     })

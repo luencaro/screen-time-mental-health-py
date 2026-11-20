@@ -127,7 +127,7 @@
     },
   ];
 
-  const consultaPersonal = /\b(suicid\w*|autolesion\w*|matarme|quitarme la vida|tengo depresion|(?:tengo|tiene|padezco) (?:ansiedad|depresion)|(?:mi|mis) (?:sintomas|diagnostico|medicamentos)|diagnostica(?:me|rme)|que (?:medicamento|tratamiento) (?:tomo|necesito))\b/;
+  const consultaPersonal = /\b(suicid\w*|autolesion\w*|matarme|quitarme la vida|(?:tengo|padezco) (?:ansiedad|depresion)|(?:mi|mis) (?:sintomas|diagnostico|medicamentos)|diagnostica(?:me|rme)|que (?:medicamento|tratamiento) (?:tomo|necesito))\b/;
 
   function responderLocal(pregunta) {
     const texto = pregunta.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
@@ -152,6 +152,13 @@
       if (ruta.startsWith(raiz)) {
         const seccion = ruta.slice(raiz.length).replace(/\/+$/, "");
         url.searchParams.set("seccion", seccion || "portada");
+        const filtros = seccion === "analisis_numerico"
+          ? {variable: "#num-variable", agrupacion: "#num-separar input:checked"}
+          : seccion === "benchmarking" ? {tarea: "#bm-tarea input:checked"} : {};
+        for (const [parametro, selector] of Object.entries(filtros)) {
+          const valor = document.querySelector(selector)?.value;
+          if (valor) url.searchParams.set(parametro, valor);
+        }
       }
       const respuesta = await fetch(url, {
         method: "POST",
@@ -165,7 +172,8 @@
         if (typeof ayuda.error === "string") aviso = ayuda.error;
         throw new Error(aviso);
       }
-      historial = [...mensajes, {role: "assistant", content: ayuda.texto}].slice(-6);
+      historial = [...mensajes, {role: "assistant", content: ayuda.texto}]
+        .slice(-2 * Number(dialogo.dataset.intercambios));
       return ayuda;
     } catch {
       const ayuda = responderLocal(pregunta);
