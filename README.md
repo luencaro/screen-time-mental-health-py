@@ -49,7 +49,7 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
 
    Desde la portada, selecciona **Explorar dashboard** para abrir el resumen del estudio. La cabecera da acceso a los análisis, el modelado y el selector de tema.
 
-   **Shapiro** responde preguntas sobre la navegación, los gráficos y la metodología. Usa una guía de respuestas en español que funciona en el navegador sin leer los datos ni los resultados. Puedes abrirlo desde la cabecera, incluso si falta el CSV.
+   **Shapiro** responde preguntas sobre la navegación, los gráficos y la metodología. Puedes abrirlo desde la cabecera, incluso si falta el CSV. Si el servidor tiene una clave de Gemini, Shapiro usa Gemini Flash-Lite. En los demás casos usa una guía local.
 
  
 5. **(Opcional) Abrir JupyterLab** para ver `notebooks/EDA.ipynb`:
@@ -78,6 +78,23 @@ Los comandos se escriben en **PowerShell** (menú Inicio → "PowerShell"). Son 
    docker compose down
    ```
    Los archivos no se pierden; solo se detienen los contenedores.
+
+### Activar Shapiro con Gemini
+
+1. Crea una clave en [Google AI Studio](https://aistudio.google.com/app/apikey) para un proyecto del nivel gratuito y confirma que Flash-Lite está disponible en ese proyecto. Mantén la facturación desactivada si quieres evitar cargos.
+2. En la raíz del repositorio, abre o crea el archivo `.env` y agrega `GEMINI_API_KEY=<tu_clave>`. Git excluye este archivo.
+3. Reconstruye y reinicia el servicio del dashboard.
+   ```powershell
+   docker compose up -d --build dashboard
+   ```
+4. Abre Shapiro desde la cabecera y prueba una pregunta seguida de una repregunta.
+   Por ejemplo, «¿Cómo se lee una correlación?» y luego «¿Y qué indica un valor negativo?».
+
+Con Gemini activo, se envían la pregunta, hasta tres intercambios recientes y la guía editorial.
+El endpoint funciona de forma independiente del CSV, los gráficos y los resultados.
+Si la API falla, Shapiro muestra una respuesta de la guía local.
+El modelo inicial es `gemini-2.5-flash-lite`. Si tu proyecto ofrece otro modelo Gemini
+del nivel gratuito, puedes indicar su identificador con `SHAPIRO_GEMINI_MODEL` en `.env`.
 
 ### Ver el bloque de Modelado en el dashboard
 
@@ -158,6 +175,7 @@ screen-time-mental-health-py/
 │   ├── ui.py                 # card, KPI, badge, interpretación, tabla, encabezado, gráfico
 │   ├── secciones.py          # registro de secciones del menú
 │   ├── shapiro.py            # interfaz de la guía del dashboard
+│   ├── shapiro_gemini.py     # guía editorial y conexión a Gemini desde el servidor
 │   ├── enlaces.py            # enlaces públicos: repositorio, Jupyter Book y dataset
 │   ├── formato.py            # formato numérico en español (coma decimal, punto de miles)
 │   └── plotly_theme.py       # paleta de datos y plantillas Plotly claro/oscuro
@@ -174,7 +192,7 @@ screen-time-mental-health-py/
     ├── componentes.css       # estilos de los componentes compartidos
     ├── portada.css           # portada e ilustración
     ├── shapiro.css           # estilos de la conversación
-    ├── shapiro.js            # guía editorial y conversación local
+    ├── shapiro.js            # conversación y guía local de respaldo
     ├── mosaico.js            # rejilla tipo mosaico para las cards de texto
     ├── animacion_graficos.js # animación de entrada y transiciones de los gráficos
     ├── altura_cabecera.js    # mide el menú superior para los filtros fijos bajo él

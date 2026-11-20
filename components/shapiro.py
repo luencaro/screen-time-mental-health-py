@@ -1,4 +1,4 @@
-"""Interfaz de Shapiro. Las respuestas se resuelven en assets/shapiro.js."""
+"""Interfaz de Shapiro para la guía local y la conexión a Gemini."""
 
 from dash import get_relative_path, html
 
@@ -16,7 +16,9 @@ def boton_shapiro():
         **{"aria-haspopup": "dialog", "aria-controls": "shapiro"})
 
 
-def dialogo_shapiro():
+def dialogo_shapiro(gemini_activo: bool):
+    privacidad = ("Gemini procesa tus preguntas y el historial reciente. Evita incluir información personal."
+                  if gemini_activo else "Las preguntas se procesan en este navegador.")
     return html.Dialog([
         html.Header([
             html.Span(html.Span(className="icono-chat"), className="shapiro-marca", **{"aria-hidden": "true"}),
@@ -37,6 +39,7 @@ def dialogo_shapiro():
                 html.Button(pregunta, type="button", className="shapiro-sugerencia", disable_n_clicks=True)
                 for pregunta in PREGUNTAS
             ], id="sugerencias-shapiro"),
+            html.P(id="estado-shapiro", className="shapiro-estado", role="status"),
         ], className="shapiro-conversacion", id="conversacion-shapiro"),
         html.Form([
             html.Label("Escribe tu pregunta para Shapiro", htmlFor="pregunta-shapiro", className="visualmente-oculto"),
@@ -45,6 +48,9 @@ def dialogo_shapiro():
                               autoComplete="off", required=True),
                 html.Button("Enviar", type="submit", className="shapiro-enviar", disable_n_clicks=True),
             ], className="shapiro-campo"),
-            html.P("Las preguntas se procesan en este navegador.", className="shapiro-privacidad"),
+            html.P(privacidad, className="shapiro-privacidad"),
         ], id="formulario-shapiro"),
-    ], id="shapiro", className="shapiro", **{"aria-labelledby": "titulo-shapiro", "data-raiz": get_relative_path("/")})
+    ], id="shapiro", className="shapiro", **{
+        "aria-labelledby": "titulo-shapiro", "data-raiz": get_relative_path("/"),
+        "data-api": get_relative_path("/api/shapiro") if gemini_activo else "",
+    })

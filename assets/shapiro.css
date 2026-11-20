@@ -180,6 +180,9 @@
 }
 
 .shapiro-enviar:hover { background: var(--color-primario-fuerte); }
+.shapiro-enviar:disabled { opacity: .55; }
+.shapiro-estado { margin: 8px 0 0; font-size: var(--texto-pequeno); color: var(--color-texto-secundario); }
+.shapiro-estado:empty { margin: 0; }
 
 @media (max-width: 475px) {
   .boton-shapiro { gap: 5px; min-height: 36px; padding-inline: 7px; font-size: 13px; }

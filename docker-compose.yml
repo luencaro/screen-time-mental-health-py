@@ -21,4 +21,6 @@ services:
       - .:/workspace
     environment:
       - DASH_DEBUG=1
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - SHAPIRO_GEMINI_MODEL=${SHAPIRO_GEMINI_MODEL:-}
     container_name: screen-time-dashboard
