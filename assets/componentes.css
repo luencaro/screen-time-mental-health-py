@@ -701,32 +701,38 @@ code, .variable, .mono {
 .rejilla-mosaico.mosaico-activo { grid-auto-rows: 4px; }
 @media (min-width: 992px) { .rejilla-mosaico { grid-template-columns: 1fr 1fr; } }
 
-/* Entrada de los gráficos: invisibles hasta que assets/animacion_graficos.js
-   pone las barras en cero; luego aparecen con un fundido mientras crecen.
-   Respaldo: si el script no actúa, se muestran igual a los 1,2 s. */
-@keyframes mostrar-grafico { to { opacity: 1; } }
-.dash-graph .js-plotly-plot {
-  opacity: 0;
-  animation: mostrar-grafico 0s 1.2s forwards;
+/* Dash indica cuándo se carga Plotly o se está calculando una nueva figura. */
+.grafico-marco { position: relative; min-width: 0; }
+.grafico-aviso {
+  position: absolute;
+  top: var(--espaciado-sm);
+  right: var(--espaciado-sm);
+  z-index: 1;
+  visibility: hidden;
+  pointer-events: none;
+  padding: var(--espaciado-xs) var(--espaciado-sm);
+  border: var(--borde-card);
+  border-radius: var(--radio-badge);
+  background: var(--color-superficie);
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-leyenda);
+  box-shadow: var(--sombra-card);
 }
-.dash-graph .js-plotly-plot.grafico-listo {
-  opacity: 1;
-  animation: none;
-  transition: opacity .3s ease-out;
+.grafico-marco:has(.dash-graph[data-dash-is-loading="true"], .dash-graph--pending) > .grafico-aviso {
+  visibility: visible;
+  transition: visibility 0s .2s;
 }
-.dash-graph .js-plotly-plot.grafico-listo.grafico-actualizando {
-  opacity: .2;
-  transition: opacity .16s ease-in;
-}
-@media (prefers-reduced-motion: reduce) {
-  .dash-graph .js-plotly-plot,
-  .dash-graph .js-plotly-plot.grafico-listo.grafico-actualizando { opacity: 1; animation: none; transition: none; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes entrada-grafico { from { opacity: .86; } to { opacity: 1; } }
+  .grafico-entrada .plot-container { animation: entrada-grafico .18s ease-out; }
 }
 
 /* Card cuyo gráfico crece hasta igualar la altura de la columna vecina */
 .tarjeta.grafico-flexible { display: flex; flex-direction: column; }
-.tarjeta.grafico-flexible > .dash-graph { display: flex; flex-direction: column; }
-.tarjeta.grafico-flexible > .dash-graph > .js-plotly-plot { flex: 1 1 auto; }
+.tarjeta.grafico-flexible > .grafico-marco,
+.tarjeta.grafico-flexible .grafico-desplazable,
+.tarjeta.grafico-flexible .dash-graph { display: flex; flex: 1 1 auto; flex-direction: column; }
+.tarjeta.grafico-flexible .dash-graph > .js-plotly-plot { flex: 1 1 auto; }
 
 /* ── Pestaña de predicción ─────────────────────── */
 .control-prediccion { margin-bottom: var(--espaciado-md); }

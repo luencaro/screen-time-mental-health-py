@@ -219,7 +219,7 @@ def histograma_variable(df: pd.DataFrame, columna: str, separar: str | None = No
     if columna == "bdi_total":
         _linea_vertical(fig, CORTE_BDI - 0.5, f"Corte clínico · {CORTE_BDI}", c["linea_corte"],
                         "dash", tema, nivel=1)
-    # Rangos explícitos: Plotly.animate no recalcula el autorango al animar
+    # El eje horizontal cubre los intervalos y el vertical deja margen sobre la barra más alta.
     y_max = max(float(np.max(t.y)) for t in fig.data) * 1.12
     fig.update_xaxes(title=ETIQUETAS[columna], range=[bordes[0], bordes[-1]])
     fig.update_yaxes(title="% del grupo" if separar else "Adolescentes",

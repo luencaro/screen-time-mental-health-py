@@ -7,7 +7,7 @@ import importlib
 import os
 
 import dash_bootstrap_components as dbc
-from dash import Dash, Input, Output, State, clientside_callback, dcc, html
+from dash import ClientsideFunction, Dash, Input, Output, clientside_callback, dcc, html
 
 from components.secciones import BLOQUES, POR_SLUG, SECCIONES, secciones_de, slug_desde_ruta
 from components.shapiro import boton_shapiro, dialogo_shapiro
@@ -27,7 +27,11 @@ app = Dash(
     update_title=None,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1, interactive-widget=resizes-content"}],
 )
-app.index_string = app.index_string.replace("<html>", '<html lang="es">', 1)
+app.index_string = app.index_string.replace("<html>", '<html lang="es">', 1).replace(
+    "{%app_entry%}",
+    '{%app_entry%}<div class="carga-arranque" role="status"><span aria-hidden="true"></span>'
+    'Abriendo el dashboard…</div>',
+)
 server = app.server
 shapiro_gemini = registrar_shapiro(app)
 
@@ -91,15 +95,40 @@ cabecera = html.Header(
     className="cabecera",
 )
 
+def _contenido_cargando():
+    return html.Div([
+        html.P("Preparando la sección…", role="status"),
+        html.Div([
+            html.Div(className="esqueleto-titulo"),
+            html.Div(className="esqueleto-texto"),
+            html.Div([html.Div() for _ in range(3)], className="esqueleto-paneles"),
+        ], **{"aria-hidden": "true"}),
+    ], className="esqueleto-vista")
+
+
+def _carga_vista():
+    return dcc.Loading(
+        html.Div(_contenido_cargando(), id="contenido"),
+        id="carga-vista-capa",
+        delay_show=160,
+        show_initially=False,
+        target_components={"contenido": "children"},
+        overlay_style={"visibility": "visible"},
+        custom_spinner=html.Div([
+            html.Span(className="carga-vista-linea", **{"aria-hidden": "true"}),
+            html.Span("Cargando sección…", className="carga-vista-texto"),
+        ], id="carga-vista", role="status"),
+    )
+
+
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
     dcc.Store(id="tema", data="claro"),
-    dcc.Store(id="titulo-activo"),
-    html.Div(id="tema-aplicado", hidden=True),
-    html.Div(id="titulo-aplicado", hidden=True),
+    dcc.Store(id="vista-activa"),
+    html.Div(id="vista-aplicada", hidden=True),
     html.A("Saltar al contenido", href="#contenido-principal", className="salto-contenido"),
     cabecera,
-    html.Main(html.Div(id="contenido"), id="contenido-principal", className="pagina", tabIndex=-1,
+    html.Main(_carga_vista(), id="contenido-principal", className="pagina", tabIndex=-1,
               **{"aria-labelledby": "titulo-vista"}),
     html.Footer([
         html.Div([
@@ -116,16 +145,17 @@ app.layout = html.Div([
 @app.callback(
     Output("contenido", "children"),
     Output("contenido-principal", "className"),
-    Output("titulo-activo", "data"),
+    Output("vista-activa", "data"),
     [Output(f"nav-{b}", "toggle_class_name") for b in BLOQUES],
     [Output(f"nav-item-{s['slug']}", "active") for s in SECCIONES],
     Input("url", "pathname"),
 )
 def renderizar(ruta):
     """Renderiza la portada o la sección activa y actualiza el menú."""
+    pathname = ruta
     ruta = app.strip_relative_path(ruta)
     if not ruta:
-        return [portada.layout(), "pagina pagina--portada", portada.TITULO,
+        return [portada.layout(), "pagina pagina--portada", {"titulo": portada.TITULO, "ruta": pathname},
                 *["" for _ in BLOQUES], *[False for _ in SECCIONES]]
 
     slug = slug_desde_ruta(ruta)
@@ -139,44 +169,27 @@ def renderizar(ruta):
     clases = ["activo" if b == bloque else "" for b in BLOQUES]
     activos = [s["slug"] == slug for s in SECCIONES]
     titulo = f"{POR_SLUG[slug]['nombre']} · {portada.TITULO}"
-    return [contenido, "pagina", titulo, *clases, *activos]
+    return [contenido, "pagina", {"titulo": titulo, "ruta": pathname}, *clases, *activos]
 
 
 clientside_callback(
-    """
-    function (titulo, anterior) {
-        if (!titulo) return window.dash_clientside.no_update;
-        document.title = titulo;
-        if (anterior && titulo !== anterior) {
-            window.requestAnimationFrame(() => {
-                document.getElementById("contenido-principal").focus({preventScroll: true});
-            });
-        }
-        return titulo;
-    }
-    """,
-    Output("titulo-aplicado", "children"),
-    Input("titulo-activo", "data"),
-    State("titulo-aplicado", "children"),
+    ClientsideFunction(namespace="navegacion", function_name="presentar"),
+    Output("vista-aplicada", "children"),
+    Input("vista-activa", "data"),
 )
 
 
 # ── Tema claro / oscuro ────────────────────────────────────────────────
-@app.callback(Output("tema", "data"), Input("selector-tema", "value"))
-def guardar_tema(valor):
-    """Guarda el tema activo; los gráficos lo reciben como Input."""
-    return valor if valor in ("claro", "oscuro") else "claro"
-
-
 clientside_callback(
     """
-    function (tema) {
+    function (valor) {
+        const tema = valor === "oscuro" ? "oscuro" : "claro";
         document.documentElement.setAttribute("data-bs-theme", tema === "oscuro" ? "dark" : "light");
         return tema;
     }
     """,
-    Output("tema-aplicado", "children"),
-    Input("tema", "data"),
+    Output("tema", "data"),
+    Input("selector-tema", "value"),
 )
 
 for _modulo in PESTANAS.values():
